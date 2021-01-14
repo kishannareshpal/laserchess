@@ -1,4 +1,3 @@
-import './App.scss';
 import { Stage, Layer } from 'react-konva';
 import BoardLayer from './components/BoardLayer';
 
