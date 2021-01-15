@@ -1,1 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128"><defs><filter id="a" x="-9" y="-9" width="146" height="146" filterUnits="userSpaceOnUse"><feOffset input="SourceAlpha"/><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-opacity="0.584"/><feComposite operator="in" in2="b"/><feComposite in="SourceGraphic"/></filter><radialGradient id="c" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#7c7c7c"/></radialGradient><clipPath id="e"><rect width="128" height="128"/></clipPath></defs><g id="d" clip-path="url(#e)"><rect width="128" height="128" fill="#dbdbdb"/><g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#a)"><g fill="none" stroke="#7b7b7b" stroke-width="4"><rect width="128" height="128" stroke="none"/><rect x="2" y="2" width="124" height="124" fill="none"/></g></g><g transform="translate(4.732 63.708) rotate(-45)"><path d="M81.66,21.7a2.238,2.238,0,0,0-2.676,1.688,15.384,15.384,0,0,1-1.555,3.6L56.38,5.945a15.52,15.52,0,0,1,3.651-1.534,2.235,2.235,0,0,0-1-4.356C58.8.108,36.809,5.529,40.842,37.514,11.821,35.246.79,53.107.317,53.911A2.233,2.233,0,0,0,4.149,56.2a21.567,21.567,0,0,1,2.968-3.643L30.838,76.282A22.443,22.443,0,0,1,27.2,79.251a2.227,2.227,0,0,0-.773,3.063,2.132,2.132,0,0,0,.339.438,2.235,2.235,0,0,0,2.723.335c.8-.477,18.665-11.5,16.4-40.529C77.875,46.591,83.3,24.593,83.352,24.374A2.25,2.25,0,0,0,81.66,21.7ZM34.541,71.909,11.49,48.868a36.687,36.687,0,0,1,9.2-4.678L39.219,62.717A36.755,36.755,0,0,1,34.541,71.909ZM40.868,56.29,27.118,42.536a53.382,53.382,0,0,1,14.244-.49A53.359,53.359,0,0,1,40.868,56.29ZM45.4,38.008A51.289,51.289,0,0,1,45,25.654L57.733,38.386A51.208,51.208,0,0,1,45.4,38.008Zm19.06-.975L46.332,18.905a23.459,23.459,0,0,1,5.486-9.442L73.893,31.535A23.641,23.641,0,0,1,64.46,37.033Z" transform="translate(0 0)" fill="url(#c)"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <filter id="Rectangle_1" x="-9" y="-9" width="146" height="146" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.584"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Path_3" x="33.287" y="18.694" width="62.544" height="98.351" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Path_4" x="31.701" y="10.466" width="63.748" height="114.985" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-3"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-White_Helix_Slot">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="White_Helix_Slot" data-name="White Helix Slot" clip-path="url(#clip-White_Helix_Slot)">
+    <rect width="128" height="128" fill="#dbdbdb"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Rectangle_1)">
+      <g id="Rectangle_1-2" data-name="Rectangle 1" fill="none" stroke="#7b7b7b" stroke-width="4">
+        <rect width="128" height="128" stroke="none"/>
+        <rect x="2" y="2" width="124" height="124" fill="none"/>
+      </g>
+    </g>
+    <g id="White_Helix" data-name="White Helix" transform="translate(39.921 19.466)">
+      <g transform="matrix(1, 0, 0, 1, -39.92, -19.47)" filter="url(#Path_3)">
+        <path id="Path_3-2" data-name="Path 3" d="M528.713,6.694V35.648l-38.544,16.6v28.8" transform="translate(-444.88 21)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      </g>
+      <g transform="matrix(1, 0, 0, 1, -39.92, -19.47)" filter="url(#Path_4)">
+        <path id="Path_4-2" data-name="Path 4" d="M490.551-1.534V37L530.3,53.956V89.451" transform="translate(-446.85 21)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      </g>
+      <path id="Path_12" data-name="Path 12" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(1 65.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+      <path id="Path_15" data-name="Path 15" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(40 17.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+      <path id="Path_16" data-name="Path 16" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 6.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+      <path id="Path_17" data-name="Path 17" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 22.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+    </g>
+    <path id="Path_18" data-name="Path 18" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(78.921 81.105)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+    <path id="Path_19" data-name="Path 19" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(78.921 97.105)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+  </g>
+</svg>
