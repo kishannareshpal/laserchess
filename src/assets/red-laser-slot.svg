@@ -7,13 +7,13 @@
       <feComposite operator="in" in2="blur"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <clipPath id="clip-Red_Lazer_Slot">
+    <clipPath id="clip-Red_Laser_Slot">
       <rect width="128" height="128"/>
     </clipPath>
   </defs>
-  <g id="Red_Lazer_Slot" data-name="Red Lazer Slot" clip-path="url(#clip-Red_Lazer_Slot)">
+  <g id="Red_Laser_Slot" data-name="Red Laser Slot" clip-path="url(#clip-Red_Laser_Slot)">
     <rect width="128" height="128" fill="#dbdbdb"/>
-    <g id="Red_Lazer" data-name="Red Lazer" transform="translate(120.071 120.068) rotate(180)">
+    <g id="Red_Laser" data-name="Red Laser" transform="translate(120.071 120.068) rotate(180)">
       <g transform="matrix(-1, 0, 0, -1, 120.07, 120.07)" filter="url(#Path_22)">
         <g id="Path_22-2" data-name="Path 22" transform="translate(378.82 99.77) rotate(180)" fill="#acacac" stroke-linecap="round">
           <path d="M 315.260986328125 90.70721435546875 L 262.401611328125 37.72748184204102 L 315.2442016601562 38.31081771850586 L 316.7611694335938 38.32757186889648 L 316.7607727050781 36.81052398681641 L 316.746826171875 -16.67452621459961 L 369.7073059082031 36.27744674682617 L 315.260986328125 90.70721435546875 Z" stroke="none"/>

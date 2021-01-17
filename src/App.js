@@ -4,6 +4,7 @@ import Piece from './components/Piece';
 
 
 const boardSize = 700;
+const gridSize = boardSize / 10; // 10 is the number of cols.
 
 function App() {
 	return (
@@ -11,16 +12,13 @@ function App() {
 			<BoardLayer boardSize={boardSize} />
 
 			<Layer>
-                
-				{
-					[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(col => (
-						<Piece
-							col={col}
-							row={7}
-							color="blue"
-							gridSize={boardSize / 10} />
-					))
-				}
+
+				<Piece
+					type=""
+					x={2}
+					y={2}
+					color="red"
+					gridSize={gridSize} />
 
 			</Layer>
 		</Stage>

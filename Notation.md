@@ -1,6 +1,6 @@
-## Lazer Algebraic Notation (for Lazer Chess)
+## Laser Algebraic Notation (for Laser Chess)
 
-Algebraic notation (or AN) is the standard method for recording and describing the moves in a game of [chess](https://en.wikipedia.org/wiki/Chess). Built upon that idea, this a notation modified for the game of [Lazer Chess](https://en.wikipedia.org/wiki/Laser_Chess), and we are calling it **Lazer Algebraic Notation** (or **LAN**)
+Algebraic notation (or AN) is the standard method for recording and describing the moves in a game of [chess](https://en.wikipedia.org/wiki/Chess). Built upon that idea, this a notation modified for the game of [Laser Chess](https://en.wikipedia.org/wiki/Laser_Chess), and we are calling it **Laser Algebraic Notation** (or **LAN**)
 
 Just as the Chess Algebraic Notation, **LAN** is based on a system of [coordinates](https://en.wikipedia.org/wiki/Coordinates) to uniquely identify each square on the board.
 
@@ -8,7 +8,11 @@ Just as the Chess Algebraic Notation, **LAN** is based on a system of [coordinat
 
 #### **Naming the squares**
 
-[todo]
+Each square of the board is identified by a unique coordinate pair—a letter and a number—from the Blue/White's point of view.
+
+- The vertical columns of squares are labeled ***a*** through ***j*** from Blue/White's left to right (the laser). 
+
+- The horizontal rows of squares are numbered ***1*** to *8* starting from White's side of the board. Thus each square has a unique identification of file letter followed by rank number. For example, the initial square of White's king is designated as "e1".
 
 
 
@@ -23,16 +27,18 @@ The identification is the first letter of the piece name, except for the **Defle
 | Switch    | S              |
 | Defender  | D              |
 | Deflector | B              |
-| Lazer     | L              |
+| Laser     | L              |
 
 
 
-#### Colors
+#### Naming the players
 
-One color per player:
+There are only two (2) players per game. Each player has pieces of one color. So in total there are two colors. 
 
-1. Blue / White
-2. Red / Gray
+Any player may choose to play with:
+
+1. Blue/White pieces
+2. Red/Gray pieces
 
 
 

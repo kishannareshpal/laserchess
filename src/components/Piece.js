@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Rect } from 'react-konva';
 
 
-const Piece = ({ col, row, gridSize, margin = 20, color }) => {
+const Piece = ({ x, y, gridSize, margin = 20, color }) => {
     
 	/**
      * Determine the X position of the piece in the grid,
@@ -11,7 +11,7 @@ const Piece = ({ col, row, gridSize, margin = 20, color }) => {
      * consideration the piece size.
      */
 	const getX = useCallback(() => {
-		return col * gridSize + (margin / 2);
+		return x * gridSize + (margin / 2);
 	}, []);
 
 	/**
@@ -20,7 +20,7 @@ const Piece = ({ col, row, gridSize, margin = 20, color }) => {
      * consideration the piece size.
      */
 	const getY = useCallback(() => {
-		return row * gridSize + (margin / 2);
+		return y * gridSize + (margin / 2);
 	}, []);
 
 	/**
