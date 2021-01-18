@@ -2,11 +2,14 @@
 
 Algebraic notation (or AN) is the standard method for recording and describing the moves in a game of [chess](https://en.wikipedia.org/wiki/Chess). Built upon that idea, this a notation modified for the game of [Laser Chess](https://en.wikipedia.org/wiki/Laser_Chess), and we are calling it **Laser Algebraic Notation** (or **LAN**)
 
-Just as the Chess Algebraic Notation, **LAN** is based on a system of [coordinates](https://en.wikipedia.org/wiki/Coordinates) to uniquely identify each square on the board.
+Just as the Chess Algebraic Notation, **LAN** is based on a system of [coordinates](https://en.wikipedia.org/wiki/Coordinates) to uniquely identify each piece (and it's movements) and squares on the board.
+
+![Laser Chess Algebraic Notation](images/algebraic_notation.png)
 
 
 
-#### **Naming the squares**
+
+## Naming the squares
 
 Each square of the board is identified by a unique coordinate pair—a letter and a number—from the Blue/White's point of view.
 
@@ -16,10 +19,10 @@ Each square of the board is identified by a unique coordinate pair—a letter an
 
 
 
-#### Naming the piece
+## Naming the piece
 
 Each piece, is identified by an uppercase letter.
-The identification is the first letter of the piece name, except for the **Deflector** which is **B** (because D for Deflector would be confused with the one of the Defender. *The letter B came from Bend*).
+The identification is the first letter of the piece name, except for the **Deflector** which is **B** (because D for Deflector would be confused with the one of the Defender. *The letter B came from Bend–bending the light*).
 
 | Name      | Identification |
 | --------- | -------------- |
@@ -31,10 +34,9 @@ The identification is the first letter of the piece name, except for the **Defle
 
 
 
-#### Naming the players
+## Naming the players
 
 There are only two (2) players per game. Each player has pieces of one color. So in total there are two colors. 
-
 Any player may choose to play with:
 
 1. Blue/White pieces
@@ -42,8 +44,14 @@ Any player may choose to play with:
 
 
 
-#### Notation for moves
+## Notation for moves
 
-Each move of a piece is indicated by the piece's uppercase letter, plus the coordinate of the destination square.
+Each move of a piece is indicated by the piece's uppercase letter, plus the coordinate of the destination square. For example, **Be5** (move a Deflector to *e5*), **Df3** (move a Defender to *f3*).
 
-For example, **Ke5** (move a bishop to e5), **Nf3** (move a knight to f3). For pawn moves, a letter indicating pawn is not used, only the destination square is given. For example, **c5** (move a pawn to c5).
+- Laser is not a movable piece (see Game Rules) hence no moves, by any pieces, are allowed on the squares *j1* and *a8*.
+
+  
+
+### Captures
+
+Captures
