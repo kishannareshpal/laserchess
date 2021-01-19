@@ -20,7 +20,20 @@ Two players per game.
 
 ## Board
 
-The board is divided into 80 identical [squares](Notation.md#Naming-the-squares), of which:
+|       | a                                | b                                  | c                            | d                            | e                            | f                            | g                            | h                            | i                                | j                                  |
+| ----- | -------------------------------- | ---------------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | -------------------------------- | ---------------------------------- |
+| **8** | ![](images/pieces/r/red_L.png)   | ![](images/pieces/white-helix.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) |
+| **7** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **6** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **5** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **4** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **3** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **2** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **1** | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/red-helix.png) | ![](images/pieces/blue_L.png)      |
+
+
+
+The board is divided into 80 identical [squares](Notation.md#Naming-the-squares) (*8 rows* and *10 columns*), of which:
 
 - Two squares (*a8* and *j1*) are reserved for the Laser piece only. (No other piece can move into these space).
 
@@ -36,13 +49,13 @@ The board is divided into 80 identical [squares](Notation.md#Naming-the-squares)
 Each player has a 13 pieces, for a total of 26 pieces per game.
 Each player has *1 King*, *2 Switches*, *2 Defenders*, *7 Deflectors* and *1 Laser*.
 
-| Name      | [Identification Letter](./Notation.md#Naming-the-piece) | Piece(s) per player | Can be eliminated?                                           |
-| --------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------ |
-| Laser     | L                                                       | 1                   | **No**                                                       |
-| Deflector | B                                                       | 7                   | **Yes** (if hit from the side or back where the mirror is not present) |
-| Defender  | D                                                       | 2                   | **Yes** (only if hit either from the sides or back)          |
-| Switch    | S                                                       | 2                   | **No**                                                       |
-| King      | K                                                       | 1                   | **Yes** (if hit from any side)                               |
+| Name      | Blue Player                   | Red Player                   | [Identification Letter](./Notation.md#Naming-the-piece) | Piece(s) per player | Can be eliminated?                                           |
+| --------- | ----------------------------- | ---------------------------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------ |
+| Laser     | ![](images/pieces/blue_L.png) | ![](images/pieces/red_L.png) | L                                                       | 1                   | **No**                                                       |
+| Deflector | ![](images/pieces/blue_B.png) | ![](images/pieces/red_B.png) | B                                                       | 7                   | **Yes** (if hit from the side or back where the mirror is not present) |
+| Defender  | ![](images/pieces/blue_D.png) | ![](images/pieces/red_D.png) | D                                                       | 2                   | **Yes** (only if hit either from the sides or back)          |
+| Switch    | ![](images/pieces/blue_S.png) | ![](images/pieces/red_S.png) | S                                                       | 2                   | **No**                                                       |
+| King      | ![](images/pieces/blue_K.png) | ![](images/pieces/red_K.png) | K                                                       | 1                   | **Yes** (if hit from any side)                               |
 
 ### Laser
 
@@ -108,3 +121,33 @@ If you accidentally hit your own King–**YOU LOSE!**. Your opponent wins the ga
 
 The special move is made only by a *Switch* piece. The Switch may swap places with an adjacent Deflector or Defender of either color. Neither piece rotates during the swap. 
 A Switch cannot swap places with a King or another Switch piece.
+
+
+
+## Board Setups
+
+### Ace
+
+|       | a                                | b                                  | c                                | d                                | e                                | f                               | g                               | h                               | i                                | j                                  |
+| ----- | -------------------------------- | ---------------------------------- | -------------------------------- | -------------------------------- | -------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- | ---------------------------------- |
+| **8** | ![](images/pieces/red_L_r1.png)  | ![](images/pieces/white-helix.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/red_D_r1.png)  | ![](images/pieces/red_K.png)    | ![](images/pieces/red_D_r1.png) | ![](images/pieces/red_B_r3.png) | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) |
+| **7** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/red_B.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **6** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B_r1.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **5** | ![](images/pieces/red_B_r2.png)  | ![](images/pieces/blank.png)       | ![](images/pieces/blue_B.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/red_S.png)     | ![](images/pieces/red_S_r1.png) | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r3.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B_r1.png)   |
+| **4** | ![](images/pieces/red_B_r3.png)  | ![](images/pieces/blank.png)       | ![](images/pieces/blue_B_r1.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_S_r1.png) | ![](images/pieces/blue_S.png)   | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r2.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B.png)      |
+| **3** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r3.png) | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **2** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r2.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **1** | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) | ![](images/pieces/blue_B_r1.png) | ![](images/pieces/blue_D.png)    | ![](images/pieces/blue_K.png)    | ![](images/pieces/blue_D.png)   | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red-helix.png) | ![](images/pieces/blue_L.png)      |
+
+### Curiosity
+
+|       | a                                | b                                  | c                                | d                                | e                                | f                               | g                               | h                               | i                                | j                                  |
+| ----- | -------------------------------- | ---------------------------------- | -------------------------------- | -------------------------------- | -------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- | ---------------------------------- |
+| **8** | ![](images/pieces/red_L_r1.png)  | ![](images/pieces/white-helix.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/red_D_r1.png)  | ![](images/pieces/red_K.png)    | ![](images/pieces/red_D_r1.png) | ![](images/pieces/red_S_r1.png) | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) |
+| **7** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **6** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B_r1.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r2.png) | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **5** | ![](images/pieces/red_B_r2.png)  | ![](images/pieces/blue_B.png)      | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B_r3.png) | ![](images/pieces/red_S_r1.png) | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r3.png)  | ![](images/pieces/blue_B_r1.png)   |
+| **4** | ![](images/pieces/red_B_r3.png)  | ![](images/pieces/blue_B_r1.png)   |                                  | ![](images/pieces/blank.png)     | ![](images/pieces/blue_S_r1.png) | ![](images/pieces/red_B_r1.png) | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r2.png)  | ![](images/pieces/blue_B.png)      |
+| **3** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blue_B.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r3.png) | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **2** | ![](images/pieces/red-helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)     | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red_B_r2.png) | ![](images/pieces/blank.png)     | ![](images/pieces/white-helix.png) |
+| **1** | ![](images/pieces/red-helix.png) | ![](images/pieces/white-helix.png) | ![](images/pieces/blue_S_r1.png) | ![](images/pieces/blue_D.png)    | ![](images/pieces/blue_K.png)    | ![](images/pieces/blue_D.png)   | ![](images/pieces/blank.png)    | ![](images/pieces/blank.png)    | ![](images/pieces/red-helix.png) | ![](images/pieces/blue_L.png)      |
