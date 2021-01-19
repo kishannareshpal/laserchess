@@ -3,44 +3,44 @@ import { Layer, Stage, Image, Rect } from 'react-konva';
 import NormalSlotSVG from '../assets/normal-slot.svg';
 import RedHelixSlotSVG from '../assets/red-helix-slot.svg';
 import RedLaserSlotSVG from '../assets/red-laser-slot.svg';
-import WhiteHelixSlotSVG from '../assets/white-helix-slot.svg';
-import WhiteLaserSlotSVG from '../assets/white-laser-slot.svg';
+import BlueHelixSlotSVG from '../assets/blue-helix-slot.svg';
+import BlueLaserSlotSVG from '../assets/blue-laser-slot.svg';
 import useImage from 'use-image';
 
 const arrangement = {
 	columns: 10,
 	rows: 8,
 	slots: [
-		['white-laser', 'white-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'white-helix'],
-		['red-helix', 'white-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'red-laser']
+		['blue-laser', 'blue-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
+		['red-helix', 'blue-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'red-laser']
 	]
 };
 
 const BoardLayer = ({ boardSize }) => {
 	const [slotSize] = useState(boardSize / arrangement.columns);
 	const [normalSlotImage] = useImage(NormalSlotSVG);
-	const [whiteLaserSlotImage] = useImage(WhiteLaserSlotSVG);
-	const [whiteHelixSlotImage] = useImage(WhiteHelixSlotSVG);
+	const [blueLaserSlotImage] = useImage(BlueLaserSlotSVG);
+	const [blueHelixSlotImage] = useImage(BlueHelixSlotSVG);
 	const [redLaserSlotImage] = useImage(RedLaserSlotSVG);
 	const [redHelixSlotImage] = useImage(RedHelixSlotSVG);
 
 
 	const getSlotImage = useCallback((slotType) => {
 		switch (slotType) {
-		case 'white-helix':
-			return whiteHelixSlotImage;
+		case 'blue-helix':
+			return blueHelixSlotImage;
 
 		case 'red-helix':
 			return redHelixSlotImage;
         
-		case 'white-laser':
-			return whiteLaserSlotImage;
+		case 'blue-laser':
+			return blueLaserSlotImage;
             
 		case 'red-laser':
 			return redLaserSlotImage;
@@ -49,7 +49,7 @@ const BoardLayer = ({ boardSize }) => {
 			return normalSlotImage;
 
 		}
-	}, [whiteHelixSlotImage, redHelixSlotImage, whiteLaserSlotImage, redLaserSlotImage, normalSlotImage]);
+	}, [blueHelixSlotImage, redHelixSlotImage, blueLaserSlotImage, redLaserSlotImage, normalSlotImage]);
 
 
 	const drawSlotsGrid = useCallback(() => {

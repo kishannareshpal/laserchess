@@ -21,11 +21,11 @@
       <feComposite operator="in" in2="blur-3"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <clipPath id="clip-White_Helix_Slot">
+    <clipPath id="clip-Blue_Helix_Slot">
       <rect width="128" height="128"/>
     </clipPath>
   </defs>
-  <g id="White_Helix_Slot" data-name="White Helix Slot" clip-path="url(#clip-White_Helix_Slot)">
+  <g id="Blue_Helix_Slot" data-name="Blue Helix Slot" clip-path="url(#clip-Blue_Helix_Slot)">
     <rect width="128" height="128" fill="#dbdbdb"/>
     <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Rectangle_1)">
       <g id="Rectangle_1-2" data-name="Rectangle 1" fill="none" stroke="#7b7b7b" stroke-width="4">
@@ -35,17 +35,17 @@
     </g>
     <g id="White_Helix" data-name="White Helix" transform="translate(39.921 19.466)">
       <g transform="matrix(1, 0, 0, 1, -39.92, -19.47)" filter="url(#Path_3)">
-        <path id="Path_3-2" data-name="Path 3" d="M528.713,6.694V35.648l-38.544,16.6v28.8" transform="translate(-444.88 21)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+        <path id="Path_3-2" data-name="Path 3" d="M528.713,6.694V35.648l-38.544,16.6v28.8" transform="translate(-444.88 21)" fill="none" stroke="#1376f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
       </g>
       <g transform="matrix(1, 0, 0, 1, -39.92, -19.47)" filter="url(#Path_4)">
-        <path id="Path_4-2" data-name="Path 4" d="M490.551-1.534V37L530.3,53.956V89.451" transform="translate(-446.85 21)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+        <path id="Path_4-2" data-name="Path 4" d="M490.551-1.534V37L530.3,53.956V89.451" transform="translate(-446.85 21)" fill="none" stroke="#1376f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
       </g>
-      <path id="Path_12" data-name="Path 12" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(1 65.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
-      <path id="Path_15" data-name="Path 15" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(40 17.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
-      <path id="Path_16" data-name="Path 16" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 6.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
-      <path id="Path_17" data-name="Path 17" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 22.638)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
+      <path id="Path_12" data-name="Path 12" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(1 65.638)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
+      <path id="Path_15" data-name="Path 15" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(40 17.638)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
+      <path id="Path_16" data-name="Path 16" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 6.638)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
+      <path id="Path_17" data-name="Path 17" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(0 22.638)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
+      <path id="Path_36" data-name="Path 36" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(39.449 61.718)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
+      <path id="Path_37" data-name="Path 37" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(39.449 77.718)" fill="#fff" stroke="#1376f8" stroke-width="3"/>
     </g>
-    <path id="Path_18" data-name="Path 18" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(78.921 81.105)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
-    <path id="Path_19" data-name="Path 19" d="M4.079,0A4.079,4.079,0,1,0,8.159,4.079,4.079,4.079,0,0,0,4.079,0Z" transform="translate(78.921 97.105)" fill="#a5a5a5" stroke="#fff" stroke-width="3"/>
   </g>
 </svg>
