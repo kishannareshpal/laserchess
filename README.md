@@ -6,7 +6,8 @@
 
 ## About
 A board game made with JavaScript (with the help of ReactJS).
-
+- [`(📄) Read the Guide`](docs/Guide.md)
+- [`(📄) Read the Laser Algebraic Notation (LAN)`](docs/Notation.md)
 
 ## Background
 Laser Chess combines the fun of bending lasers and illuminating pieces with chess-like strategy. You have to strike your opponent’s King while protecting your own from getting zapped! Simple rules and only a few basic moves make Laser Chess easy to learn and quick to play.
