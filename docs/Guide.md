@@ -49,7 +49,7 @@ The board is divided into 80 identical [squares](Notation.md#Naming-the-squares)
 Each player has a 13 pieces, for a total of 26 pieces per game.
 Each player has *1 King*, *2 Switches*, *2 Defenders*, *7 Deflectors* and *1 Laser*.
 
-| Name      | Blue Player                   | Red Player                   | [Identification Letter](./Notation.md#Naming-the-piece) | Piece(s) per player | Can be eliminated?                                           |
+| Name      | Blue Player                   | Red Player                   | Identification Letter | Piece(s) per player | Can be eliminated?                                           |
 | --------- | ----------------------------- | ---------------------------- | ------------------------------------------------------- | ------------------- | ------------------------------------------------------------ |
 | Laser     | ![](images/pieces/blue_L.png) | ![](images/pieces/red_L.png) | L                                                       | 1                   | **No**                                                       |
 | Deflector | ![](images/pieces/blue_B.png) | ![](images/pieces/red_B.png) | B                                                       | 7                   | **Yes** (if hit from the side or back where the mirror is not present) |
