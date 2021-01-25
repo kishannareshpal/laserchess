@@ -1,23 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
   <defs>
-    <filter id="Rectangle_1" x="-9" y="-9" width="146" height="146" filterUnits="userSpaceOnUse">
-      <feOffset input="SourceAlpha"/>
+    <filter id="Path_3" x="32.168" y="12.212" width="62.544" height="110.982" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feFlood flood-opacity="0.584"/>
+      <feFlood flood-color="#e00000" flood-opacity="0.161"/>
       <feComposite operator="in" in2="blur"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <filter id="Path_3" x="32.168" y="12.212" width="62.544" height="110.982" filterUnits="userSpaceOnUse">
+    <filter id="Path_4" x="32.551" y="5.201" width="63.748" height="123.15" filterUnits="userSpaceOnUse">
       <feOffset dy="3" input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="3" result="blur-2"/>
       <feFlood flood-color="#e00000" flood-opacity="0.161"/>
       <feComposite operator="in" in2="blur-2"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <filter id="Path_4" x="32.551" y="5.201" width="63.748" height="123.15" filterUnits="userSpaceOnUse">
-      <feOffset dy="3" input="SourceAlpha"/>
+    <filter id="StrokeComponent" x="-9" y="-9" width="146" height="146" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="3" result="blur-3"/>
-      <feFlood flood-color="#e00000" flood-opacity="0.161"/>
+      <feFlood flood-opacity="0.584"/>
       <feComposite operator="in" in2="blur-3"/>
       <feComposite in="SourceGraphic"/>
     </filter>
@@ -26,12 +26,8 @@
     </clipPath>
   </defs>
   <g id="Red_Helix_Slot" data-name="Red Helix Slot" clip-path="url(#clip-Red_Helix_Slot)">
-    <rect width="128" height="128" fill="#dbdbdb"/>
-    <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Rectangle_1)">
-      <g id="Rectangle_1-2" data-name="Rectangle 1" fill="none" stroke="#7b7b7b" stroke-width="4">
-        <rect width="128" height="128" stroke="none"/>
-        <rect x="2" y="2" width="124" height="124" fill="none"/>
-      </g>
+    <g id="BackgroundComponent">
+      <rect id="Rectangle_3" data-name="Rectangle 3" width="128" height="128" fill="#313134"/>
     </g>
     <g id="Red_Helix" data-name="Red Helix" transform="translate(39.921 15.36)">
       <g transform="matrix(1, 0, 0, 1, -39.92, -15.36)" filter="url(#Path_3)">
@@ -46,6 +42,14 @@
       <path id="Path_14" data-name="Path 14" d="M4.079,0A4.079,4.079,0,1,1,0,4.079,4.079,4.079,0,0,1,4.079,0Z" transform="translate(40 29.745)" fill="#fff" stroke="#ba1827" stroke-width="3"/>
       <path id="Path_12" data-name="Path 12" d="M4.079,0A4.079,4.079,0,1,1,0,4.079,4.079,4.079,0,0,1,4.079,0Z" transform="translate(38 66.745)" fill="#fff" stroke="#ba1827" stroke-width="3"/>
       <path id="Path_15" data-name="Path 15" d="M4.079,0A4.079,4.079,0,1,1,0,4.079,4.079,4.079,0,0,1,4.079,0Z" transform="translate(0 24.745)" fill="#fff" stroke="#ba1827" stroke-width="3"/>
+    </g>
+    <g id="StrokeComponent-2" data-name="StrokeComponent">
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#StrokeComponent)">
+        <g id="StrokeComponent-3" data-name="StrokeComponent" fill="none" stroke="#000" stroke-width="4">
+          <rect width="128" height="128" stroke="none"/>
+          <rect x="2" y="2" width="124" height="124" fill="none"/>
+        </g>
+      </g>
     </g>
   </g>
 </svg>

@@ -1,23 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
   <defs>
-    <filter id="Path_22" x="-3.012" y="-2.057" width="137.083" height="137.126" filterUnits="userSpaceOnUse">
+    <filter id="Path_22" x="3.47" y="5.452" width="121.06" height="121.097" filterUnits="userSpaceOnUse">
       <feOffset dy="2" input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="4" result="blur"/>
       <feFlood flood-opacity="0.396"/>
       <feComposite operator="in" in2="blur"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <clipPath id="clip-White_Laser_Slot">
+    <clipPath id="clip-Blue_Laser_Slot">
       <rect width="128" height="128"/>
     </clipPath>
   </defs>
-  <g id="White_Laser_Slot" data-name="White Laser Slot" clip-path="url(#clip-White_Laser_Slot)">
-    <rect width="128" height="128" fill="#dbdbdb"/>
-    <g id="White_Laser" data-name="White Laser" transform="translate(8.988 7.943)">
-      <g transform="matrix(1, 0, 0, 1, -8.99, -7.94)" filter="url(#Path_22)">
-        <g id="Path_22-2" data-name="Path 22" transform="translate(-249.76 28.24)" fill="#acacac" stroke-linecap="round">
-          <path d="M 315.2614135742188 89.99974822998047 L 263.6202392578125 38.24097061157227 L 315.2386779785156 38.81078338623047 L 317.2613220214844 38.83310317993164 L 317.2607727050781 36.81038665771484 L 317.2471313476562 -15.46722030639648 L 369.0000915527344 36.27743148803711 L 315.2614135742188 89.99974822998047 Z" stroke="none"/>
-          <path d="M 319.2483825683594 -10.63808441162109 L 319.2607727050781 36.80987548828125 L 319.2618103027344 40.85533142089844 L 315.2166137695312 40.81067657470703 L 268.4947204589844 40.29489517211914 L 315.2632751464844 87.16992950439453 L 366.1713562011719 36.27732467651367 L 319.2483825683594 -10.63808441162109 M 315.2458801269531 -20.29636383056641 L 371.828857421875 36.27753067016602 L 315.2596130371094 92.82956695556641 L 258.7457580566406 36.18701934814453 L 315.2607727050781 36.81090927124023 L 315.2458801269531 -20.29636383056641 Z" stroke="none" fill="#7b7b7b"/>
+  <g id="Blue_Laser_Slot" data-name="Blue Laser Slot" clip-path="url(#clip-Blue_Laser_Slot)">
+    <g id="BackgroundComponent">
+      <rect id="Rectangle_3" data-name="Rectangle 3" width="128" height="128" fill="#313134"/>
+    </g>
+    <g id="White_Lazer" data-name="White Lazer" transform="translate(15.47 15.452)">
+      <g transform="matrix(1, 0, 0, 1, -15.47, -15.45)" filter="url(#Path_22)">
+        <g id="Path_22-2" data-name="Path 22" transform="translate(-243.28 35.75)" fill="#555" stroke-linecap="round">
+          <path d="M 307.2538452148438 73.97058868408203 L 263.6202087402344 30.23764228820801 L 307.2309265136719 30.71906089782715 L 309.2535095214844 30.74139022827148 L 309.2529907226562 28.71866035461426 L 309.241455078125 -15.4672155380249 L 352.9770202636719 28.26130294799805 L 307.2538452148438 73.97058868408203 Z" stroke="none"/>
+          <path d="M 311.2427368164062 -10.63809204101562 L 311.2529907226562 28.7181510925293 L 311.2540283203125 32.76361846923828 L 307.2088317871094 32.71895217895508 L 268.4947204589844 32.29157638549805 L 307.2556457519531 71.14076232910156 L 350.1482849121094 28.26119804382324 L 311.2427368164062 -10.63809204101562 M 307.2402038574219 -20.29636383056641 L 355.8057861328125 28.26140213012695 L 307.2520141601562 76.80039978027344 L 258.7457580566406 28.18371772766113 L 307.2529907226562 28.71920204162598 L 307.2402038574219 -20.29636383056641 Z" stroke="none" fill="#6eacfd"/>
         </g>
       </g>
     </g>
