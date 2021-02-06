@@ -45,7 +45,7 @@ For instance, moving the deflector from `j4` to `j3` is denoted as `j4j3`.
 - Laser is not a movable piece (see Game Rules) hence no moves, by any pieces, are allowed on the squares *j1* and *a8*.
 
 ### Special Move
-For denoting a [special move](Guide.md#special-move), we use the letter `u` is added between the piece location and the target location.
+For denoting a [special move](Guide.md#special-move), the letter `u` is added between the piece location and the target location.
 For example, making a swap between a Switch at location `f4` with a Deflector at `g3` is denoted as `f4ug3`.
 ### Rotation
 For denoting the rotation of a piece, the location of the piece to rotate is written, followed by either `+` indicating a clockwise-rotation, or `-`, indicating a counter-clockwise rotation.
