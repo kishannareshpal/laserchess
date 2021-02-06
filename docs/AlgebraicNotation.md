@@ -3,7 +3,7 @@ There exists no official notation for the board locations and the moves in Laser
 
 | | Column *a* | Column *b* | Column *c* | Column *d* | Column *e* | Column *f* | Column *g* | Column *h* | Column *i* | Column *j* |
 | ----- | -------------------------------- | ---------------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | ---------------------------- | -------------------------------- | ---------------------------------- |
-| **8** | <img src="images/pieces/red_L_r1.png" width=""/>  | ![](images/pieces/blue_helix.png)  | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/red_helix.png) | ![](images/pieces/blue_helix.png) |
+| **8** | ![](images/pieces/red_L_r1.png)  | ![](images/pieces/blue_helix.png)  | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/red_helix.png) | ![](images/pieces/blue_helix.png) |
 | **7** | ![](images/pieces/red_helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_helix.png) |
 | **6** | ![](images/pieces/red_helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_helix.png) |
 | **5** | ![](images/pieces/red_helix.png) | ![](images/pieces/blank.png)       | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png) | ![](images/pieces/blank.png)     | ![](images/pieces/blue_helix.png) |
@@ -38,17 +38,21 @@ There are only two (2) players per game.
 2. Red player
 
 
-## Moves
+## Movement
+### Move
 When moving a piece, the location of the piece to move and the target location are written down.
 For instance, moving the deflector from `j4` to `j3` is denoted as `j4j3`.
 - Laser is not a movable piece (see Game Rules) hence no moves, by any pieces, are allowed on the squares *j1* and *a8*.
+
+### Special Move
+For denoting a [special move](Guide.md#special-move), we use the letter `u` is added between the piece location and the target location.
+For example, making a swap between a Switch at location `f4` with a Deflector at `g3` is denoted as `f4ug3`.
 ### Rotation
-For denoting the rotation of a piece, the location of the piece to rotate is written, followed by either `r+` indicating a clockwise-rotation, or `r-`, indicating a counter-clockwise rotation.
-So, rotating the deflector on `h2` clockwise is denoted as `h2r+`.
+For denoting the rotation of a piece, the location of the piece to rotate is written, followed by either `+` indicating a clockwise-rotation, or `-`, indicating a counter-clockwise rotation.
+So, rotating the deflector on `h2` clockwise is denoted as `h2+`.
 
 ### Captures
 If a piece is captured, the move notation will be appended by an `x` and the location of the captured piece. For example, if the piece at `g3` is captured after the move `j4j3`, this is written down as `j4j3xg3`.
-
 
 ## Setup
 Read [`📄 Setup Notation.md`](SetupNotation.md)

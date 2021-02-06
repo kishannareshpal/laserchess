@@ -8,7 +8,7 @@ The purpose of this notation is to provide all the necessary information to rest
 A **record** defines a particular game position, all in one text line and using only the ASCII character set.
 ```bash
 # Example of LSN for starting position (Ace):
-l++3d++kd++b++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1b/6b+++3/7b++2/2B++DKD3L        
+l++3d++kd++b++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7b++2/2B++DKD3L
 ```
 
 #### Piece placement

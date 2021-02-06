@@ -70,7 +70,7 @@ A Defender is eliminated from play only if the laser strikes either of its sides
 
 ### Switch
 
-Both sides of the Switch reflect the laser *90 degrees*. The Switch can also swap places with an adjacent Deflector or Defender (see [Special Move]() section of Movement Rules).
+Both sides of the Switch reflect the laser *90 degrees*. The Switch can also swap places with an adjacent Deflector or Defender (see [Special Move](#special-move) section of Movement Rules).
 A switch can never be eliminated from play.
 
 ### King
