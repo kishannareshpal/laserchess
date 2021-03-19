@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-Slot_background">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="Slot_background" data-name="Slot background" clip-path="url(#clip-Slot_background)">
+    <g id="BackgroundComponent">
+      <rect id="Rectangle_3" data-name="Rectangle 3" width="128" height="128" fill="#313134"/>
+    </g>
+  </g>
+</svg>

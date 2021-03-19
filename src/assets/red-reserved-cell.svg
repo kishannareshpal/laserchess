@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-red-reserved-cell">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="red-reserved-cell" clip-path="url(#clip-red-reserved-cell)">
+    <g id="Group_3" data-name="Group 3">
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="81" height="81" rx="27" transform="translate(24 24)" fill="#ffb1b1"/>
+      <circle id="Ellipse_4" data-name="Ellipse 4" cx="19.5" cy="19.5" r="19.5" transform="translate(45 45)" fill="#ff8686"/>
+    </g>
+  </g>
+</svg>

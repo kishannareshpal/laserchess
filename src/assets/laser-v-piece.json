@@ -1,0 +1,130 @@
+{
+    "top": {
+        "l": {
+            "0": "nothing",
+            "90": "nothing",
+            "180": "nothing",
+            "270": "nothing"
+        },
+        "d": {
+            "0": "kill",
+            "90": "kill",
+            "180": "nothing",
+            "270": "kill"
+        },
+        "b": {
+            "0": "left",
+            "90": "kill",
+            "180": "kill",
+            "270": "right"
+        },
+        "k": {
+            "0": "kill",
+            "90": "kill",
+            "180": "kill",
+            "270": "kill"
+        },
+        "s": {
+            "0": "left",
+            "90": "right",
+            "180": "left",
+            "270": "right"
+        }
+    },
+    "right": {
+        "l": {
+            "0": "nothing",
+            "90": "nothing",
+            "180": "nothing",
+            "270": "nothing"
+        },
+        "d": {
+            "0": "kill",
+            "90": "kill",
+            "180": "kill",
+            "270": "nothing"
+        },
+        "b": {
+            "0": "bottom",
+            "90": "top",
+            "180": "kill",
+            "270": "kill"
+        },
+        "k": {
+            "0": "kill",
+            "90": "kill",
+            "180": "kill",
+            "270": "kill"
+        },
+        "s": {
+            "0": "bottom",
+            "90": "top",
+            "180": "bottom",
+            "270": "top"
+        }
+    },
+    "bottom": {
+        "l": {
+            "0": "nothing",
+            "90": "nothing",
+            "180": "nothing",
+            "270": "nothing"
+        },
+        "d": {
+            "0": "nothing",
+            "90": "kill",
+            "180": "kill",
+            "270": "kill"
+        },
+        "b": {
+            "0": "kill",
+            "90": "left",
+            "180": "right",
+            "270": "kill"
+        },
+        "k": {
+            "0": "kill",
+            "90": "kill",
+            "180": "kill",
+            "270": "kill"
+        },
+        "s": {
+            "0": "right",
+            "90": "left",
+            "180": "right",
+            "270": "left"
+        }
+    },
+    "left": {
+        "l": {
+            "0": "nothing",
+            "90": "nothing",
+            "180": "nothing",
+            "270": "nothing"
+        },
+        "d": {
+            "0": "kill",
+            "90": "nothing",
+            "180": "kill",
+            "270": "kill"
+        },
+        "b": {
+            "0": "kill",
+            "90": "kill",
+            "180": "top",
+            "270": "bottom"
+        },
+        "k": {
+            "0": "kill",
+            "90": "kill",
+            "180": "kill",
+            "270": "kill"
+        },
+        "s": {
+            "0": "top",
+            "90": "bottom",
+            "180": "top",
+            "270": "bottom"
+        }
+    }
+}

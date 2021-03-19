@@ -1,0 +1,120 @@
+# Laser v. Piece hit relations
+# ––––––––––––––––––––––––––––
+# How to interpret this file:
+#   top, left, right and bottom - represents the direction FROM WHERE the laser is hitting a piece from.
+#   l, d, b, k and s - represents the TYPE OF THE PIECE BEING HIT from the direction of the parent key.
+#   0, 90, 180 and 270 - represents the ORIENTATION OF THE PIECE BEING HIT.
+#   nothing, kill, left, right, top and bottom values - represent THE ACTION TAKEN BY THE LASER WHEN IT HITS A PIECE THAT IS ROTATED IN THAT ORIENTATION:
+#       - nothing: means the laser should stop, and do nothing with the piece.
+#       - kill: means the piece being hit by the laser should be captured (taken from the board).
+#       - left, right, top and bottom: means that the laser should deflect to that direction after hitting this piece.
+
+---
+# 0deg
+top:
+    l:
+        0: nothing
+        90: nothing
+        180: nothing
+        270: nothing
+    d:
+        0: kill
+        90: kill
+        180: nothing
+        270: kill
+    b:
+        0: left
+        90: kill
+        180: kill
+        270: right
+    k:
+        0: kill
+        90: kill
+        180: kill
+        270: kill
+    s:
+        0: left
+        90: right
+        180: left
+        270: right
+# 90deg
+right:
+    l:
+        0: nothing
+        90: nothing
+        180: nothing
+        270: nothing
+    d:
+        0: kill
+        90: kill
+        180: kill
+        270: nothing
+    b:
+        0: bottom
+        90: top
+        180: kill
+        270: kill
+    k:
+        0: kill
+        90: kill
+        180: kill
+        270: kill
+    s:
+        0: bottom
+        90: top
+        180: bottom
+        270: top
+# 180deg
+bottom:
+    l:
+        0: nothing
+        90: nothing
+        180: nothing
+        270: nothing
+    d:
+        0: nothing
+        90: kill
+        180: kill
+        270: kill
+    b:
+        0: kill
+        90: left
+        180: right
+        270: kill
+    k:
+        0: kill
+        90: kill
+        180: kill
+        270: kill
+    s:
+        0: right
+        90: left
+        180: right
+        270: left
+# 270deg
+left:
+    l:
+        0: nothing
+        90: nothing
+        180: nothing
+        270: nothing
+    d:
+        0: kill
+        90: nothing
+        180: kill
+        270: kill
+    b:
+        0: kill
+        90: kill
+        180: top
+        270: bottom
+    k:
+        0: kill
+        90: kill
+        180: kill
+        270: kill
+    s:
+        0: top
+        90: bottom
+        180: top
+        270: bottom

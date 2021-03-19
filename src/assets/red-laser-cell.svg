@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-Red_Laser_Slot">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="Red_Laser_Slot" data-name="Red Laser Slot" clip-path="url(#clip-Red_Laser_Slot)">
+    <g id="Group_3" data-name="Group 3">
+      <rect id="Rectangle_6" data-name="Rectangle 6" width="81" height="81" rx="27" transform="translate(24 24)" fill="#f05454"/>
+    </g>
+    <path id="Modifier_On_Size_20_Theme_Filled" data-name="Modifier=On, Size=20, Theme=Filled" d="M15.166,2a3.613,3.613,0,0,0-3.474,2.621L4.041,31.4A3.613,3.613,0,0,0,7.515,36h4.31L7.847,51.917A3.613,3.613,0,0,0,13.952,55.3L43.461,25.178l.012-.013A3.645,3.645,0,0,0,40.866,19H32.147l4.29-12.224.009-.025A3.613,3.613,0,0,0,33.018,2Z" transform="translate(40.309 35.288)" fill="#ba2525"/>
+  </g>
+</svg>
