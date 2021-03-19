@@ -1,4 +1,11 @@
 {
+    "root": true,
+    "extends": [
+        "eslint:recommended"
+    ],
+    "plugins": [
+        "react-hooks"
+    ],
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module",
@@ -7,8 +14,16 @@
         }
     },
     "rules": {
-        "semi": "error",
-        "indent": ["error", "tab"],
-        "quotes": ["error", "single"]
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "warn", // Checks effect 
+
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"],
+
+        // override configuration set by extending "eslint:recommended"
+        "no-empty": "warn",
+        "no-unused-vars": "off",
+        "no-cond-assign": ["error", "always"],
+        "no-undef": "off"
     }
 }

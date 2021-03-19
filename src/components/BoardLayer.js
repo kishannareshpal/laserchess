@@ -1,77 +1,108 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Layer, Stage, Image, Rect } from 'react-konva';
-import NormalSlotSVG from '../assets/normal-slot.svg';
-import RedHelixSlotSVG from '../assets/red-helix-slot.svg';
-import RedLaserSlotSVG from '../assets/red-laser-slot.svg';
-import BlueHelixSlotSVG from '../assets/blue-helix-slot.svg';
-import BlueLaserSlotSVG from '../assets/blue-laser-slot.svg';
-import useImage from 'use-image';
-
-const arrangement = {
-	columns: 10,
-	rows: 8,
-	slots: [
-		['blue-laser', 'blue-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'blue-helix'],
-		['red-helix', 'blue-helix', 'normal', 'normal', 'normal', 'normal', 'normal', 'normal', 'red-helix', 'red-laser']
-	]
-};
-
-const BoardLayer = ({ boardSize }) => {
-	const [slotSize] = useState(boardSize / arrangement.columns);
-	const [normalSlotImage] = useImage(NormalSlotSVG);
-	const [blueLaserSlotImage] = useImage(BlueLaserSlotSVG);
-	const [blueHelixSlotImage] = useImage(BlueHelixSlotSVG);
-	const [redLaserSlotImage] = useImage(RedLaserSlotSVG);
-	const [redHelixSlotImage] = useImage(RedHelixSlotSVG);
+import React, { useCallback } from "react";
+import { Layer, Image, Rect } from "react-konva";
+import { CellTypesEnum, PlayerTypesEnum } from "../models/Enums";
+import NormalCellSVG from "../assets/cell.svg";
+import RedReservedCellSVG from "../assets/red-reserved-cell.svg";
+import RedLaserCellSVG from "../assets/red-laser-cell.svg";
+import BlueReservedCellSVG from "../assets/blue-reserved-cell.svg";
+import BlueLaserCellSVG from "../assets/blue-laser-cell.svg";
+import useImage from "use-image";
+import BGN from "../utils/BGN";
 
 
-	const getSlotImage = useCallback((slotType) => {
-		switch (slotType) {
-		case 'blue-helix':
-			return blueHelixSlotImage;
+/**
+ * The number of columns of the board
+ * @constant
+ * @type {number}
+ */
+const columns = 10;
 
-		case 'red-helix':
-			return redHelixSlotImage;
-        
-		case 'blue-laser':
-			return blueLaserSlotImage;
-            
-		case 'red-laser':
-			return redLaserSlotImage;
+/**
+ * The number of rows of the board
+ * @constant
+ * @type {number}
+ */
+const rows = 8;
 
-		default:
-			return normalSlotImage;
+/**
+ * The board cell arrangement bgn
+ * @constant
+ * @type {string}
+ */
+const boardGridNotationText = "lH6hH/h8H/h8H/h8H/h8H/h8H/h8H/hH6hL";
+const boardGridNotation = BGN.parse(boardGridNotationText);
 
+/**
+ * The hex color of the cell background
+ * @constant
+ * @type {string} 
+ */
+const cellBackgroundColor = "#313134"; // a sort of dark grey
+
+
+/**
+ * The board
+ */
+const BoardLayer = ({ boardSize, gridSize }) => {
+	const [normalCellImage] = useImage(NormalCellSVG);
+	const [blueLaserCellImage] = useImage(BlueLaserCellSVG);
+	const [blueReservedCellImage] = useImage(BlueReservedCellSVG);
+	const [redLaserCellImage] = useImage(RedLaserCellSVG);
+	const [redReservedCellImage] = useImage(RedReservedCellSVG);
+
+
+	const getCellImage = useCallback((cellType, color) => {
+		switch (cellType) {
+			case CellTypesEnum.HELIX:
+				if (color === PlayerTypesEnum.BLUE) {
+					return blueReservedCellImage;
+				} else {
+					return redReservedCellImage;
+				}
+
+			case CellTypesEnum.LASER:
+				if (color === PlayerTypesEnum.BLUE) {
+					return blueLaserCellImage;
+				} else {
+					return redLaserCellImage;
+				}
+
+			default:
+				// CellTypesEnum.NORMAL
+				// No image for this cell. It's a normal cell. So we just return null.
+				return null;
 		}
-	}, [blueHelixSlotImage, redHelixSlotImage, blueLaserSlotImage, redLaserSlotImage, normalSlotImage]);
+
+	}, [blueLaserCellImage, blueReservedCellImage, redLaserCellImage, redReservedCellImage]);
 
 
-	const drawSlotsGrid = useCallback(() => {
+	const drawGrid = useCallback(() => {
 		const rows = [];
-		arrangement.slots.forEach((row, rowIndex) => {
+		boardGridNotation.forEach((row, rowIndex) => {
 			row.forEach((col, colIndex) => {
+				const cellType = col.type;
+				const cellTypeColor = col.color;
 				rows.push(
-					<Image key={`${rowIndex}${colIndex}`} image={getSlotImage(col)} 
-						x={0 + (slotSize * colIndex)}
-						y={0 + (slotSize * rowIndex)} 
-						width={slotSize} 
-						height={slotSize} />
+					<Image key={`slot--${rowIndex}${colIndex}`}
+						fill={cellBackgroundColor}
+						x={gridSize * colIndex}
+						y={gridSize * rowIndex}
+						stroke="grey"
+						image={getCellImage(cellType, cellTypeColor)}
+						strokeWidth={1}
+						strokeEnabled={true}
+						width={gridSize}
+						height={gridSize} />
 				);
 			});
 		});
 		return rows;
-	}, [slotSize, getSlotImage]);
+	}, [gridSize, getCellImage]);
 
-    
+
 	return (
 		<Layer>
-			{ drawSlotsGrid() }
+			{drawGrid()}
 		</Layer>
 	);
 };
