@@ -53,7 +53,7 @@ const BoardLayer = ({ boardSize, gridSize }) => {
 
 	const getCellImage = useCallback((cellType, color) => {
 		switch (cellType) {
-			case CellTypesEnum.HELIX:
+			case CellTypesEnum.RESERVED:
 				if (color === PlayerTypesEnum.BLUE) {
 					return blueReservedCellImage;
 				} else {
