@@ -72,7 +72,7 @@ class BGN {
         const hasValidCharsOnly = BGN_VALID_CHARS_PATTERN.test(notationText);
         if (!hasValidCharsOnly) {
             if (throwOnInvalid) {
-                throw "Invalid notation – Must only contain 'hl123456789*/'";
+                throw "Invalid notation – Must only contain 'rRlL123456789*/'";
             }
             return false;
         }

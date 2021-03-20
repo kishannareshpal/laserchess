@@ -29,7 +29,7 @@ const rows = 8;
  * @constant
  * @type {string}
  */
-const boardGridNotationText = "lH6hH/h8H/h8H/h8H/h8H/h8H/h8H/hH6hL";
+const boardGridNotationText = "lR6rR/r8R/r8R/r8R/r8R/r8R/r8R/rR6rL";
 const boardGridNotation = BGN.parse(boardGridNotationText);
 
 /**
