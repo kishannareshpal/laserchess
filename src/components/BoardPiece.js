@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { isEqual, toPlainObject } from "lodash";
 import Konva from "konva";
 import Location from "../models/Location";
@@ -12,6 +12,7 @@ import { Image } from "react-konva";
 const pieceAnimDuration = 0.332;
 
 const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, gridSize, turn, laserIsTriggered }) => {
+
 
 	const [lastXY, setLastXY] = useState({ x: undefined, y: undefined });
 	const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${piece.imageName}.svg`);
@@ -51,7 +52,6 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 		setLastXY(xy);
 	}, [getX, getY]);
 
-
 	/**
 	 * Converts the 0-indexed xy coordinates into Location.
 	 * 
@@ -67,33 +67,54 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 		return pieceLocation;
 	}, [gridSize]);
 
+
+
+	// Methods
+	const selectThePiece = useCallback(() => {
+		// Select the piece.
+		// todo allow laser selections and show possible rotations!
+		if (piece.type !== PieceTypesEnum.LASER) { // Just don't select the piece if it is LASER. TODO
+			onSelect(location); // location (aka srcLocation) of the clicked peace
+		}
+	}, [location, onSelect, piece.type]);
+
+
+	const performPieceRotation = useCallback((e) => {
+		// Rotate 90 degrees clockwise.
+		const currentOrientation = e.target.rotation();
+		let newOrientation;
+		if (currentOrientation === 270) {
+			newOrientation = 0; // reset the rotation.. basically rotates to 360º but we use 0º instead, to conform to our guidelines.
+		} else {
+			newOrientation = currentOrientation + 90; // rotate 90 degrees from current orientation.
+		}
+
+		e.target.rotation(newOrientation);
+
+		const srcLocation = xyToLocation(lastXY.x, lastXY.y);
+		// TODO: Implement counter-clockwise rotation.
+		const movement = toPlainObject(new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, toPlainObject(srcLocation)));
+		onSelect(null); // location (aka srcLocation) of the clicked peace
+		onMove(movement);
+
+	}, [lastXY.x, lastXY.y, onMove, onSelect, xyToLocation]);
+
+
 	return (
 		<Image draggable={piece.type !== PieceTypesEnum.LASER}
 			id={id}
-			onClick={(e) => {
-				// Prevent selection on a lser piece
-				if (piece.type !== PieceTypesEnum.LASER) {
-					onSelect(location); // location (aka srcLocation) of the clicked peace
-				}
+			onTap={selectThePiece}
+			onClick={selectThePiece}
+			onMouseEnter={(e) => {
+				const container = e.target.getStage().container();
+				container.style.cursor = "grab";
 			}}
-			onDblClick={(e) => {
-				// Rotate 90 degrees clockwise.
-				const currentOrientation = e.target.rotation();
-				let newOrientation;
-				if (currentOrientation === 270) {
-					newOrientation = 0; // reset the rotation.. basically rotates to 360º but we use 0º instead, to conform to our guidelines.
-				} else {
-					newOrientation = currentOrientation + 90; // rotate 90 degrees from current orientation.
-				}
-
-				e.target.rotation(newOrientation);
-
-				const srcLocation = xyToLocation(lastXY.x, lastXY.y);
-				// TODO: Implement counter-clockwise rotation.
-				const movement = toPlainObject(new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, toPlainObject(srcLocation)));
-				onSelect(null); // location (aka srcLocation) of the clicked peace
-				onMove(movement);
+			onMouseLeave={(e) => {
+				const container = e.target.getStage().container();
+				container.style.cursor = "default";
 			}}
+			onDblTap={performPieceRotation}
+			onDblClick={performPieceRotation}
 			dragBoundFunc={(pos) => {
 				// Limit drag to inside the canvas.
 				const firstSquare = getPieceSize() - (getPieceSize() / 2);
@@ -108,6 +129,8 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 			}}
 			onDragStart={(e) => {
 				e.target.moveToTop(); // Move up the layer, so it doesn't get hidden beneath other Nodes (pieces)
+				const container = e.target.getStage().container();
+				container.style.cursor = "grabbing";
 			}}
 			onDragEnd={(e) => {
 				onSelect(null); // Unselect the piece
@@ -207,6 +230,9 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 						easing: Konva.Easings.BackEaseOut
 					});
 				}
+
+				const container = e.target.getStage().container();
+				container.style.cursor = "grab";
 			}}
 			offset={{
 				x: getPieceSize() / 2,

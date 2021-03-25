@@ -1,4 +1,5 @@
-import { isArray } from "lodash";
+import { isArray, flatMap } from "lodash";
+import { SquareUtils } from "./Square";
 
 
 class BoardUtils {
@@ -16,6 +17,22 @@ class BoardUtils {
                 let squareAtLocation = row[location.colIndex];
                 return squareAtLocation;
             }
+        }
+        return null;
+    }
+
+
+    static getSquaresOfColor(board, color) {
+        if (isArray(board)) {
+            // flatten all rows into a single array
+            // console.log(board);
+            const flattened = flatMap(board);
+            const squares = flattened.filter((square) => {
+                // Filter out the squares with no pieces in it.
+                // Because we are not drawing empty squares on the board (obviously!)
+                return SquareUtils.hasPiece(square) && square.piece.color === color;
+            });
+            return squares;
         }
         return null;
     }

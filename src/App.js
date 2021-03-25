@@ -4,6 +4,9 @@ import { isEmpty, flatMap } from "lodash";
 import BoardLayer from "./components/BoardLayer";
 import BoardPiece from "./components/BoardPiece";
 import useWindowSize from "./hooks/useWindowSize";
+import LogoPNG from "./assets/logo.png";
+import BluePlayerProfile from "./assets/ui/blue-player-profile.png";
+import RedPlayerProfile from "./assets/ui/red-player-profile.png";
 import Engine from "./utils/Engine";
 import { useDispatch, useSelector } from "react-redux";
 import { init, togglePlayerTurn, hideLaserBeam, move } from "./redux/slices/gameSlice";
@@ -13,12 +16,11 @@ import { MovementTypesEnum, PlayerTypesEnum } from "./models/Enums";
 
 
 
-const boardSize = 700;
-const gridSize = boardSize / 10; // 10 is the number of cols.
-
 function App() {
 	// the curent selected piece AN string.
 	const [selectedPieceLocation, setSelectedPieceLocation] = useState(null);
+
+	const [stageWidth, setStageWidth] = useState(700);
 
 	const board = useSelector(state => state.game.board); // The current board
 	const turn = useSelector(state => state.game.turn); // It's blue by default!
@@ -28,14 +30,32 @@ function App() {
 	const winner = useSelector(state => state.game.winner); // The winner of this match!
 
 	const stageRef = useRef();
+	const boardContainerRef = useRef();
 	const dispatch = useDispatch();
+
+
+
+	const refreshBoardSize = () => {
+		const width = boardContainerRef.current.offsetWidth;
+		setStageWidth(width);
+	};
 
 
 	useEffect(() => {
 		// Setup the board pieces.
 		dispatch(init());
 
+		refreshBoardSize();
+		// here we should add listener for "container" resize
+		// take a look here https://developers.google.com/web/updates/2016/10/resizeobserver
+		// for simplicity I will just listen window resize
+		window.addEventListener("resize", refreshBoardSize);
+
+		return () => {
+			window.removeEventListener("resize", refreshBoardSize);
+		};
 	}, [dispatch]);
+
 
 
 	// Methods
@@ -52,6 +72,17 @@ function App() {
 		}
 
 	}, [dispatch, laserBeamPath]);
+
+
+	const getBoardSize = useCallback(() => {
+		// return Math.min(height, width);
+		return stageWidth;
+	}, [stageWidth]);
+
+	const getCellSize = useCallback(() => {
+		return getBoardSize() / 10;
+
+	}, [getBoardSize]);
 
 
 
@@ -71,30 +102,30 @@ function App() {
 			const selectedPieceHighlight = (
 				<Rect key="selectedPiece"
 					stroke="#F8F32B"
-					cornerRadius={12}
+					cornerRadius={8}
 					listening={false}
-					strokeWidth={4}
+					strokeWidth={2}
 					lineCap="round"
 					lineJoin="round"
-					width={gridSize}
-					height={gridSize}
-					x={selectedPieceLocation.colIndex * gridSize}
-					y={selectedPieceLocation.rowIndex * gridSize} />
+					width={getCellSize()}
+					height={getCellSize()}
+					x={selectedPieceLocation.colIndex * getCellSize()}
+					y={selectedPieceLocation.rowIndex * getCellSize()} />
 			);
 			const possibleMovesHighlights = allMovePossibilities.map(move => {
 				return (
 					<Circle key={`pm--${LocationUtils.toANString(move.destLocation)}`}
 						fill="#1EFC1E9F"
-						offsetX={-gridSize / 2}
-						offsetY={-gridSize / 2}
+						offsetX={-(getCellSize()) / 2}
+						offsetY={-(getCellSize()) / 2}
 						listening={false}
-						width={32}
-						height={32}
+						width={getCellSize() / 2.5}
+						height={getCellSize() / 2.5}
 						stroke="#1EFC1E"
 						strokeWidth={4}
 						perfectDrawEnabled={false}
-						x={(move.destLocation.colIndex * gridSize)}
-						y={(move.destLocation.rowIndex * gridSize)} />
+						x={(move.destLocation.colIndex * getCellSize())}
+						y={(move.destLocation.rowIndex * getCellSize())} />
 				);
 			});
 
@@ -103,7 +134,7 @@ function App() {
 			return highlights;
 		}
 
-	}, [selectedPieceLocation, board]);
+	}, [selectedPieceLocation, board, getCellSize]);
 
 
 	/**
@@ -150,7 +181,7 @@ function App() {
 
 					// Perform the movement
 					// - Only delay if the movement type is NORMAL or SPECIAL (bc there is some animation on these movement types). 
-					//   No need to delay while rotating, cause it's istant!
+					//   No need to delay while rotating, cause its istant!
 					// ? Add an option to disable animations.
 					let delayed = !(movement.type === MovementTypesEnum.ROTATION_CLOCKWISE || movement.type === MovementTypesEnum.ROTATION_C_CLOCKWISE);
 					if (delayed) {
@@ -167,46 +198,104 @@ function App() {
 				onSelect={(srcLocation) => {
 					setSelectedPieceLocation(srcLocation);
 				}}
-				gridSize={gridSize} />
+				gridSize={getCellSize()} />
 		));
-	}, [board, turn, laserIsTriggered, dispatch]);
+	}, [board, turn, laserIsTriggered, dispatch, getCellSize]);
 
 
 
 	const drawLaser = useCallback(() => {
-		const points = laserBeamPath.map(coord => coord * gridSize + (gridSize / 2));
+		const points = laserBeamPath.map(coord => coord * getCellSize() + (getCellSize() / 2));
 		if (points) {
 			return (
 				<Line points={points}
-					stroke={turn === PlayerTypesEnum.BLUE ? "#00FFEB" : "#FF7600"}
+					stroke="#FF7600"
 					lineCap="round"
 					lineJoin="round"
 					listening={false}
 					strokeWidth={7} />
 			);
 		}
-	}, [laserBeamPath, turn]);
+	}, [laserBeamPath, getCellSize]);
 
 
 	return (
 		<div>
-			<Stage className="board-color" width={boardSize} height={boardSize - (2 * (boardSize / 10))}>
-				<BoardLayer boardSize={boardSize} gridSize={gridSize} />
+			<nav className="navbar navbar-dark bg-dark">
+				<div className="container">
+					<a className="navbar-brand" href="#">
+						<img src={LogoPNG} alt="laser-chess.com logo" height="52" />
+					</a>
+				</div>
+			</nav>
 
-				<Layer ref={stageRef}>
-					{drawBoardPieces()}
-					{drawHighlight()}
-				</Layer>
+			<div className="container section">
+				<div className="row align-items-center">
+					<div className="col-12 col-lg-6">
+						<div>
+							<div className="text-white py-3">
+								<div className="row align-items-center">
+									<div className="col-auto">
+										<img height={36} src={RedPlayerProfile} alt="rpp" />
+									</div>
+									<div className={`col ${turn === PlayerTypesEnum.RED ? "text-white" : "text-muted"}`}>
+										<div className="row align-items-center gx-4">
+											<div className="col-auto">
+												<h4 className="m-0">
+													Red Player
+												</h4>
+											</div>
+											<div className="col">
+												<div hidden={turn !== PlayerTypesEnum.RED} className="badge rounded-pill bg-dark text-light">Your turn</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="board" ref={boardContainerRef}>
+								<Stage className="stage" width={getBoardSize()} height={getBoardSize() - (2 * (getCellSize()))}>
+									<BoardLayer boardSize={getBoardSize()} gridSize={getCellSize()} />
+									<Layer ref={stageRef}>
+										{drawBoardPieces()}
+										{drawHighlight()}
+									</Layer>
 
-				<Layer>
-					{drawLaser()}
-				</Layer>
-			</Stage>
+									<Layer>
+										{drawLaser()}
+									</Layer>
+								</Stage>
+							</div>
+							<div className="text-white py-3">
+								<div className="row align-items-center">
+									<div className="col-auto">
+										<img height={36} src={BluePlayerProfile} alt="bpp" />
+									</div>
+									<div className={`col ${turn === PlayerTypesEnum.BLUE ? "text-white" : "text-muted"}`}>
+										<div className="row align-items-center gx-4">
+											<div className="col-auto">
+												<h4 className="m-0">
+													Blue Player
+												</h4>
+											</div>
+											<div className="col">
+												<div hidden={turn !== PlayerTypesEnum.BLUE} className="badge rounded-pill bg-dark text-light">Your turn</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="col text-white">
+						{winner && <h1>🎉 {winner.toUpperCase()} player wins!</h1>}
+					</div>
+				</div>
+			</div>
 
-			<div className="card rounded-lg d-inline-block p-4 m-4">
-				{/* Ellapsed: <CountUp start={0} end={1000} startOnMount={true} duration={1000} /> */}
-				<h4 className="m-0">Now playing: <strong>{turn.toUpperCase()}</strong></h4>
-				{winner && <h1>🎉 {winner.toUpperCase()} player wins!</h1>}
+
+			<div className="container mt-5 p-3 text-muted">
+				<hr />
+				<small>Laser Chess - 1.0.0-alpha - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
 			</div>
 		</div>
 	);

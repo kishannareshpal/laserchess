@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { Layer, Image, Rect } from "react-konva";
 import { CellTypesEnum, PlayerTypesEnum } from "../models/Enums";
-import NormalCellSVG from "../assets/cell.svg";
 import RedReservedCellSVG from "../assets/red-reserved-cell.svg";
 import RedLaserCellSVG from "../assets/red-laser-cell.svg";
 import BlueReservedCellSVG from "../assets/blue-reserved-cell.svg";
@@ -44,7 +43,6 @@ const cellBackgroundColor = "#313134"; // a sort of dark grey
  * The board
  */
 const BoardLayer = ({ boardSize, gridSize }) => {
-	const [normalCellImage] = useImage(NormalCellSVG);
 	const [blueLaserCellImage] = useImage(BlueLaserCellSVG);
 	const [blueReservedCellImage] = useImage(BlueReservedCellSVG);
 	const [redLaserCellImage] = useImage(RedLaserCellSVG);
@@ -83,11 +81,11 @@ const BoardLayer = ({ boardSize, gridSize }) => {
 				const cellType = col.type;
 				const cellTypeColor = col.color;
 				rows.push(
-					<Image key={`slot--${rowIndex}${colIndex}`}
+					<Image key={`cell--${rowIndex}${colIndex}`}
 						fill={cellBackgroundColor}
 						x={gridSize * colIndex}
 						y={gridSize * rowIndex}
-						stroke="grey"
+						stroke="#000"
 						image={getCellImage(cellType, cellTypeColor)}
 						strokeWidth={1}
 						strokeEnabled={true}
