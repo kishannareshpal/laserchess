@@ -115,7 +115,7 @@ If you accidentally hit your own King–**YOU LOSE!**. Your opponent wins the ga
 
 1. A piece may only be moved **OR** rotated in one turn, not both.
 2. A piece may only be rotated 90 degrees at a time.
-3. A piece is captured when the laser hits a piece in one of it's non-deflective / non-shield side. [`(📄) See the Hit Notation`](./HitNotation.md)
+3. A piece is captured when the laser hits a piece in one of it's non-deflective / non-shield side. [`(📄) See the Hit Notation`](./LaserHitActionNotation.md)
 
 #### Special Move
 
