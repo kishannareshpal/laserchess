@@ -2,7 +2,11 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
 
-### STATUS :warning: _Not ready!_
+### Project Status: `🔬 Active development`
+
+Try the early release version (1.0.0-alpha1): [www.laser-chess.com](https://laser-chess.com)
+
+
 
 ## About
 
