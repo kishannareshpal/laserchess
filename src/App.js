@@ -337,7 +337,7 @@ function App() {
 
 			<div className="container mt-5 p-3 text-muted">
 				<hr />
-				<small><a href="https://github.com/kishannareshpal/laserchess">Laser Chess - 1.0.0-alpha</a> - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
+				<small><a href="https://github.com/kishannareshpal/laserchess">Laser Chess - 1.0.0-alpha.2</a> - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
 			</div>
 		</div >
 	);
