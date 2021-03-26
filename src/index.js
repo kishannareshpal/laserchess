@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import "array-flat-polyfill";
 import App from "./App";
-// import AppContextProvider from './context/AppContext';
 import store from "./redux/store";
 import { Provider } from "react-redux";
 

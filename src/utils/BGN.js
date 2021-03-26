@@ -1,4 +1,4 @@
-import { isString, isEmpty, toPlainObject } from "lodash";
+import { isString, isEmpty } from "lodash";
 import Cell from "../models/Cell";
 import { CellTypesEnum } from "../models/Enums";
 import Location from "../models/Location";
@@ -113,15 +113,15 @@ class BGN {
         const boardCells = notationArray.map((row, rowIndex) => {
             const cells = [];
             row.forEach((col, colIndex) => {
-                const location = toPlainObject(new Location(colIndex, rowIndex));
+                const location = new Location(colIndex, rowIndex);
                 if (!isEmpty(col)) {
                     const type = col[0];
-                    const cell = toPlainObject(new Cell(type, location));
+                    const cell = new Cell(type, location);
                     cells.push(cell);
 
                 } else {
                     const type = CellTypesEnum.NORMAL;
-                    const cell = toPlainObject(new Cell(type, location));
+                    const cell = new Cell(type, location);
                     cells.push(cell);
                 }
             });

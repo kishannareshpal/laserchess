@@ -18,6 +18,27 @@ class Movement {
         this.srcLocation = srcLocation;
         this.destLocation = destLocation;
     }
+
+    /**
+     * Check if the movement is possible, in other words, if it not of type #INVALID
+     * @returns {boolean} true if possible, otherwise false
+     */
+    get isPossible() {
+        return this.type !== MovementTypesEnum.INVALID;
+    }
+
+    /**
+     * Serializes the Movement object into an Object.
+     * @returns {Object} plain object, representing this instance
+     */
+    serialize() {
+        return {
+            type: this.type,
+            srcLocation: this.srcLocation.serialize(),
+            destLocation: this.destLocation ? this.destLocation.serialize() : null,
+            isPossible: this.isPossible
+        };
+    }
 }
 
 class MovementUtils {
@@ -44,6 +65,48 @@ class MovementUtils {
         }
 
         return null;
+    }
+
+
+    /**
+     * Returns a new Movement object from the provided algebraic notation for movement.
+     * @see AlgebraicNotation.md to learn more about the Algebraic Notation for this game
+     * 
+     * @param {string} algebraicNotation the algebraic notation text to transform into Movement
+     */
+    static parse(algebraicNotation) {
+        if (algebraicNotation) {
+            // First of all get the type of movement being performed.
+            if (algebraicNotation.includes("u")) {
+                // Special Move
+                const [src, dest] = algebraicNotation.split("u");
+                const srcLocation = LocationUtils.parse(src);
+                const destLocation = LocationUtils.parse(dest);
+                return new Movement(MovementTypesEnum.SPECIAL, srcLocation, destLocation);
+
+            } else if (algebraicNotation.includes("+")) {
+                // Clockwise rotation
+                const [src] = algebraicNotation.split("+");
+                const srcLocation = LocationUtils.parse(src);
+                return new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, srcLocation, null);
+
+            } else if (algebraicNotation.includes("-")) {
+                // Clockwise rotation
+                const [src] = algebraicNotation.split("-");
+                const srcLocation = LocationUtils.parse(src);
+                return new Movement(MovementTypesEnum.ROTATION_C_CLOCKWISE, srcLocation, null);
+
+            } else {
+                // Normal move
+                const src = algebraicNotation.slice(0, 2);
+                const dest = algebraicNotation.slice(2, 4);
+                const srcLocation = LocationUtils.parse(src);
+                const destLocation = LocationUtils.parse(dest);
+                return new Movement(MovementTypesEnum.NORMAL, srcLocation, destLocation);
+            }
+        } else {
+            throw new Error(`Invalid algebraic notation: '${algebraicNotation}'`);
+        }
     }
 }
 

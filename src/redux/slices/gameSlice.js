@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import SN from "../../utils/SN";
-import { PieceUtils } from "../../models/Piece";
-import BoardUtils from "../../models/BoardUtils";
-import { PlayerTypesEnum, MovementTypesEnum, LaserHitActionTypesEnum, GameStatusEnum, PieceTypesEnum } from "../../models/Enums";
-import Engine from "../../utils/Engine";
+import { PlayerTypesEnum, GameStatusEnum } from "../../models/Enums";
+import Board from "../../models/Board";
+import AI from "../../utils/ai/AI";
 
 /** 
  * The default board setup (ACE).
@@ -14,6 +12,7 @@ import Engine from "../../utils/Engine";
  */
 const DEFAULT_BOARD_SN = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7B++2/2B+DKD3L";
 
+
 const gameSlice = createSlice({
     name: "game",
     initialState: {
@@ -23,27 +22,73 @@ const gameSlice = createSlice({
         laserBeamPath: [],
         status: GameStatusEnum.PLAYING,
         winner: "", // 🎉 this is replaced with either PlayerTypesEnum.BLUE or PlayerTypesEnum.RED when one of them wins by killing the opponent's king!
-        board: []
+        squares: [],
+
+        aiEnabled: true,
+
+        laser: {
+            triggered: false,
+            path: []
+        }
     },
     reducers: {
         /**
-         * Initialize the board by setting up the pieces on it's initial positions.
-         * This should be called once in the game initialization code (when page loads / onComponentDidMount - useEffect(,[]))
+         * Setup the board with a setup notation
+         * This should be called in the app initialization.
          * 
-         * @param {SN} action.payload.sn Setup Notation of the initial pieces positions.
+         * @param {Object} action
+         * @param {Object} action.payload
+         * @param {string} action.payload.setupNotation the initial board setup notation.
+         *                                              - If setupNotation is not passed, will default to the Ace board
          */
-        init: (state, action) => {
-            if (action.payload) {
-                // Get the custom starting setup notation (sn)
-                const startingSN = action.payload.sn;
-                state.sn = startingSN;
-                state.board = SN.parse(startingSN);
-
-            } else {
-                // Use the default board sn as starter.
-                state.board = SN.parse(state.sn);
-            }
+        setBoardType: (state, action) => {
+            const newBoard = new Board(action.payload).serialize();
+            state.squares = newBoard.squares;
+            state.winner = newBoard.winner;
+            state.sn = newBoard.sn;
         },
+
+        /**
+         * Perform a movement on the current board state.
+         * @param {Movement} action.payload.movement the movement to be performed on the board.
+         */
+        playerMove: (state, action) => {
+            const { movement } = action.payload;
+            const newBoard = new Board({ squares: state.squares });
+            newBoard.applyMovement(movement);
+            const laserPath = newBoard.applyLaser(state.turn);
+
+            const serializedBoard = newBoard.serialize();
+            state.winner = serializedBoard.winner;
+            state.sn = serializedBoard.sn;
+            state.squares = serializedBoard.squares;
+
+            state.laser.triggered = true;
+            state.laser.path = laserPath;
+        },
+
+
+        /**
+         * Think and perform a move as AI, using the Minimax algorithm
+         */
+        aiMove: (state) => {
+            const newBoard = new Board({ squares: state.squares });
+
+            // Using minimax, determine the best possible move for this player based on current state of the board
+            const ai = new AI();
+            const movement = ai.computeMove(newBoard, PlayerTypesEnum.RED);
+
+            newBoard.applyMovement(movement);
+            const laserPath = newBoard.applyLaser(PlayerTypesEnum.RED);
+            const serializedBoard = newBoard.serialize();
+            state.winner = serializedBoard.winner;
+            state.sn = serializedBoard.sn;
+            state.squares = serializedBoard.squares;
+
+            state.laser.triggered = true;
+            state.laser.path = laserPath;
+        },
+
 
         /**
          * Toggle the player turn. If red, toggle to blue and vice versa.
@@ -53,79 +98,22 @@ const gameSlice = createSlice({
             state.turn = (state.turn === PlayerTypesEnum.BLUE) ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
         },
 
+
         /**
-         * Perform the movement on the current board and return the new board with the move made.
          * 
-         * @param {Movement} action.payload.movement the movement that is being performed.
+         * @param {*} state 
          */
-        move: (state, action) => {
-            const board = state.board;
-            const { movement } = action.payload;
-            const squareAtSrc = BoardUtils.getSquareAtLocation(board, movement.srcLocation);
-
-            // Check what type of move is being performed
-            if (movement.type === MovementTypesEnum.NORMAL) {
-                // Normal movement (from one square to an empty one)
-                const squareAtDest = board[movement.destLocation.rowIndex][movement.destLocation.colIndex];
-                // const squareAtDest = BoardUtils.getSquareAtLocation(board, movement.srcLocation);
-
-                // Move the piece from the src to dest.
-                squareAtDest.piece = squareAtSrc.piece;
-                squareAtSrc.piece = null;
-
-            } else if (movement.type === MovementTypesEnum.ROTATION_CLOCKWISE) {
-                // Rotation movement (clockwise)
-                const clockwise = true;
-                PieceUtils.applyRotation(squareAtSrc.piece, clockwise);
-
-            } else if (movement.type === MovementTypesEnum.ROTATION_C_CLOCKWISE) {
-                // Rotation movement (counter-clockwise)
-                const c_clockwise = false;
-                PieceUtils.applyRotation(squareAtSrc.piece, c_clockwise);
-
-            } else if (movement.type === MovementTypesEnum.SPECIAL) {
-                // Special movement (Switch piece is swapping places with either a Deflector or Defender piece)
-                const squareAtDest = BoardUtils.getSquareAtLocation(board, movement.destLocation);
-
-                // Swap the pieces.
-                const squareAtSrcPiece = squareAtSrc.piece;
-                squareAtSrc.piece = squareAtDest.piece;
-                squareAtDest.piece = squareAtSrcPiece;
-            }
-
-
-            // Now compute the new laser beam path so we can turn it on
-            const { lastHitType, lastHitLocation, path } = Engine.computeLaserPath(board, state.turn);
-            // and finally handle the laser hit
-            if (lastHitType === LaserHitActionTypesEnum.KILL) {
-                const squareAtHit = board[lastHitLocation.rowIndex][lastHitLocation.colIndex];
-                // Check if we killed the King!
-                if (squareAtHit.piece.type === PieceTypesEnum.KING) {
-                    // Oh lord, the king is dead, I repeat, the king is dead!
-                    // Check which king is dead and declare the winner! 🏴‍☠️ 
-                    const winnerPlayerColor = squareAtHit.piece.color === PlayerTypesEnum.BLUE ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
-                    state.winner = winnerPlayerColor;
-                    state.status = GameStatusEnum.FINISHED;
-
-                } else {
-                    // If we hit any piece, other than a King
-                    // Remove the piece from the square.
-                    squareAtHit.piece = null;
-                }
-            }
-            // Trigger the laser (this laser is then hidden after a short period of time when shown)
-            state.laserBeamPath = path;
-            state.laserIsTriggered = true;
+        toggleAI(state) {
+            state.aiEnabled = !state.aiEnabled;
         },
-
 
         /**
          * Hide the laser beam.
          * - This action is always called after/before #togglePlayerTurn.
          */
         hideLaserBeam: (state) => {
-            state.laserBeamPath = [];
-            state.laserIsTriggered = false;
+            state.laser.path = [];
+            state.laser.triggered = false;
         },
 
 
@@ -149,14 +137,17 @@ const gameSlice = createSlice({
 
 });
 
+
 // Action creators are generated for each case reducer function
 export const {
-    init,
     togglePlayerTurn,
     hideLaserBeam,
-    move,
     pause,
-    resume
+    resume,
+    setBoardType,
+    playerMove,
+    aiMove,
+    toggleAI
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

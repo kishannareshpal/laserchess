@@ -7,51 +7,59 @@ import useWindowSize from "./hooks/useWindowSize";
 import LogoPNG from "./assets/logo.png";
 import BluePlayerProfile from "./assets/ui/blue-player-profile.png";
 import RedPlayerProfile from "./assets/ui/red-player-profile.png";
-import Engine from "./utils/Engine";
 import { useDispatch, useSelector } from "react-redux";
-import { init, togglePlayerTurn, hideLaserBeam, move } from "./redux/slices/gameSlice";
+import { togglePlayerTurn, hideLaserBeam, setBoardType, playerMove, aiMove, toggleAI } from "./redux/slices/gameSlice";
 import { LocationUtils } from "./models/Location";
 import { SquareUtils } from "./models/Square";
 import { MovementTypesEnum, PlayerTypesEnum } from "./models/Enums";
+import Board from "./models/Board";
 
 
 
 function App() {
-	// the curent selected piece AN string.
+
+	// The selected piece location (when a piece is selected ofc).
 	const [selectedPieceLocation, setSelectedPieceLocation] = useState(null);
 
+	// The stage width. This is dynamic, and changes on window resize.
 	const [stageWidth, setStageWidth] = useState(700);
 
-	const board = useSelector(state => state.game.board); // The current board
+	const aiEnabled = useSelector(state => state.game.aiEnabled); // the current board squares setup notation
+	const squares = useSelector(state => state.game.squares); // The current board squares
 	const turn = useSelector(state => state.game.turn); // It's blue by default!
-	const laserBeamPath = useSelector(state => state.game.laserBeamPath); // So i can enable the laser after the player has moved.
-	const laserIsTriggered = useSelector(state => state.game.laserIsTriggered); // So i can enable the laser after the player has moved.
+	const laserBeamPath = useSelector(state => state.game.laser.path); // So i can enable the laser after the player has moved.
+	const laserIsTriggered = useSelector(state => state.game.laser.triggered); // So i can enable the laser after the player has moved.
 	const status = useSelector(state => state.game.status); // Current game state
 	const winner = useSelector(state => state.game.winner); // The winner of this match!
 
-	const stageRef = useRef();
-	const boardContainerRef = useRef();
+	const stagePiecesLayerRef = useRef(); // A reference to the stage, used to find BoardPieces afterwards.
+	const stageContainerRef = useRef(); // A reference to the Div containing the stage
 	const dispatch = useDispatch();
 
 
 
+	/**
+	 * Resizes the stage width to match the DIV parent.
+	 * For page responsiveness.
+	 * This function is called on the "resize" event of the window.
+	 */
 	const refreshBoardSize = () => {
-		const width = boardContainerRef.current.offsetWidth;
+		const width = stageContainerRef.current.offsetWidth;
 		setStageWidth(width);
 	};
 
-
 	useEffect(() => {
 		// Setup the board pieces.
-		dispatch(init());
+		dispatch(setBoardType());
 
-		refreshBoardSize();
-		// here we should add listener for "container" resize
+		// Handle stage responsiveness
 		// take a look here https://developers.google.com/web/updates/2016/10/resizeobserver
 		// for simplicity I will just listen window resize
+		refreshBoardSize();
 		window.addEventListener("resize", refreshBoardSize);
 
 		return () => {
+			// clear on unmount to prevent memory leak!
 			window.removeEventListener("resize", refreshBoardSize);
 		};
 	}, [dispatch]);
@@ -62,7 +70,7 @@ function App() {
 	useEffect(() => {
 		// Shows the laser path, after each move for the player on the move.
 		// Automatically hides it after 2 sec.
-		// ? Maybe add an option to define how long the laser beam should be shown
+		// ? Maybe add an option to define for how long the laser beam should be shown
 		if (laserBeamPath.length) {
 			setTimeout(() => {
 				// hide
@@ -74,15 +82,37 @@ function App() {
 	}, [dispatch, laserBeamPath]);
 
 
+	useEffect(() => {
+		if (turn === PlayerTypesEnum.RED && aiEnabled) {
+			// ? Red's the AI
+			setTimeout(() => {
+				dispatch(aiMove());
+			}, 500);
+		}
+
+	}, [turn, aiEnabled, dispatch]);
+
+
 	const getBoardSize = useCallback(() => {
-		// return Math.min(height, width);
 		return stageWidth;
 	}, [stageWidth]);
 
+
 	const getCellSize = useCallback(() => {
 		return getBoardSize() / 10;
-
 	}, [getBoardSize]);
+
+
+	/**
+	 * Gets the current board
+	 * 
+	 * @returns {Board} the board object for the current squares.
+	 */
+	const getCurrentBoard = useCallback(() => {
+		const board = new Board({ squares });
+		return board;
+
+	}, [squares]);
 
 
 
@@ -94,8 +124,8 @@ function App() {
 		// Check if a piece is selected
 		if (!isEmpty(selectedPieceLocation)) {
 			// Retrieve all possible moves for the selected piece
-			const allMovePossibilities = Engine.checkAllMovePossibilities(selectedPieceLocation, board);
-			console.log("Possible moves", allMovePossibilities);
+			const board = getCurrentBoard();
+			const movesForSelectedPiece = board.getMovesForPieceAtLocation(selectedPieceLocation);
 
 			// Create the highlight Konva Rect and Circles
 			const highlights = [];
@@ -112,7 +142,7 @@ function App() {
 					x={selectedPieceLocation.colIndex * getCellSize()}
 					y={selectedPieceLocation.rowIndex * getCellSize()} />
 			);
-			const possibleMovesHighlights = allMovePossibilities.map(move => {
+			const possibleMovesHighlights = movesForSelectedPiece.map(move => {
 				return (
 					<Circle key={`pm--${LocationUtils.toANString(move.destLocation)}`}
 						fill="#1EFC1E9F"
@@ -134,7 +164,7 @@ function App() {
 			return highlights;
 		}
 
-	}, [selectedPieceLocation, board, getCellSize]);
+	}, [selectedPieceLocation, getCellSize, getCurrentBoard]);
 
 
 	/**
@@ -142,21 +172,20 @@ function App() {
 	 */
 	const drawBoardPieces = useCallback(() => {
 		// flatten all rows into a single array
-		// console.log(board);
-		const flattened = flatMap(board);
-		const squares = flattened.filter((square) => {
+		const flattenedSquares = flatMap(squares);
+		const squaresWithPieces = flattenedSquares.filter((square) => {
 			// Filter out the squares with no pieces in it.
 			// Because we are not drawing empty squares on the board (obviously!)
 			return SquareUtils.hasPiece(square);
 		});
 
-		// Transform the pieces inside the square into Konva's BoardPiece
-		return squares.map((square) => (
+		// Transform the Piece inside the square into Konva's BoardPiece
+		return squaresWithPieces.map((square) => (
 			<BoardPiece turn={turn}
 				laserIsTriggered={laserIsTriggered}
 				id={LocationUtils.toANString(square.location)}
 				key={`${square.piece.imageName}--${LocationUtils.toANString(square.location)}`}
-				board={board}
+				squares={squares}
 				square={square}
 				onMove={(movement, srcPieceXY) => {
 					// console.log("Movement made!", movement);
@@ -167,7 +196,7 @@ function App() {
 					if (movement.type === MovementTypesEnum.SPECIAL) {
 						// Grab the piece that is being switched with the Switch piece.
 						const destPieceId = LocationUtils.toANString(movement.destLocation);
-						const query = stageRef.current.find(`#${destPieceId}`);
+						const query = stagePiecesLayerRef.current.find(`#${destPieceId}`);
 						const destPieceRaw = query[0];
 
 						// And move it to where the Switch piece srcLocation (Because you are already dragging the Switch to the destLocation)
@@ -187,11 +216,11 @@ function App() {
 					if (delayed) {
 						// Delay the state change so that the konva animation finishes.
 						setTimeout(() => {
-							dispatch(move({ movement }));
+							dispatch(playerMove({ movement: movement.serialize() }));
 						}, 332); // 332ms is the tween duration for every piece movement in the game.
 
 					} else {
-						dispatch(move({ movement }));
+						dispatch(playerMove({ movement: movement.serialize() }));
 					}
 				}}
 
@@ -200,12 +229,12 @@ function App() {
 				}}
 				gridSize={getCellSize()} />
 		));
-	}, [board, turn, laserIsTriggered, dispatch, getCellSize]);
+	}, [squares, turn, laserIsTriggered, dispatch, getCellSize]);
 
 
 
 	const drawLaser = useCallback(() => {
-		const points = laserBeamPath.map(coord => coord * getCellSize() + (getCellSize() / 2));
+		const points = flatMap(laserBeamPath).map(coord => coord * getCellSize() + (getCellSize() / 2));
 		if (points) {
 			return (
 				<Line points={points}
@@ -239,23 +268,36 @@ function App() {
 										<img height={36} src={RedPlayerProfile} alt="rpp" />
 									</div>
 									<div className={`col ${turn === PlayerTypesEnum.RED ? "text-white" : "text-muted"}`}>
-										<div className="row align-items-center gx-4">
+										<div className="row align-items-center justify-content-between gx-4">
 											<div className="col-auto">
 												<h4 className="m-0">
 													Red Player
 												</h4>
 											</div>
 											<div className="col">
-												<div hidden={turn !== PlayerTypesEnum.RED} className="badge rounded-pill bg-dark text-light">Your turn</div>
+												<div hidden={(turn !== PlayerTypesEnum.RED) || (aiEnabled)} className="badge rounded-pill bg-dark text-light">Your turn</div>
+											</div>
+											<div className="col-auto">
+												<div className="form-check form-switch m-0">
+													<label className="form-check-label text-white fw-bold" htmlFor="aiModeSwitch">AI Mode {aiEnabled}</label>
+													<input checked={aiEnabled}
+														onChange={(e) => {
+															// Toggle ai mode for next moves of RED player
+															dispatch(toggleAI());
+														}}
+														className="form-check-input"
+														type="checkbox"
+														id="aiModeSwitch" />
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div className="board" ref={boardContainerRef}>
+							<div className="board" ref={stageContainerRef}>
 								<Stage className="stage" width={getBoardSize()} height={getBoardSize() - (2 * (getCellSize()))}>
 									<BoardLayer boardSize={getBoardSize()} gridSize={getCellSize()} />
-									<Layer ref={stageRef}>
+									<Layer ref={stagePiecesLayerRef}>
 										{drawBoardPieces()}
 										{drawHighlight()}
 									</Layer>
@@ -295,9 +337,9 @@ function App() {
 
 			<div className="container mt-5 p-3 text-muted">
 				<hr />
-				<small>Laser Chess - 1.0.0-alpha - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
+				<small><a href="https://github.com/kishannareshpal/laserchess">Laser Chess - 1.0.0-alpha</a> - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
 			</div>
-		</div>
+		</div >
 	);
 }
 

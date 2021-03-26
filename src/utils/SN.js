@@ -1,4 +1,4 @@
-import { isString, isEmpty, reduce, toPlainObject } from "lodash";
+import { isString, isEmpty, reduce } from "lodash";
 import { isLowerCase } from "./Utils";
 import Square from "../models/Square";
 import Location from "../models/Location";
@@ -42,7 +42,7 @@ class SN {
             return false;
         }
 
-        const hasNoSpaces = notationText.indexOf(" ") == -1;
+        const hasNoSpaces = notationText.indexOf(" ") === -1;
         if (!hasNoSpaces) {
             if (throwOnInvalid) {
                 throw "Invalid notation – Must not contain space";
@@ -50,7 +50,7 @@ class SN {
             return false;
         }
 
-        const hasEightRows = notationText.split("/").length == 8;
+        const hasEightRows = notationText.split("/").length === 8;
         if (!hasEightRows) {
             if (throwOnInvalid) {
                 throw "Invalid notation – Must contain 8 rows (7 slashes)";
@@ -82,33 +82,54 @@ class SN {
      */
     static parse(notationText) {
         // Validate the SN. 
-        // throw if invalid
+        // throw on invalid notation
         this.validate(notationText, true);
 
         const notationArray = [];
         const rows = notationText.split("/");
-        rows.forEach(row => {
+        rows.forEach((row, rowIndex) => {
+            // Make sure it only has valid characters
             const colsRaw = row.match(/([ksdbl1-9*]\+{0,3})/gi);
+
+            // Track the number of columns so we can validate rows, which must have only 10 squares (cols)! 
+            let squaresCount = 0;
             const cols = colsRaw.flatMap(col => {
-                if (col == "*") {
+                if (col === "*") {
+                    // It's 10 empty spaces.
+                    // Transform it into the literal number 10, so i can map it into 10 empty squares.
                     col = 10;
                 }
-                if (parseInt(col)) {
-                    return new Array(parseInt(col)).fill("");
+
+                if (isNaN(col)) {
+                    // It's a letter (which represents the piece type and color, and optionally the orientation)
+                    // Increment the column count.
+                    // - ignore + symbols(which represents orientation) as it adds no squares(cols) to a row.
+                    squaresCount += 1;
+                    return col;
+                } else {
+                    // It's a number (which represents the number of empty spaces from this col)
+                    // Increment the number of cols
+                    const numberOfEmptySquares = parseInt(col);
+                    squaresCount += numberOfEmptySquares;
+                    return new Array(numberOfEmptySquares).fill("");
                 }
-                return col;
             });
+
+            // Make sure that the row has 10 cols.
+            if (squaresCount !== 10) {
+                throw `Invalid Notation – Must contain 10 Columns per Row. Found ${squaresCount} Columns in row ${rowIndex + 1} instead`;
+            }
+
             notationArray.push(cols);
         });
 
         const parsedBoard = notationArray.map((row, rowIndex) => {
             const squares = [];
             row.forEach((col, colIndex) => {
-                const location = toPlainObject(new Location(colIndex, rowIndex));
+                const location = new Location(colIndex, rowIndex).serialize();
 
                 if (!isEmpty(col)) {
                     const type = col[0]; // type (Kk, Ll, Bb, Dd, Ss)
-                    const color = isLowerCase(type) ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE; // color (red, blue)
                     let orientation = 0; // orientation (0, 90, 180, 270)
                     if (col.indexOf("+") != -1) {
                         const rotations = col.substring(1);
@@ -116,12 +137,12 @@ class SN {
                             return prev + 90;
                         }, 0);
                     }
-                    const piece = toPlainObject(new Piece(type, orientation));
-                    const square = toPlainObject(new Square(piece, location));
+                    const piece = new Piece(type, orientation).serialize();
+                    const square = new Square(piece, location).serialize();
                     squares.push(square);
 
                 } else {
-                    const emptySquare = toPlainObject(new Square(null, location));
+                    const emptySquare = new Square(null, location).serialize();
                     squares.push(emptySquare);
                 }
             });

@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { isEqual, toPlainObject } from "lodash";
+import { isEqual } from "lodash";
 import Konva from "konva";
 import Location from "../models/Location";
 import Movement from "../models/Movement";
 import useImage from "use-image";
-import Engine from "../utils/Engine";
 import { MovementTypesEnum, PieceTypesEnum } from "../models/Enums";
 import { Image } from "react-konva";
+import Board from "../models/Board";
 
 
 const pieceAnimDuration = 0.332;
 
-const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, gridSize, turn, laserIsTriggered }) => {
-
-
+const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, gridSize, turn, laserIsTriggered }) => {
 	const [lastXY, setLastXY] = useState({ x: undefined, y: undefined });
 	const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${piece.imageName}.svg`);
 
@@ -93,7 +91,7 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 
 		const srcLocation = xyToLocation(lastXY.x, lastXY.y);
 		// TODO: Implement counter-clockwise rotation.
-		const movement = toPlainObject(new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, toPlainObject(srcLocation)));
+		const movement = new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, srcLocation);
 		onSelect(null); // location (aka srcLocation) of the clicked peace
 		onMove(movement);
 
@@ -142,7 +140,6 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 				const endX = (Math.round((rawEndX + (gridSize / 2)) / gridSize) * gridSize) - (gridSize / 2);
 				const endY = (Math.round((rawEndY + (gridSize / 2)) / gridSize) * gridSize) - (gridSize / 2);
 
-				// TODO: check if this move was valid then update the board arrangement!
 				const hasChangedLocation = !isEqual(lastXY, { x: endX, y: endY });
 				if (hasChangedLocation) {
 					const srcLocation = xyToLocation(lastXY.x, lastXY.y);
@@ -150,7 +147,7 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 
 					// Validate!
 					// Check if the destLocation square is a neighbor of the srcLocation.
-					const isMovingToNeighbor = Engine.isMovingToNeighbor(srcLocation, destLocation);
+					const isMovingToNeighbor = Board.isMovingToNeighborSquare(srcLocation, destLocation);
 					if (!isMovingToNeighbor) {
 						// Not a neighbor square of the srcLocation, so move is invalid by itself.
 						// See game rules about piece movement https://github.com/kishannareshpal/docs/Guide.md
@@ -165,11 +162,12 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 
 					} else {
 						// We are moving to a neighbor, which is a valid move location.
-						// But, now we check if we are not stepping into another piece (moving to a square where another piece already exists is only valid for a Switch piece)
-						const movePossibility = Engine.checkMovePossibility(srcLocation, destLocation, board);
-						console.log(movePossibility);
+						// But, now we check if we are not stepping into another piece being a piece other than a switch (moving to a square where another piece already exists is only valid for a Switch piece)
+						const board = new Board({ squares });
+						const movement = board.checkMovePossibility(srcLocation, destLocation);
+						// console.log("Move possibility", movement);
 
-						if (!movePossibility.isPossible) {
+						if (!movement.isPossible) {
 							// Oh-no, the movement is not possible!
 							// The dest location already contains a piece on it and the srcPiece is not a Shield.
 							// Or the destLocation is not a neighboring square.
@@ -184,7 +182,7 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 						} else {
 							// Perfect! The movement is possible
 							// Check the type of movement, which could be either "special" or "normal"
-							if (movePossibility.type === MovementTypesEnum.SPECIAL) {
+							if (movement.type === MovementTypesEnum.SPECIAL) {
 								// Special move (Switch can swap)
 								// Swap the piece from destLocation with the current piece!
 								e.target.to({
@@ -195,11 +193,10 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 								});
 
 								// Replaces the srcPiece with the destPiece and vice versa.
-								const movement = toPlainObject(new Movement(MovementTypesEnum.SPECIAL, toPlainObject(srcLocation), toPlainObject(destLocation)));
 								// Pass the lastXY so we can animate the move of the destPiece to the srcLocation (the switch)!
-								onMove(movement, lastXY);
+								onMove(movement, lastXY); // the other piece is moved to the srcLocation on the App.js
 
-							} else if (movePossibility.type === MovementTypesEnum.NORMAL) {
+							} else if (movement.type === MovementTypesEnum.NORMAL) {
 								// Normal move (moving to a new empty target square)
 								e.target.to({
 									x: endX,
@@ -208,8 +205,7 @@ const BoardPiece = ({ id, square: { piece, location }, board, onMove, onSelect, 
 									easing: Konva.Easings.BackEaseOut
 								});
 
-								const movement = new Movement(MovementTypesEnum.NORMAL, toPlainObject(srcLocation), toPlainObject(destLocation));
-								onMove(toPlainObject(movement));
+								onMove(movement, null);
 
 							}
 

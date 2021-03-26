@@ -40,9 +40,9 @@ const cellBackgroundColor = "#313134"; // a sort of dark grey
 
 
 /**
- * The board
+ * The board layer
  */
-const BoardLayer = ({ boardSize, gridSize }) => {
+const BoardLayer = ({ gridSize }) => {
 	const [blueLaserCellImage] = useImage(BlueLaserCellSVG);
 	const [blueReservedCellImage] = useImage(BlueReservedCellSVG);
 	const [redLaserCellImage] = useImage(RedLaserCellSVG);

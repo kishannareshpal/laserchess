@@ -1,15 +1,35 @@
 /**
- * Defaults
+ * @constant
+ * Column lookup representation in algebraic notation
+ * The first column, from left-to-right, is "a", the next one is "b" and so on, until the last (10th column), which is "j".
+ * 
+ * @see https://github.com/kishannareshpal/docs/AlgebraicNotation.md Algebraic Notation for this game
  */
 const COLS_IN_NOTATION = "abcdefghij";
 
-
+/**
+ * @description
+ * A class representing a location in the board.
+ */
 class Location {
     constructor(colIndex, rowIndex) {
-        this.colIndex = colIndex;
-        this.rowIndex = rowIndex;
-        this.col = COLS_IN_NOTATION.charAt(colIndex);
-        this.row = 8 - rowIndex;
+        this.colIndex = colIndex; // 0-indexed column (x) for internal use.
+        this.rowIndex = rowIndex; // 0-indexed row (y) for internal use.
+        this.col = COLS_IN_NOTATION.charAt(colIndex); // the column in Algebraic Notation
+        this.row = 8 - rowIndex; // the row in Algebraic Notation
+    }
+
+    /**
+     * Serializes the Location object into an Object.
+     * @returns {Object} plain object, representing this instance
+     */
+    serialize() {
+        return {
+            colIndex: this.colIndex,
+            rowIndex: this.rowIndex,
+            col: this.col,
+            row: this.row
+        };
     }
 }
 

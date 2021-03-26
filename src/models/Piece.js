@@ -5,11 +5,9 @@ class Piece {
     /**
      * A class representing a single piece.
      * 
-     * @param {string} color the color of the piece, which matches the player color. Use PieceColorsEnum
-     * @param {Number} orientation (0, 90, 180, 270) the current orientation of the piece.
      * @param {string} type the type of the piece. Use PieceTypesEnum
+     * @param {Number} orientation (0, 90, 180, 270) the current orientation of the piece.
      *
-     * @see PlayerTypesEnum for color param
      * @see PieceTypesEnum for type param
      */
     constructor(type, orientation) {
@@ -17,6 +15,19 @@ class Piece {
         this.type = type.toLowerCase();
         this.orientation = orientation;
         this.imageName = `${this.color}-${PieceUtils.getPieceName(type)}`;
+    }
+
+    /**
+     * Serializes the Piece object into an Object.
+     * @returns {Object} plain object, representing this instance
+     */
+    serialize() {
+        return {
+            color: this.color,
+            type: this.type,
+            orientation: this.orientation,
+            imageName: this.imageName
+        };
     }
 
 }

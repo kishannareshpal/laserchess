@@ -14,6 +14,17 @@ class Square {
         this.piece = piece;
         this.location = location;
     }
+
+    /**
+     * Serializes the Square into an plain object.
+     * @returns {Object} plain object, representing this instance
+     */
+    serialize() {
+        return {
+            piece: this.piece,
+            location: this.location
+        };
+    }
 }
 
 class SquareUtils {
