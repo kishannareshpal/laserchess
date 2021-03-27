@@ -377,7 +377,7 @@ function App() {
 
 			<div className="container mt-5 p-3 text-muted">
 				<hr />
-				<small><a href="https://github.com/kishannareshpal/laserchess">Laser Chess - 1.0.0-alpha.2</a> - <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a></small>
+				<a href="https://github.com/kishannareshpal/laserchess"><img alt="GitHub release" src="https://img.shields.io/github/v/release/kishannareshpal/laserchess?include_prereleases&label=laserchess&style=flat-square"></img></a> • <a className="text-muted" href="https://kishanjadav.com">Kishan Jadav</a>
 			</div>
 		</div >
 	);
