@@ -4,7 +4,7 @@
 
 ### Project Status: `🔬 Active development`
 
-Try the early release version (1.0.0-alpha1): [www.laser-chess.com](https://laser-chess.com)
+Try the early release version ([1.0.0-alpha.2](https://github.com/kishannareshpal/laserchess/releases)): [www.laser-chess.com](https://laser-chess.com)
 
 
 
