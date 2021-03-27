@@ -68,7 +68,7 @@ function App() {
 
 		// Check the type of movement, which could be either "special" or "normal"
 		if (movement.type === MovementTypesEnum.SPECIAL) {
-			alert("Special move!");
+
 			// // Special move (Switch can swap)
 			// // Swap the piece from destLocation with the current piece!
 			// e.target.to({
