@@ -11,12 +11,12 @@ class AI {
     }
 
     /**
-     * Return the next move for the given color, based on the board state given
+     * Return the next movement for the given color, based on the board state given
      * 
      * @param {Board} board the current state of the board.
-     * @param {PlayerTypesEnum} player the player of whom you want the move for
+     * @param {PlayerTypesEnum} player the player of whom you want the movement for
      * 
-     * @returns {Movement} the best possible move for this player
+     * @returns {Movement} the best possible movement for this player
      */
     computeMove(board, player) {
         let evaluations = 0; // number of evaluations made

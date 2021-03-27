@@ -1,5 +1,5 @@
 import { LaserBeamDirectionsEnum, PlayerTypesEnum, MovementTypesEnum, LaserHitActionTypesEnum, PieceTypesEnum } from "./Enums";
-import Location, { LocationUtils } from "./Location";
+import Location from "./Location";
 import { PieceUtils } from "./Piece";
 import { SquareUtils } from "./Square";
 import SN from "../utils/SN";
@@ -10,7 +10,10 @@ import { point, polygon } from "@turf/helpers";
 import isPointInPolygon from "@turf/boolean-point-in-polygon";
 
 
-// Ace
+/**
+ * @constant
+ * Ace
+ */
 const DEFAULT_BOARD_SN = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7B++2/2B+DKD3L";
 
 /**
@@ -143,7 +146,7 @@ class Board {
         // Get the laser of the player on the move
         // Starting from the laser, start scanning squares in the direction where laser is pointing.
         const an = (player === PlayerTypesEnum.BLUE) ? "j1" : "a8"; // We know exactly where the laser for each player is! As those are immovable pieces.
-        const laserSquareLocation = LocationUtils.parse(an);
+        const laserSquareLocation = Location.fromAN(an);
         const laserSquare = this.getSquare(laserSquareLocation);
         if (SquareUtils.hasPiece(laserSquare)) {
             // Begin!

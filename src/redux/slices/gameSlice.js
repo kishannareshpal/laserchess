@@ -18,16 +18,18 @@ const gameSlice = createSlice({
     initialState: {
         sn: DEFAULT_BOARD_SN, // setup notation
         turn: PlayerTypesEnum.BLUE, // The side to move. The blue player always plays first. See rules.
-        laserIsTriggered: false, // after each move, becomes true for short-time, and then false again.
-        laserBeamPath: [],
         status: GameStatusEnum.PLAYING,
         winner: "", // 🎉 this is replaced with either PlayerTypesEnum.BLUE or PlayerTypesEnum.RED when one of them wins by killing the opponent's king!
         squares: [],
 
-        aiEnabled: true,
+        movementIsLocked: false, // when true, no player can move any piece. Usually becomes true when the laser is triggered and changing to another piece
+
+        ai: {
+            enabled: true, // is ai mode enabled?
+            movement: null // the ai movement to be made
+        },
 
         laser: {
-            triggered: false,
             path: []
         }
     },
@@ -50,14 +52,21 @@ const gameSlice = createSlice({
 
         /**
          * Perform a movement on the current board state.
+         * @param {Object} action
+         * @param {Object} action.payload
          * @param {Movement} action.payload.movement the movement to be performed on the board.
          */
-        playerMove: (state, action) => {
+        applyMovement: (state, action) => {
+            // Lock the move until finished (or laser stopped)
+            if (!state.movementIsLocked) {
+                state.movementIsLocked = true;
+            }
+
             const { movement } = action.payload;
             const newBoard = new Board({ squares: state.squares });
+
             newBoard.applyMovement(movement);
             const laserPath = newBoard.applyLaser(state.turn);
-
             const serializedBoard = newBoard.serialize();
             state.winner = serializedBoard.winner;
             state.sn = serializedBoard.sn;
@@ -65,28 +74,25 @@ const gameSlice = createSlice({
 
             state.laser.triggered = true;
             state.laser.path = laserPath;
+
+            if (state.ai.movement) {
+                state.ai.movement = null; // resets the ai movement
+            }
         },
 
 
         /**
-         * Think and perform a move as AI, using the Minimax algorithm
+         * Compute the next move for the AI based on current board state.
+         * Sets the serialized computed movement to state.movement
          */
-        aiMove: (state) => {
+        computeAIMovement: (state) => {
             const newBoard = new Board({ squares: state.squares });
 
-            // Using minimax, determine the best possible move for this player based on current state of the board
+            // Using minimax determine the optimal move for the ai.
             const ai = new AI();
             const movement = ai.computeMove(newBoard, PlayerTypesEnum.RED);
-
-            newBoard.applyMovement(movement);
-            const laserPath = newBoard.applyLaser(PlayerTypesEnum.RED);
-            const serializedBoard = newBoard.serialize();
-            state.winner = serializedBoard.winner;
-            state.sn = serializedBoard.sn;
-            state.squares = serializedBoard.squares;
-
-            state.laser.triggered = true;
-            state.laser.path = laserPath;
+            state.ai.movement = movement.serialize();
+            state.movementIsLocked = true;
         },
 
 
@@ -104,7 +110,7 @@ const gameSlice = createSlice({
          * @param {*} state 
          */
         toggleAI(state) {
-            state.aiEnabled = !state.aiEnabled;
+            state.ai.enabled = !state.ai.enabled;
         },
 
         /**
@@ -114,6 +120,9 @@ const gameSlice = createSlice({
         hideLaserBeam: (state) => {
             state.laser.path = [];
             state.laser.triggered = false;
+
+            // Unlock movement once laser has been stopped
+            state.movementIsLocked = false;
         },
 
 
@@ -145,8 +154,8 @@ export const {
     pause,
     resume,
     setBoardType,
-    playerMove,
-    aiMove,
+    applyMovement,
+    computeAIMovement,
     toggleAI
 } = gameSlice.actions;
 

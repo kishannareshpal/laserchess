@@ -8,11 +8,13 @@ import LogoPNG from "./assets/logo.png";
 import BluePlayerProfile from "./assets/ui/blue-player-profile.png";
 import RedPlayerProfile from "./assets/ui/red-player-profile.png";
 import { useDispatch, useSelector } from "react-redux";
-import { togglePlayerTurn, hideLaserBeam, setBoardType, playerMove, aiMove, toggleAI } from "./redux/slices/gameSlice";
-import { LocationUtils } from "./models/Location";
+import { togglePlayerTurn, hideLaserBeam, setBoardType, applyMovement, computeAIMovement, toggleAI } from "./redux/slices/gameSlice";
 import { SquareUtils } from "./models/Square";
 import { MovementTypesEnum, PlayerTypesEnum } from "./models/Enums";
 import Board from "./models/Board";
+import AI from "./utils/ai/AI";
+import Konva from "konva";
+import Location from "./models/Location";
 
 
 
@@ -24,11 +26,13 @@ function App() {
 	// The stage width. This is dynamic, and changes on window resize.
 	const [stageWidth, setStageWidth] = useState(700);
 
-	const aiEnabled = useSelector(state => state.game.aiEnabled); // the current board squares setup notation
+	const aiEnabled = useSelector(state => state.game.ai.enabled);
+	const aiMovement = useSelector(state => state.game.ai.movement);
+
+	const movementIsLocked = useSelector(state => state.game.movementIsLocked);
 	const squares = useSelector(state => state.game.squares); // The current board squares
 	const turn = useSelector(state => state.game.turn); // It's blue by default!
 	const laserBeamPath = useSelector(state => state.game.laser.path); // So i can enable the laser after the player has moved.
-	const laserIsTriggered = useSelector(state => state.game.laser.triggered); // So i can enable the laser after the player has moved.
 	const status = useSelector(state => state.game.status); // Current game state
 	const winner = useSelector(state => state.game.winner); // The winner of this match!
 
@@ -36,6 +40,58 @@ function App() {
 	const stageContainerRef = useRef(); // A reference to the Div containing the stage
 	const dispatch = useDispatch();
 
+
+	// Methods
+	const getBoardSize = useCallback(() => {
+		return stageWidth;
+	}, [stageWidth]);
+
+
+	const getCellSize = useCallback(() => {
+		return getBoardSize() / 10;
+	}, [getBoardSize]);
+
+	/**
+	 * Gets the current board
+	 * 
+	 * @returns {Board} the board object for the current squares.
+	 */
+	const getCurrentBoard = useCallback(() => {
+		const board = new Board({ squares });
+		return board;
+	}, [squares]);
+
+
+	const performBoardPieceMovement = useCallback((movement) => {
+		const [srcBoardPiece] = stagePiecesLayerRef.current.find(`#${movement.srcLocation.an}`);
+		const [destBoardPiece] = stagePiecesLayerRef.current.find(`#${movement.destLocation.an}`);
+
+		// Check the type of movement, which could be either "special" or "normal"
+		if (movement.type === MovementTypesEnum.SPECIAL) {
+			alert("Special move!");
+			// // Special move (Switch can swap)
+			// // Swap the piece from destLocation with the current piece!
+			// e.target.to({
+			// 	x: endX,
+			// 	y: endY,
+			// 	duration: pieceAnimDuration,
+			// 	easing: Konva.Easings.BackEaseOut
+			// });
+
+			// // Replaces the srcPiece with the destPiece and vice versa.
+			// // Pass the lastXY so we can animate the move of the destPiece to the srcLocation (the switch)!
+			// onMove(movement, lastXY); // the other piece is moved to the srcLocation on the App.js
+
+		} else if (movement.type === MovementTypesEnum.NORMAL) {
+			// Normal move (moving to a new empty target square)
+			srcBoardPiece.to({
+				x: Location.getX(movement.destLocation.colIndex, getCellSize()),
+				y: Location.getY(movement.destLocation.rowIndex, getCellSize()),
+				duration: 0.332,
+				easing: Konva.Easings.BackEaseOut
+			});
+		}
+	}, [getCellSize]);
 
 
 	/**
@@ -65,8 +121,6 @@ function App() {
 	}, [dispatch]);
 
 
-
-	// Methods
 	useEffect(() => {
 		// Shows the laser path, after each move for the player on the move.
 		// Automatically hides it after 2 sec.
@@ -76,43 +130,31 @@ function App() {
 				// hide
 				dispatch(togglePlayerTurn());
 				dispatch(hideLaserBeam());
-			}, 500);
+			}, 1000);
 		}
-
 	}, [dispatch, laserBeamPath]);
 
 
 	useEffect(() => {
 		if (turn === PlayerTypesEnum.RED && aiEnabled) {
-			// ? Red's the AI
-			setTimeout(() => {
-				dispatch(aiMove());
-			}, 500);
+			// Perform the move as AI
+			// Apply the new move to the board state.
+			dispatch(computeAIMovement());
 		}
-
 	}, [turn, aiEnabled, dispatch]);
 
+	useEffect(() => {
+		if (aiMovement) {
+			// If the ai is moving, perform the movement animation
+			performBoardPieceMovement(aiMovement);
 
-	const getBoardSize = useCallback(() => {
-		return stageWidth;
-	}, [stageWidth]);
+			// Apply the ai movement on the board state
+			setTimeout(() => {
+				dispatch(applyMovement({ movement: aiMovement }));
 
-
-	const getCellSize = useCallback(() => {
-		return getBoardSize() / 10;
-	}, [getBoardSize]);
-
-
-	/**
-	 * Gets the current board
-	 * 
-	 * @returns {Board} the board object for the current squares.
-	 */
-	const getCurrentBoard = useCallback(() => {
-		const board = new Board({ squares });
-		return board;
-
-	}, [squares]);
+			}, 332);
+		}
+	}, [dispatch, aiMovement, performBoardPieceMovement]);
 
 
 
@@ -144,7 +186,7 @@ function App() {
 			);
 			const possibleMovesHighlights = movesForSelectedPiece.map(move => {
 				return (
-					<Circle key={`pm--${LocationUtils.toANString(move.destLocation)}`}
+					<Circle key={`pm--${move.destLocation.an}`}
 						fill="#1EFC1E9F"
 						offsetX={-(getCellSize()) / 2}
 						offsetY={-(getCellSize()) / 2}
@@ -182,9 +224,9 @@ function App() {
 		// Transform the Piece inside the square into Konva's BoardPiece
 		return squaresWithPieces.map((square) => (
 			<BoardPiece turn={turn}
-				laserIsTriggered={laserIsTriggered}
-				id={LocationUtils.toANString(square.location)}
-				key={`${square.piece.imageName}--${LocationUtils.toANString(square.location)}`}
+				movementIsLocked={movementIsLocked}
+				id={square.location.an}
+				key={`${square.piece.imageName}--${square.location.an}`}
 				squares={squares}
 				square={square}
 				onMove={(movement, srcPieceXY) => {
@@ -195,12 +237,10 @@ function App() {
 					// You can comment out this part of the code if you prefer reduced motion (no move animation)
 					if (movement.type === MovementTypesEnum.SPECIAL) {
 						// Grab the piece that is being switched with the Switch piece.
-						const destPieceId = LocationUtils.toANString(movement.destLocation);
-						const query = stagePiecesLayerRef.current.find(`#${destPieceId}`);
-						const destPieceRaw = query[0];
+						const [destBoardPiece] = stagePiecesLayerRef.current.find(`#${movement.destLocation.an}`);
 
 						// And move it to where the Switch piece srcLocation (Because you are already dragging the Switch to the destLocation)
-						destPieceRaw.to({
+						destBoardPiece.to({
 							x: srcPieceXY.x,
 							y: srcPieceXY.y,
 							duration: 0.332,
@@ -216,20 +256,20 @@ function App() {
 					if (delayed) {
 						// Delay the state change so that the konva animation finishes.
 						setTimeout(() => {
-							dispatch(playerMove({ movement: movement.serialize() }));
+							dispatch(applyMovement({ movement: movement.serialize() }));
 						}, 332); // 332ms is the tween duration for every piece movement in the game.
 
 					} else {
-						dispatch(playerMove({ movement: movement.serialize() }));
+						dispatch(applyMovement({ movement: movement.serialize() }));
 					}
 				}}
 
 				onSelect={(srcLocation) => {
 					setSelectedPieceLocation(srcLocation);
 				}}
-				gridSize={getCellSize()} />
+				cellSize={getCellSize()} />
 		));
-	}, [squares, turn, laserIsTriggered, dispatch, getCellSize]);
+	}, [squares, turn, movementIsLocked, dispatch, getCellSize]);
 
 
 
@@ -296,7 +336,7 @@ function App() {
 							</div>
 							<div className="board" ref={stageContainerRef}>
 								<Stage className="stage" width={getBoardSize()} height={getBoardSize() - (2 * (getCellSize()))}>
-									<BoardLayer boardSize={getBoardSize()} gridSize={getCellSize()} />
+									<BoardLayer boardSize={getBoardSize()} cellSize={getCellSize()} />
 									<Layer ref={stagePiecesLayerRef}>
 										{drawBoardPieces()}
 										{drawHighlight()}

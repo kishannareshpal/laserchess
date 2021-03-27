@@ -8,69 +8,30 @@ import { MovementTypesEnum, PieceTypesEnum } from "../models/Enums";
 import { Image } from "react-konva";
 import Board from "../models/Board";
 
-
+/**
+ * @constant
+ * The duration of the animation of a piece movement.
+ */
 const pieceAnimDuration = 0.332;
 
-const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, gridSize, turn, laserIsTriggered }) => {
+const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, cellSize, turn, movementIsLocked }) => {
 	const [lastXY, setLastXY] = useState({ x: undefined, y: undefined });
 	const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${piece.imageName}.svg`);
-
-	/**
-	 * Determine the piece size according to the grid 
-	 * and the given margin for the piece inside the grid.
-	 */
-	const getPieceSize = useCallback(() => {
-		return gridSize;
-	}, [gridSize]);
-
-	/**
-	 * Determine the X position of the piece in the grid,
-	 * according to the given column, and taking in
-	 * consideration the piece size.
-	 */
-	const getX = useCallback(() => {
-		return (location.colIndex * gridSize) + Math.floor(getPieceSize() / 2);
-	}, [getPieceSize, gridSize, location.colIndex]);
-
-	/**
-	 * Determine the Y position of the piece in the grid,
-	 * according to the given row, and taking in
-	 * consideration the piece size.
-	 */
-	const getY = useCallback(() => {
-		return (location.rowIndex * gridSize) + Math.floor(getPieceSize() / 2);
-	}, [getPieceSize, gridSize, location.rowIndex]);
 
 
 	useEffect(() => {
 		const xy = {
-			x: getX(),
-			y: getY()
+			x: Location.getX(location.colIndex, cellSize),
+			y: Location.getY(location.rowIndex, cellSize)
 		};
 		setLastXY(xy);
-	}, [getX, getY]);
-
-	/**
-	 * Converts the 0-indexed xy coordinates into Location.
-	 * 
-	 * @param {Number} x the x index (0-9) // column
-	 * @param {Number} y the y index (0-7) // row
-	 * @returns {Location} the location calculated from the xy index
-	 */
-	const xyToLocation = useCallback((x, y) => {
-		// First transform the x and y to column and array index (the one we use for arrays)
-		const colIndex = Math.floor((x / gridSize));
-		const rowIndex = Math.floor((y / gridSize));
-		const pieceLocation = new Location(colIndex, rowIndex);
-		return pieceLocation;
-	}, [gridSize]);
-
+	}, [location, cellSize]);
 
 
 	// Methods
 	const selectThePiece = useCallback(() => {
 		// Select the piece.
-		// todo allow laser selections and show possible rotations!
+		// todo allow laser selections and show possible rotations for it!
 		if (piece.type !== PieceTypesEnum.LASER) { // Just don't select the piece if it is LASER. TODO
 			onSelect(location); // location (aka srcLocation) of the clicked peace
 		}
@@ -89,13 +50,13 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 
 		e.target.rotation(newOrientation);
 
-		const srcLocation = xyToLocation(lastXY.x, lastXY.y);
+		const srcLocation = Location.fromXY(lastXY.x, lastXY.y, cellSize);
 		// TODO: Implement counter-clockwise rotation.
 		const movement = new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, srcLocation);
 		onSelect(null); // location (aka srcLocation) of the clicked peace
 		onMove(movement);
 
-	}, [lastXY.x, lastXY.y, onMove, onSelect, xyToLocation]);
+	}, [lastXY.x, lastXY.y, onMove, onSelect, cellSize]);
 
 
 	return (
@@ -115,9 +76,9 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 			onDblClick={performPieceRotation}
 			dragBoundFunc={(pos) => {
 				// Limit drag to inside the canvas.
-				const firstSquare = getPieceSize() - (getPieceSize() / 2);
-				const lastColHor = (getPieceSize() * 9) + (getPieceSize() / 2);
-				const lastColVer = (getPieceSize() * 7) + (getPieceSize() / 2);
+				const firstSquare = cellSize - (cellSize / 2);
+				const lastColHor = (cellSize * 9) + (cellSize / 2);
+				const lastColVer = (cellSize * 7) + (cellSize / 2);
 				const newX = pos.x > lastColHor ? lastColHor : pos.x < firstSquare ? firstSquare : pos.x;
 				const newY = pos.y > lastColVer ? lastColVer : pos.y < firstSquare ? firstSquare : pos.y;
 				return {
@@ -137,13 +98,13 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 				const rawEndX = e.target.x(); // the final X position
 				const rawEndY = e.target.y(); // the final Y position
 				// Calculate the X and Y used to draw the piece in the board. Having in consideration the margin and the piece offset.
-				const endX = (Math.round((rawEndX + (gridSize / 2)) / gridSize) * gridSize) - (gridSize / 2);
-				const endY = (Math.round((rawEndY + (gridSize / 2)) / gridSize) * gridSize) - (gridSize / 2);
+				const endX = (Math.round((rawEndX + (cellSize / 2)) / cellSize) * cellSize) - (cellSize / 2);
+				const endY = (Math.round((rawEndY + (cellSize / 2)) / cellSize) * cellSize) - (cellSize / 2);
 
 				const hasChangedLocation = !isEqual(lastXY, { x: endX, y: endY });
 				if (hasChangedLocation) {
-					const srcLocation = xyToLocation(lastXY.x, lastXY.y);
-					const destLocation = xyToLocation(endX, endY);
+					const srcLocation = Location.fromXY(lastXY.x, lastXY.y, cellSize);
+					const destLocation = Location.fromXY(endX, endY, cellSize);
 
 					// Validate!
 					// Check if the destLocation square is a neighbor of the srcLocation.
@@ -231,16 +192,16 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 				container.style.cursor = "grab";
 			}}
 			offset={{
-				x: getPieceSize() / 2,
-				y: getPieceSize() / 2,
+				x: cellSize / 2,
+				y: cellSize / 2,
 			}}
 			image={pieceImage}
 			rotation={piece.orientation}
-			listening={(piece.color === turn) && (!laserIsTriggered)}
-			x={getX()} // 0.5 because of the stroke of the slot that is 1 centered
-			y={getY()} // 0.5 because of the stroke of the slot that is 1 centered
-			width={getPieceSize()}
-			height={getPieceSize()}
+			listening={(piece.color === turn) && (!movementIsLocked)}
+			x={Location.getX(location.colIndex, cellSize)}
+			y={Location.getY(location.rowIndex, cellSize)}
+			width={cellSize}
+			height={cellSize}
 		/>
 	);
 };

@@ -18,7 +18,7 @@ class Node {
         this.board = board;
         this.player = player;
         this.move = move;
-        this.parentNode = null;
+        this.parentNode = parentNode; // ! from = null
 
         this.redPlayerScore = board.getPlayerScore(PlayerTypesEnum.RED); // evaluated a score for the red player only
         this.bluePlayerScore = board.getPlayerScore(PlayerTypesEnum.BLUE); // evaluated score for the blue player only
@@ -73,13 +73,13 @@ class Node {
             //         bias = (.5 * len([1 for i in scores if i < parent_base])) / len(scores)
             let bias = 0; // A small bias for directions that have better probabilistic outcomes
             if (this.parentNode) {
-                const parentBaseScore = this.parent.score;
+                const parentBaseScore = this.parentNode.score;
                 const scores = this.children.map((childNode) => childNode.score);
 
                 if ((this.biasPlayer === PlayerTypesEnum.BLUE) && (scores.every(score => score >= parentBaseScore))) {
                     const s = [];
                     scores.forEach(score => {
-                        if (score > parentBase) {
+                        if (score > parentBaseScore) {
                             s.push(1);
                         }
                     });
@@ -89,7 +89,7 @@ class Node {
                 } else if ((this.biasPlayer === PlayerTypesEnum.RED) && (scores.every(score => score <= parentBaseScore))) {
                     const s = [];
                     scores.forEach(score => {
-                        if (score < parentBase) {
+                        if (score < parentBaseScore) {
                             s.push(1);
                         }
                     });

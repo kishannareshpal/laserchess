@@ -7,6 +7,7 @@ import BlueReservedCellSVG from "../assets/blue-reserved-cell.svg";
 import BlueLaserCellSVG from "../assets/blue-laser-cell.svg";
 import useImage from "use-image";
 import BGN from "../utils/BGN";
+import Location from "../models/Location";
 
 
 /**
@@ -42,7 +43,7 @@ const cellBackgroundColor = "#313134"; // a sort of dark grey
 /**
  * The board layer
  */
-const BoardLayer = ({ gridSize }) => {
+const BoardLayer = ({ cellSize }) => {
 	const [blueLaserCellImage] = useImage(BlueLaserCellSVG);
 	const [blueReservedCellImage] = useImage(BlueReservedCellSVG);
 	const [redLaserCellImage] = useImage(RedLaserCellSVG);
@@ -83,19 +84,19 @@ const BoardLayer = ({ gridSize }) => {
 				rows.push(
 					<Image key={`cell--${rowIndex}${colIndex}`}
 						fill={cellBackgroundColor}
-						x={gridSize * colIndex}
-						y={gridSize * rowIndex}
+						x={Location.getX(colIndex, cellSize, false)}
+						y={Location.getY(rowIndex, cellSize, false)}
 						stroke="#000"
 						image={getCellImage(cellType, cellTypeColor)}
 						strokeWidth={1}
 						strokeEnabled={true}
-						width={gridSize}
-						height={gridSize} />
+						width={cellSize}
+						height={cellSize} />
 				);
 			});
 		});
 		return rows;
-	}, [gridSize, getCellImage]);
+	}, [cellSize, getCellImage]);
 
 
 	return (
