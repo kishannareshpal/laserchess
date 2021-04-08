@@ -1,6 +1,6 @@
 # Laser Chess
 
-![Laser Chess Badge](https://img.shields.io/github/v/release/kishannareshpal/laserchess?color=ffefe2&include_prereleases&label=laser-chess.com&style=for-the-badge)
+[![Laser Chess Badge](https://img.shields.io/github/v/release/kishannareshpal/laserchess?color=ffefe2&include_prereleases&label=laser-chess.com&style=for-the-badge)](https://laser-chess.com)
 
 ## About
 
