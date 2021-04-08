@@ -1,18 +1,14 @@
 # Laser Chess
 
-[![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
-
-### Project Status: `🔬 Active development`
-
-Try the early release version ([1.0.0-alpha.3](https://github.com/kishannareshpal/laserchess/releases)): [www.laser-chess.com](https://laser-chess.com)
+![Laser Chess Badge](https://img.shields.io/github/v/release/kishannareshpal/laserchess?color=ffefe2&include_prereleases&label=laser-chess.com&style=for-the-badge)
 
 ## About
 
-<!-- 16351636-1646 -->
+##### Status: `Work in progress`
 
 A board game made with JavaScript (with the help of ReactJS).
 
--   [`(📄) Read the Guide`](docs/Guide.md)
+-   [`(📄) Read the Laser Chess Guide`](docs/Guide.md)
 -   [`(📄) Read the Algebraic Notation (AN)`](docs/AlgebraicNotation.md)
 -   [`(📄) Read the Setup Notation (SN)`](docs/SetupNotation.md)
 -   [`(📄) Read the Laser Hit Action Notation (LHAN)`](docs/LaserHitActionNotation.md)
