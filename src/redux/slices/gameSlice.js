@@ -17,11 +17,12 @@ const gameSlice = createSlice({
     name: "game",
     initialState: {
         sn: DEFAULT_BOARD_SN, // setup notation
-        turn: PlayerTypesEnum.BLUE, // The side to move. The blue player always plays first. See rules.
+        currentPlayer: PlayerTypesEnum.BLUE, // The current player
         status: GameStatusEnum.PLAYING,
         winner: "", // 🎉 this is replaced with either PlayerTypesEnum.BLUE or PlayerTypesEnum.RED when one of them wins by killing the opponent's king!
         squares: [],
 
+        selectedPieceLocation: null, // keeps track of the location where the selected piece is. It is NULL when no piece is selected.
         movementIsLocked: false, // when true, no player can move any piece. Usually becomes true when the laser is triggered and changing to another piece
 
         ai: {
@@ -30,7 +31,9 @@ const gameSlice = createSlice({
         },
 
         laser: {
-            path: []
+            route: [],
+            finalLocation: null,
+            finalActionType: null
         }
     },
     reducers: {
@@ -57,23 +60,21 @@ const gameSlice = createSlice({
          * @param {Movement} action.payload.movement the movement to be performed on the board.
          */
         applyMovement: (state, action) => {
-            // Lock the move until finished (or laser stopped)
-            if (!state.movementIsLocked) {
-                state.movementIsLocked = true;
-            }
+            state.movementIsLocked = true;
 
+            // Lock the move until finished (or laser stopped)
             const { movement } = action.payload;
             const newBoard = new Board({ squares: state.squares });
 
             newBoard.applyMovement(movement);
-            const laserPath = newBoard.applyLaser(state.turn);
-            const serializedBoard = newBoard.serialize();
-            state.winner = serializedBoard.winner;
-            state.sn = serializedBoard.sn;
-            state.squares = serializedBoard.squares;
+            const route = newBoard.getLaserRoute(state.currentPlayer);
 
             state.laser.triggered = true;
-            state.laser.path = laserPath;
+            state.laser.route = route;
+
+            const lastLaserRoutePath = route[route.length - 1];
+            state.laser.finalActionType = lastLaserRoutePath.actionType;
+            state.laser.finalLocation = lastLaserRoutePath.location;
 
             if (state.ai.movement) {
                 state.ai.movement = null; // resets the ai movement
@@ -97,32 +98,71 @@ const gameSlice = createSlice({
 
 
         /**
-         * Toggle the player turn. If red, toggle to blue and vice versa.
-         * 
-         */
-        togglePlayerTurn: (state) => {
-            state.turn = (state.turn === PlayerTypesEnum.BLUE) ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
-        },
-
-
-        /**
          * 
          * @param {*} state 
          */
-        toggleAI(state) {
+        toggleAI: (state) => {
             state.ai.enabled = !state.ai.enabled;
         },
 
         /**
-         * Hide the laser beam.
-         * - This action is always called after/before #togglePlayerTurn.
+         * Finishes the current player move.
+         * Hides the laser and applies any laser effect to the board (such as removing a piece on hit)
+         *  - if game over, lock the movement.
+         *  - // todo: if not game over, passes the turn to the next player. by removing the #togglePlayerTurn()
+         * - This action is dispatched before #togglePlayerTurn.
          */
-        hideLaserBeam: (state) => {
-            state.laser.path = [];
-            state.laser.triggered = false;
+        finishMovement: (state) => {
+            const newBoard = new Board({ squares: state.squares });
+            newBoard.applyLaser(state.currentPlayer);
+            const serializedBoard = newBoard.serialize();
 
-            // Unlock movement once laser has been stopped
-            state.movementIsLocked = false;
+            state.winner = serializedBoard.winner;
+            state.sn = serializedBoard.sn;
+            state.squares = serializedBoard.squares;
+
+            // Check if game over
+            if (serializedBoard.winner) {
+                // If game is over, then keep the movement locked and show who won in the UI.
+                state.movementIsLocked = true;
+                state.status = GameStatusEnum.GAME_OVER;
+
+            } else {
+                // reset laser
+                state.laser.route = [];
+                state.laser.finalActionType = null;
+                state.laser.finalLocation = null;
+
+                // If game is not over, then pass the turn to the next player
+                state.currentPlayer = (state.currentPlayer === PlayerTypesEnum.BLUE) ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
+                state.movementIsLocked = false; // unlock the movement for the next player.
+            }
+
+        },
+
+
+        /**
+         * Mark a square location, selected or not.
+         * 
+         * @param {Object} action
+         * @param {Object} action.payload
+         * @param {Location} action.payload.location The location of the piece to be selected. 
+         * 
+         * You can pass NULL to unselect (if selected) the currently selected piece,
+         * or even better, use the #uselectPiece action.
+         */
+        selectPiece: (state, action) => {
+            const { location } = action.payload;
+            state.selectedPieceLocation = location;
+        },
+
+        /**
+         * Unselect a piece
+         * 
+         * @see selectPiece on how to select a piece by it's location.
+         */
+        unselectPiece: (state) => {
+            state.selectedPieceLocation = null;
         },
 
 
@@ -140,23 +180,28 @@ const gameSlice = createSlice({
         resume: (state) => {
             state.status = GameStatusEnum.PLAYING;
         }
-
-
     }
-
 });
 
 
 // Action creators are generated for each case reducer function
 export const {
     togglePlayerTurn,
-    hideLaserBeam,
+    finishMovement,
     pause,
     resume,
     setBoardType,
     applyMovement,
     computeAIMovement,
-    toggleAI
+    toggleAI,
+    selectPiece,
+    unselectPiece,
 } = gameSlice.actions;
+
+
+// Selectors, to allow us to easily select a value from the state, while 
+// export const selectAllSquares = state => state.squares;
+
+
 
 export default gameSlice.reducer;

@@ -1,0 +1,37 @@
+/* Navigation bar */
+.lc-nav {
+    background-color: #ffefe2;
+    border-color: #eee0d5 !important;
+}
+
+/* The board or stage */
+.board {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* Piece controls */
+.lc-controls {
+    border-radius: 12px;
+    background-color: #dec9b8;
+
+    &--text {
+        color: #8a7c71;
+    }
+
+    &--divider {
+        border-width: 2px !important;
+        border-color: #f6e1cd !important;
+    }
+
+    .lc-btn-control {
+        background-color: #16db65 !important;
+        color: white !important;
+
+        &:disabled {
+            transition-duration: 120ms;
+            background-color: #fae0ca !important;
+            color: #8a7c71 !important;
+        }
+    }
+}

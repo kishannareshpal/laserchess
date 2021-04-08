@@ -1,4 +1,4 @@
-import { LaserHitActionTypesEnum } from "../models/Enums";
+import { LaserActionTypesEnum } from "../models/Enums";
 import LHAN_RELATIONS_JSON from "../assets/laser-v-piece.json";
 
 /**
@@ -10,10 +10,10 @@ class LHAN {
     /**
      * Get the laser beam hit action on the piece from the current direction.
      * 
-     * @param {LaserBeamDirectionsEnum} currentDirection The direction from where the laser beam is coming to hit the piece. 
+     * @param {LaserDirectionsEnum} currentDirection The direction from where the laser beam is coming to hit the piece. 
      * @param {Piece} piece The piece you want the hit action of from the currentDirection.
      * 
-     * @returns {object} { actionType: LaserHitActionTypesEnum, newDirection LaserBeamDirectionsEnum | null }
+     * @returns {object} { actionType: LaserActionTypesEnum, newDirection LaserDirectionsEnum | null }
      */
     static getHitAction(currentDirection, piece) {
         const orientation = piece.orientation;
@@ -27,7 +27,7 @@ class LHAN {
             };
         } else {
             return {
-                type: LaserHitActionTypesEnum.DEFLECT,
+                type: LaserActionTypesEnum.DEFLECT,
                 newDirection: hitAction
             };
         }

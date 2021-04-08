@@ -12,11 +12,7 @@ h6 {
 }
 
 body {
-    background-color: #1c1d21;
+    /* background-color: #1c1d21; #ffe8d6 */
+    background-color: #ffefe2;
     margin: 0;
-}
-
-.board {
-    border-radius: 6px;
-    overflow: hidden;
 }

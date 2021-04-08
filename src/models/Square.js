@@ -1,5 +1,6 @@
+import { SquareFootRounded } from "@material-ui/icons";
 import { isEmpty } from "lodash";
-import { LaserBeamDirectionsEnum, PieceTypesEnum } from "./Enums";
+import { LaserDirectionsEnum, PieceTypesEnum, SquareTypesEnum } from "./Enums";
 
 
 class Square {
@@ -7,10 +8,12 @@ class Square {
      * A square on the board! 
      * It has a location and can also have a piece on it.
      * 
-     * @param {Piece} piece 
-     * @param {Location} location 
+     * @param {SquareTypesEnum} type the type of the square. Is it only reserved for blue/red pieces?
+     * @param {Piece} piece the piece that is inside of the square.
+     * @param {Location} location the location of this square in the board.
      */
-    constructor(piece, location) {
+    constructor(type, piece, location) {
+        this.type = type;
         this.piece = piece;
         this.location = location;
     }
@@ -21,6 +24,7 @@ class Square {
      */
     serialize() {
         return {
+            type: this.type,
             piece: this.piece,
             location: this.location
         };
@@ -45,7 +49,7 @@ class SquareUtils {
      * Returns the direction where the laser is currently pointing, based on it's orientation
      * 
      * @param {Piece} laserPiece the laser piece of which we want to get the direction from.
-     * @returns {LaserBeamDirectionsEnum} the laser beam direction
+     * @returns {LaserDirectionsEnum} the laser beam direction
      */
     static getLaserBeamDirection(piece) {
         if (piece) {
@@ -53,16 +57,16 @@ class SquareUtils {
             if (piece.type === PieceTypesEnum.LASER) {
                 switch (orientation) {
                     case 0:
-                        return LaserBeamDirectionsEnum.TOP;
+                        return LaserDirectionsEnum.TOP;
 
                     case 90:
-                        return LaserBeamDirectionsEnum.RIGHT;
+                        return LaserDirectionsEnum.RIGHT;
 
                     case 180:
-                        return LaserBeamDirectionsEnum.BOTTOM;
+                        return LaserDirectionsEnum.BOTTOM;
 
                     case 270:
-                        return LaserBeamDirectionsEnum.LEFT;
+                        return LaserDirectionsEnum.LEFT;
 
                     default:
                         return null;

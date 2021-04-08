@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-normal-move-highlight">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="normal-move-highlight" clip-path="url(#clip-normal-move-highlight)">
+    <g id="Group_3" data-name="Group 3" transform="translate(2.198 2.198)">
+      <circle id="Ellipse_4" data-name="Ellipse 4" cx="33.5" cy="33.5" r="33.5" transform="translate(28.802 28.802)" fill="#93ff96" stroke="#16db65" stroke-width="10"/>
+    </g>
+  </g>
+</svg>

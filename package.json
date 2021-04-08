@@ -1,9 +1,10 @@
 {
   "name": "laserchess",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha4",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@reduxjs/toolkit": "^1.5.0",
     "@turf/boolean-point-in-polygon": "^6.3.0",
     "@turf/helpers": "^6.3.0",

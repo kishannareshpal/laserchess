@@ -8,6 +8,8 @@ Try the early release version ([1.0.0-alpha.3](https://github.com/kishannareshpa
 
 ## About
 
+<!-- 16351636-1646 -->
+
 A board game made with JavaScript (with the help of ReactJS).
 
 -   [`(📄) Read the Guide`](docs/Guide.md)

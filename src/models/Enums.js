@@ -6,16 +6,27 @@ export const PlayerTypesEnum = Object.freeze({
     BLUE: "blue"
 });
 
+/**
+ * @deprecated
+ */
 export const CellTypesEnum = Object.freeze({
     NORMAL: "n",
     LASER: "l",
     RESERVED: "r"
 });
 
+export const SquareTypesEnum = Object.freeze({
+    NORMAL: "normal",
+    LASER_BLUE: "laser-blue",
+    LASER_RED: "laser-red",
+    RESERVED_BLUE: "reserved-blue",
+    RESERVED_RED: "reserved-red"
+});
+
 export const GameStatusEnum = Object.freeze({
     PLAYING: "playing",
     PAUSED: "paused",
-    FINISHED: "finished"
+    GAME_OVER: "gameover"
 });
 
 
@@ -38,16 +49,22 @@ export const PieceTypesEnum = Object.freeze({
 
 
 /**
- * General
+ * Laser
  */
-export const LaserBeamDirectionsEnum = Object.freeze({
+export const LaserEventsEnum = Object.freeze({
+    START: "start",
+    CENTRAL: "central",
+    END: "end"
+});
+
+export const LaserDirectionsEnum = Object.freeze({
     TOP: "top",
     RIGHT: "right",
     BOTTOM: "bottom",
     LEFT: "left"
 });
 
-export const LaserHitActionTypesEnum = Object.freeze({
+export const LaserActionTypesEnum = Object.freeze({
     DEFLECT: "deflect",
     KILL: "kill",
     NOTHING: "nothing"

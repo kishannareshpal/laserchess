@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-special-move-highlight">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="special-move-highlight" clip-path="url(#clip-special-move-highlight)">
+    <g id="Group_10" data-name="Group 10" transform="translate(23.658 22.605)">
+      <rect id="Rectangle_15" data-name="Rectangle 15" width="35" height="35" rx="17.5" transform="translate(44.342 47.395)" fill="#93ff96" stroke="#16db65" stroke-linecap="round" stroke-width="8"/>
+      <g id="Rectangle_16" data-name="Rectangle 16" transform="translate(6.342 6.395)" fill="#93ff96" stroke="#16db65" stroke-linecap="round" stroke-width="8">
+        <rect width="25" height="25" rx="4" stroke="none"/>
+        <rect x="-4" y="-4" width="33" height="33" rx="8" fill="none"/>
+      </g>
+      <path id="Direction_Up_Left_Size_20_Theme_Filled" data-name="Direction=Up Left, Size=20, Theme=Filled" d="M7.409,12.717a1.558,1.558,0,0,1-2.2-2.2l8.308-8.308a1.558,1.558,0,0,1,2.2,0l8.308,8.308a1.558,1.558,0,1,1-2.2,2.2L16.173,7.068v11.3c0,4.044.509,6.9,1.538,9.069a11.86,11.86,0,0,0,4.975,5.173,1.558,1.558,0,0,1-1.6,2.671,14.955,14.955,0,0,1-6.188-6.51c-1.308-2.762-1.837-6.139-1.837-10.4V7.068Z" transform="translate(4.226 46.27)" fill="#16db65" stroke="#16db65" stroke-width="6"/>
+      <path id="Direction_Up_Left_Size_20_Theme_Filled-2" data-name="Direction=Up Left, Size=20, Theme=Filled" d="M7.409,12.717a1.558,1.558,0,0,1-2.2-2.2l8.308-8.308a1.558,1.558,0,0,1,2.2,0l8.308,8.308a1.558,1.558,0,1,1-2.2,2.2L16.173,7.068v11.3c0,4.044.509,6.9,1.538,9.069a11.86,11.86,0,0,0,4.975,5.173,1.558,1.558,0,0,1-1.6,2.671,14.955,14.955,0,0,1-6.188-6.51c-1.308-2.762-1.837-6.139-1.837-10.4V7.068Z" transform="translate(76.457 37.52) rotate(180)" fill="#16db65" stroke="#16db65" stroke-width="6"/>
+    </g>
+  </g>
+</svg>

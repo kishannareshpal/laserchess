@@ -12,9 +12,15 @@ import Board from "../models/Board";
  * @constant
  * The duration of the animation of a piece movement.
  */
-const pieceAnimDuration = 0.332;
+export const pieceAnimDuration = 0.332;
 
-const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, cellSize, turn, movementIsLocked }) => {
+/**
+ * @constant
+ * The easing of the tween for any piece movement
+ */
+export const pieceAnimEasing = Konva.Easings.BackEaseOut;
+
+const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, onGrab, cellSize, currentPlayer, movementIsLocked }) => {
 	const [lastXY, setLastXY] = useState({ x: undefined, y: undefined });
 	const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${piece.imageName}.svg`);
 
@@ -38,27 +44,6 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 	}, [location, onSelect, piece.type]);
 
 
-	const performPieceRotation = useCallback((e) => {
-		// Rotate 90 degrees clockwise.
-		const currentOrientation = e.target.rotation();
-		let newOrientation;
-		if (currentOrientation === 270) {
-			newOrientation = 0; // reset the rotation.. basically rotates to 360º but we use 0º instead, to conform to our guidelines.
-		} else {
-			newOrientation = currentOrientation + 90; // rotate 90 degrees from current orientation.
-		}
-
-		e.target.rotation(newOrientation);
-
-		const srcLocation = Location.fromXY(lastXY.x, lastXY.y, cellSize);
-		// TODO: Implement counter-clockwise rotation.
-		const movement = new Movement(MovementTypesEnum.ROTATION_CLOCKWISE, srcLocation);
-		onSelect(null); // location (aka srcLocation) of the clicked peace
-		onMove(movement);
-
-	}, [lastXY.x, lastXY.y, onMove, onSelect, cellSize]);
-
-
 	return (
 		<Image draggable={piece.type !== PieceTypesEnum.LASER}
 			id={id}
@@ -72,8 +57,6 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 				const container = e.target.getStage().container();
 				container.style.cursor = "default";
 			}}
-			onDblTap={performPieceRotation}
-			onDblClick={performPieceRotation}
 			dragBoundFunc={(pos) => {
 				// Limit drag to inside the canvas.
 				const firstSquare = cellSize - (cellSize / 2);
@@ -87,13 +70,13 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 				};
 			}}
 			onDragStart={(e) => {
+				// On piece drag, with mouse or touch
+				onGrab(location);
 				e.target.moveToTop(); // Move up the layer, so it doesn't get hidden beneath other Nodes (pieces)
 				const container = e.target.getStage().container();
 				container.style.cursor = "grabbing";
 			}}
 			onDragEnd={(e) => {
-				onSelect(null); // Unselect the piece
-
 				// Handle piece drag and dropping by snapping it to the grid.
 				const rawEndX = e.target.x(); // the final X position
 				const rawEndY = e.target.y(); // the final Y position
@@ -118,7 +101,7 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 							x: lastXY.x,
 							y: lastXY.y,
 							duration: pieceAnimDuration,
-							easing: Konva.Easings.BackEaseOut
+							easing: pieceAnimEasing
 						});
 
 					} else {
@@ -137,10 +120,11 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 								x: lastXY.x,
 								y: lastXY.y,
 								duration: pieceAnimDuration,
-								easing: Konva.Easings.BackEaseOut
+								easing: pieceAnimEasing
 							});
 
 						} else {
+							onSelect(null); // Unselect the piece if moved to a different piece
 							// Perfect! The movement is possible
 							// Check the type of movement, which could be either "special" or "normal"
 							if (movement.type === MovementTypesEnum.SPECIAL) {
@@ -150,7 +134,7 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 									x: endX,
 									y: endY,
 									duration: pieceAnimDuration,
-									easing: Konva.Easings.BackEaseOut
+									easing: pieceAnimEasing
 								});
 
 								// Replaces the srcPiece with the destPiece and vice versa.
@@ -163,7 +147,7 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 									x: endX,
 									y: endY,
 									duration: pieceAnimDuration,
-									easing: Konva.Easings.BackEaseOut
+									easing: pieceAnimEasing
 								});
 
 								onMove(movement, null);
@@ -184,7 +168,7 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 						x: endX,
 						y: endY,
 						duration: pieceAnimDuration,
-						easing: Konva.Easings.BackEaseOut
+						easing: pieceAnimEasing
 					});
 				}
 
@@ -197,7 +181,7 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 			}}
 			image={pieceImage}
 			rotation={piece.orientation}
-			listening={(piece.color === turn) && (!movementIsLocked)}
+			listening={(piece.color === currentPlayer) && (!movementIsLocked)}
 			x={Location.getX(location.colIndex, cellSize)}
 			y={Location.getY(location.rowIndex, cellSize)}
 			width={cellSize}

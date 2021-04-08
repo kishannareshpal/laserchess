@@ -3,7 +3,25 @@ import { isLowerCase } from "./Utils";
 import Square from "../models/Square";
 import Location from "../models/Location";
 import Piece from "../models/Piece";
-import { PlayerTypesEnum } from "../models/Enums";
+import { PlayerTypesEnum, SquareTypesEnum } from "../models/Enums";
+
+
+// const boardGridNotationText = "lR6rR/r8R/r8R/r8R/r8R/r8R/r8R/rR6rL";
+const SPECIAL_SQUARES = [
+    {
+        location_an: "a8",
+        type: SquareTypesEnum.LASER_RED
+    },
+    {
+        location_an: "j1",
+        type: SquareTypesEnum.LASER_BLUE
+    },
+    {
+        location_an: "j8",
+        type: SquareTypesEnum.LASER_BLUE
+    }
+];
+
 
 /**
  * Class representing Setup Notation.
@@ -126,25 +144,55 @@ class SN {
         const parsedBoard = notationArray.map((row, rowIndex) => {
             const squares = [];
             row.forEach((col, colIndex) => {
-                const location = new Location(colIndex, rowIndex).serialize();
+                const location = new Location(colIndex, rowIndex).serialize(); // the location of the square
+                let piece = null; // null means, no piece in the square
+                let squareType = SquareTypesEnum.NORMAL; // represents the square type in this location
 
+                // Check if we need a piece on this square
                 if (!isEmpty(col)) {
-                    const type = col[0]; // type (Kk, Ll, Bb, Dd, Ss)
-                    let orientation = 0; // orientation (0, 90, 180, 270)
+                    // Find out which piece we need.
+                    const pieceType = col[0]; // type (Kk, Ll, Bb, Dd, Ss)
+                    let orientation = 0; // orientation in 90deg increments (0, 90, 180, 270)
                     if (col.indexOf("+") != -1) {
                         const rotations = col.substring(1);
                         orientation = reduce(rotations, (prev) => {
                             return prev + 90;
                         }, 0);
                     }
-                    const piece = new Piece(type, orientation).serialize();
-                    const square = new Square(piece, location).serialize();
-                    squares.push(square);
-
-                } else {
-                    const emptySquare = new Square(null, location).serialize();
-                    squares.push(emptySquare);
+                    piece = new Piece(pieceType, orientation).serialize();
                 }
+
+                if (colIndex === 0 && rowIndex === 0) {
+                    // This square is reserved for the red player's laser piece only.
+                    // No other piece can be put in here
+                    squareType = SquareTypesEnum.LASER_RED;
+
+                } else if (colIndex === 9 && rowIndex === 7) {
+                    // This square is reserved for the blue player's laser piece only. 
+                    // No other piece can be put in here
+                    squareType = SquareTypesEnum.LASER_BLUE;
+
+                } else if ((colIndex === 0 && (rowIndex >= 1 && rowIndex <= 7) ||
+                    (colIndex === 8 && (rowIndex === 0 || rowIndex === 7)))) {
+                    // To facilitate your reading, this statement basically matches:
+                    //  - Squares at Column: 0 and Rows: in between 1 and 7
+                    //  - Square at Column: 8 and Rows: either 0 or 7
+                    // These squares are reserved for pieces of the red player only.
+                    // The other player pieces cannot be put or moved into these squares.
+                    squareType = SquareTypesEnum.RESERVED_RED;
+
+                } else if ((colIndex === 1 && (rowIndex === 0 || rowIndex === 7)) ||
+                    (colIndex === 9 && (rowIndex >= 0 && rowIndex <= 6))) {
+                    // To facilitate your reading, this statement basically matches:
+                    //  - Squares at Column: 9 and Rows: in between 0 and 6
+                    //  - Square at Column: 1 and Rows: either 0 or 7
+                    // These squares are reserved for pieces of the blue player only.
+                    // The other player pieces cannot be put or moved into these squares.
+                    squareType = SquareTypesEnum.RESERVED_BLUE;
+                }
+
+                const square = new Square(squareType, piece, location).serialize();
+                squares.push(square);
             });
             return squares;
         });

@@ -1,5 +1,5 @@
 import Location from "./Location";
-import { MovementTypesEnum } from "../models/Enums";
+import { MovementTypesEnum, RotationTypesEnum } from "../models/Enums";
 import { toPlainObject } from "lodash";
 
 
@@ -98,7 +98,6 @@ class Movement {
      * @returns {Object} plain object, representing this instance
      */
     serialize() {
-        console.log(this);
         return {
             type: this.type,
             srcLocation: this.srcLocation instanceof Location ? this.srcLocation.serialize() : this.srcLocation,

@@ -1,4 +1,4 @@
-import { LaserBeamDirectionsEnum, PlayerTypesEnum, MovementTypesEnum, LaserHitActionTypesEnum, PieceTypesEnum } from "./Enums";
+import { LaserDirectionsEnum, PlayerTypesEnum, MovementTypesEnum, LaserActionTypesEnum, PieceTypesEnum, LaserEventsEnum, SquareTypesEnum } from "./Enums";
 import Location from "./Location";
 import { PieceUtils } from "./Piece";
 import { SquareUtils } from "./Square";
@@ -6,8 +6,10 @@ import SN from "../utils/SN";
 import LHAN from "../utils/LHAN";
 import { flatMap, toLower, toUpper } from "lodash";
 import Movement from "./Movement";
+import LaserPath from "./LaserPath";
 import { point, polygon } from "@turf/helpers";
 import isPointInPolygon from "@turf/boolean-point-in-polygon";
+import { pieceAnimDuration, pieceAnimEasing } from "../components/BoardPiece";
 
 
 /**
@@ -101,12 +103,12 @@ class Board {
      * Evaluate a score based on the current board state and pieces available on it for the specified player.
      * @see PIECE_TO_SCORE for the weights of playable piece, used on the evaluation here.
      * 
-     * @param {PlayerTypesEnum} player the player of whom we want to evaluate the score
+     * @param {PlayerTypesEnum} playerType the player of whom we want to evaluate the score
      * @returns {number} the score. If game over, return -100.
      */
-    getPlayerScore(player) {
+    getPlayerScore(playerType) {
         let playerScore = 0;
-        const squaresOfPlayer = this.getPlayerSquares(player);
+        const squaresOfPlayer = this.getPlayerSquares(playerType);
 
         // Track the king, to make sure it is is on the board
         let isKingAvailable = false; // we will update this check bellow when we loop through all the pieces on the board
@@ -136,45 +138,49 @@ class Board {
 
 
     /**
-     * Get the laser path for the laser player when applied on the current board.
+     * Get the route that the laser will travel when enabled for the specified playerType
      * 
-     * @param {PlayerTypesEnum} player the player type
+     * @param {PlayerTypesEnum} playerType the player who will applying the laser
      */
-    getLaserPath(player) {
-        const path = []; // holds the laser path!
-        let lastHitType, lastHitLocation;
+    getLaserRoute(playerType) {
+        const completeRoute = []; // holds the laser path!
+
         // Get the laser of the player on the move
         // Starting from the laser, start scanning squares in the direction where laser is pointing.
-        const an = (player === PlayerTypesEnum.BLUE) ? "j1" : "a8"; // We know exactly where the laser for each player is! As those are immovable pieces.
+        const an = (playerType === PlayerTypesEnum.BLUE) ? "j1" : "a8"; // We know exactly where the laser for each player is! As those are immovable pieces.
         const laserSquareLocation = Location.fromAN(an);
         const laserSquare = this.getSquare(laserSquareLocation);
         if (SquareUtils.hasPiece(laserSquare)) {
             // Begin!
-            // Get the laser's direction based on it's orientation
+            // Get the starting laser beam's direction based on the laser piece's orientation
             const laserPiece = laserSquare.piece;
             let direction = SquareUtils.getLaserBeamDirection(laserPiece);
 
             let colIndex = laserSquareLocation.colIndex;
             let rowIndex = laserSquareLocation.rowIndex;
-            path.push([colIndex, rowIndex]); // start from the player's laser.
 
             // Start scanning in the pointing direction of the laser beam
-            let isScanning = true;
-            while (isScanning) {
+            let eventType = LaserEventsEnum.START;
+            let actionType = LaserActionTypesEnum.NOTHING;
+
+            completeRoute.push(new LaserPath(eventType, direction, actionType, laserSquareLocation.serialize()).serialize()); // start from the player's laser piece.
+            while (eventType !== LaserEventsEnum.END) {
+                eventType = LaserEventsEnum.CENTRAL;
+
                 let dx, dy;
-                if (direction === LaserBeamDirectionsEnum.TOP) {
+                if (direction === LaserDirectionsEnum.TOP) {
                     dx = 0;
                     dy = -1;
 
-                } else if (direction === LaserBeamDirectionsEnum.RIGHT) {
+                } else if (direction === LaserDirectionsEnum.RIGHT) {
                     dx = 1;
                     dy = 0;
 
-                } else if (direction === LaserBeamDirectionsEnum.BOTTOM) {
+                } else if (direction === LaserDirectionsEnum.BOTTOM) {
                     dx = 0;
                     dy = 1;
 
-                } else if (direction === LaserBeamDirectionsEnum.LEFT) {
+                } else if (direction === LaserDirectionsEnum.LEFT) {
                     dx = -1;
                     dy = 0;
 
@@ -184,62 +190,56 @@ class Board {
 
                 // Make sure the indexes are not out of bound from the board.
                 if ((rowIndex < 0 || rowIndex > 7) || (colIndex < 0 || colIndex > 9)) {
-                    // If it is out of bound. Stop the laser.
-                    isScanning = false;
+                    // If it is out of bound. Stop the laser right here
+                    eventType = LaserEventsEnum.END;
                     continue;
                 }
-                path.push([colIndex, rowIndex]);
 
-                // Get the next square in that direction!
+                // Get the square in the scanning location!
                 const nextScanningSquareLocation = new Location(colIndex, rowIndex);
                 const nextScanningSquare = this.getSquare(nextScanningSquareLocation);
 
-                // Check if it has a piece
+                // Check if it has a piece in this square
                 if (SquareUtils.hasPiece(nextScanningSquare)) {
-                    // If piece was found, get the hit action and do something.
+                    // If piece was found, check what we have to do, based on the Laser Hit Action Notation of the piece in the scanning square
                     const action = LHAN.getHitAction(direction, nextScanningSquare.piece);
-                    if (action.type === LaserHitActionTypesEnum.KILL) {
+                    if (action.type === LaserActionTypesEnum.KILL) {
                         // The piece in this square should be killed/eaten/captured.
-                        isScanning = false;
+                        eventType = LaserEventsEnum.END; // end the scanning, we reached the limit for this laser beam.
 
-                    } else if (action.type === LaserHitActionTypesEnum.DEFLECT) {
+                    } else if (action.type === LaserActionTypesEnum.DEFLECT) {
                         // The piece in this square changes the direction of my laser beam.
                         direction = action.newDirection;
 
-                    } else if (action.type === LaserHitActionTypesEnum.NOTHING) {
+                    } else if (action.type === LaserActionTypesEnum.NOTHING) {
                         // The piece in this square is probably (1) another laser or (2) a defender
                         // So, do nothing! Stop the laser now.
-                        isScanning = false;
+                        eventType = LaserEventsEnum.END;
                     }
-
-                    lastHitType = action.type;
+                    actionType = action.type;
 
                 } else {
                     // Continue if no piece in the scanning square.
                     // Did nothing.
-                    lastHitType = LaserHitActionTypesEnum.NOTHING;
+                    actionType = LaserActionTypesEnum.NOTHING;
                 }
 
-                lastHitLocation = nextScanningSquareLocation;
+                completeRoute.push(new LaserPath(eventType, direction, actionType, nextScanningSquareLocation.serialize()).serialize());
             }
         }
-        return {
-            lastHitType,
-            lastHitLocation,
-            path
-        };
+        return completeRoute;
     }
 
 
     /**
      * Returns all moves for all of the pieces of the specified player.
      * 
-     * @param {PlayerTypesEnum} player
+     * @param {PlayerTypesEnum} playerType
      * @returns {Movement[]}
      */
-    getMovesForPlayer(player) {
+    getMovesForPlayer(playerType) {
         const moves = [];
-        const squaresOfPlayer = this.getPlayerSquares(player);
+        const squaresOfPlayer = this.getPlayerSquares(playerType);
         squaresOfPlayer.forEach(square => {
             const movesForPiece = this.getMovesForPieceAtLocation(square.location);
             if (movesForPiece.length !== 0) {
@@ -322,8 +322,8 @@ class Board {
         const squareAtSrc = this.getSquare(srcLocation);
         const squareAtDest = this.getSquare(destLocation);
 
-
-        if ((squareAtDest === null) || (squareAtSrc.piece.type === PieceTypesEnum.LASER)) {
+        // todo: remove the last OR statement, and add draggable={piece is not laser} instead in BoardPiece
+        if ((squareAtDest === null) || (squareAtSrc === null) || (squareAtSrc.piece.type === PieceTypesEnum.LASER)) {
             // Invalid destLocation, as it has no square there. Most likely this is out of bound.
             // Or, we are trying to move a Laser Piece, which is not a possible move according to the rules of the game.
             // Return as not possible to move.
@@ -332,6 +332,18 @@ class Board {
 
         const pieceTypeAtSrc = squareAtSrc.piece.type;
         const pieceTypeAtDest = squareAtDest.piece ? squareAtDest.piece.type : null;
+        const pieceColorAtSrc = squareAtSrc.piece.color;
+
+        if (squareAtDest.type === SquareTypesEnum.RESERVED_BLUE && pieceColorAtSrc !== PlayerTypesEnum.BLUE) {
+            // Trying to make a movement to a square reserved for blue player pieces only,
+            // with a red player's piece.
+            return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+
+        } else if (squareAtDest.type === SquareTypesEnum.RESERVED_RED && pieceColorAtSrc !== PlayerTypesEnum.RED) {
+            // Trying to make a movement to a square reserved for red player pieces only,
+            // with a blue player's piece.
+            return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+        }
 
         // Special Move (swap)
         if ((pieceTypeAtSrc === PieceTypesEnum.SWITCH) &&
@@ -342,6 +354,8 @@ class Board {
 
         } else {
             // Normal movement (to an empty neighbor square)
+
+            // Check if we are moving to a reserved square, and make sure only the correct color can go there.
             if (SquareUtils.hasPiece(squareAtDest)) {
                 // Trying to move into a square which already has a piece (and is not a valid swap).
                 // Invalid move
@@ -392,21 +406,28 @@ class Board {
     }
 
 
-    applyLaser(player) {
-        if (!player) {
+    /**
+     * Applies the laser hit action notation in the current board.
+     * 
+     * @param {PlayerTypesEnum} playerType the player whose laser is being switched on.
+     * @returns {number[][]} the
+     */
+    applyLaser(playerType) {
+        if (!playerType) {
             throw new Error("applyLaser - Please specify the player whose laser is being switched on.");
         }
 
-        // Now compute the new laser beam path
-        const { lastHitType, lastHitLocation, path } = this.getLaserPath(player);
+        // Compute the laser beam route, and do actions on the necessary pieces.
+        const laserRoute = this.getLaserRoute(playerType);
+        const finalLaserPath = laserRoute[laserRoute.length - 1];
 
         // handle the laser hit
-        if (lastHitType === LaserHitActionTypesEnum.KILL) {
-            const squareAtHit = this.squares[lastHitLocation.rowIndex][lastHitLocation.colIndex];
+        if (finalLaserPath.actionType === LaserActionTypesEnum.KILL) {
+            const squareAtHit = this.squares[finalLaserPath.location.rowIndex][finalLaserPath.location.colIndex];
             // Check if we killed the King!
             if (squareAtHit.piece.type === PieceTypesEnum.KING) {
                 // Oh lord, the king is dead, I repeat, the king is dead!
-                // Check which king is dead and declare the winner! 🏴‍☠️ 
+                // Check which king is dead and declare the winner! 🏴‍☠️
                 const winnerPlayerColor = squareAtHit.piece.color === PlayerTypesEnum.BLUE ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
                 this.winner = winnerPlayerColor;
 
@@ -414,20 +435,18 @@ class Board {
             // Remove the piece from the square.
             squareAtHit.piece = null;
         }
-
-        return path;
     }
 
 
     /**
      * Returns a new board from move without modifying current board.
      * @param {Movement} movement the movement being performed on the board
-     * @param {PlayerTypesEnum} player the player that is moving
+     * @param {PlayerTypesEnum} playerType the player that is moving
      */
-    newBoardFromMovement(movement, player) {
+    newBoardFromMovement(movement, playerType) {
         const newBoard = new Board({ setupNotation: this.toSN() }); // clone this board
         newBoard.applyMovement(movement);
-        newBoard.applyLaser(player);
+        newBoard.applyLaser(playerType);
         return newBoard;
     }
 
@@ -590,6 +609,136 @@ class Board {
         // Check if the destLocation is one of the neighboring squares of the srcLocation
         const destPoint = point([destX, destY]); // x
         return isPointInPolygon(destPoint, possiblePoly);
+    }
+
+
+
+    /**
+     * Get flattened xy points from the laser route, that is used in the board's laser drawing.
+     * 
+     * @param {LaserPath[]} route the route travelled by the laser. Use { #getLaserRoute() }
+     * @param {number} cellSize the size of indidual cells of the board.
+     * @returns {number[]} a flattened array of the x,y coordinates for the laser to be drawn in the board.
+     */
+    static linePointsFromLaserRoute(laserRoute, cellSize) {
+        const points = laserRoute.map(path => {
+            let x, y;
+            if ((path.eventType === LaserEventsEnum.START) || (path.eventType === LaserEventsEnum.END)) {
+                // Start from the middle of the laser piece,
+                y = path.location.rowIndex * cellSize + (cellSize / 2);
+                x = path.location.colIndex * cellSize + (cellSize / 2);
+
+            } else if (path.eventType === LaserEventsEnum.CENTRAL) {
+                // Laser is going ways....
+                if (path.direction === LaserDirectionsEnum.TOP) {
+                    // going top
+                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+
+                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize;
+                    }
+
+                } else if (path.direction === LaserDirectionsEnum.LEFT) {
+                    // going left
+                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+
+                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                        x = path.location.colIndex * cellSize;
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+                    }
+
+                } else if (path.direction === LaserDirectionsEnum.RIGHT) {
+                    // going right
+                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+
+                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                        x = path.location.colIndex * cellSize + cellSize;
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+                    }
+
+                } else if (path.direction === LaserDirectionsEnum.BOTTOM) {
+                    // going bottom
+                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize + (cellSize / 2);
+
+                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                        x = path.location.colIndex * cellSize + (cellSize / 2);
+                        y = path.location.rowIndex * cellSize + cellSize;
+                    }
+                }
+            }
+            return [x, y];
+        });
+
+        return flatMap(points);
+    }
+
+
+
+    /**
+     * Simply presents a piece movement visually on the canvas stage.
+     * 
+     * @param {Ref} stagePiecesRef React.Ref of the layer where the board pieces are drawn in the canvas
+     * @param {Movement} movement The movement being performed
+     * @param {number} cellSize The width of individual squares of the board
+     */
+    static presentPieceMovement(stagePiecesRef, movement, cellSize) {
+        const [srcBoardPiece] = stagePiecesRef.current.find(`#${movement.srcLocation.an}`);
+
+        // Check the type of movement, which could be either "special" or "normal"
+        if (movement.type === MovementTypesEnum.SPECIAL) {
+            const [destBoardPiece] = stagePiecesRef.current.find(`#${movement.destLocation.an}`);
+            // Special move (Switch can swap)
+            // Swap the piece from destLocation with the piece at srcLocation!
+            // - First move the piece from src to dest
+            srcBoardPiece.to({
+                x: Location.getX(movement.destLocation.colIndex, cellSize),
+                y: Location.getY(movement.destLocation.rowIndex, cellSize),
+                duration: pieceAnimDuration,
+                easing: pieceAnimEasing
+            });
+            // - Now move the piece from src to dest
+            destBoardPiece.to({
+                x: Location.getX(movement.srcLocation.colIndex, cellSize),
+                y: Location.getY(movement.srcLocation.rowIndex, cellSize),
+                duration: pieceAnimDuration,
+                easing: pieceAnimEasing
+            });
+
+        } else if (movement.type === MovementTypesEnum.NORMAL) {
+            // Normal move (moving to a new empty target square)
+            // - Just put the piece from src in dest square
+            srcBoardPiece.to({
+                x: Location.getX(movement.destLocation.colIndex, cellSize),
+                y: Location.getY(movement.destLocation.rowIndex, cellSize),
+                duration: pieceAnimDuration,
+                easing: pieceAnimEasing
+            });
+
+        } else if (movement.type === MovementTypesEnum.ROTATION_CLOCKWISE) {
+            const prevOrientation = srcBoardPiece.rotation();
+            srcBoardPiece.to({
+                rotation: prevOrientation + 90,
+                duration: pieceAnimDuration,
+                easing: pieceAnimEasing
+            });
+
+        } else if (movement.type === MovementTypesEnum.ROTATION_C_CLOCKWISE) {
+            const prevOrientation = srcBoardPiece.rotation();
+            srcBoardPiece.to({
+                rotation: prevOrientation - 90,
+                duration: pieceAnimDuration,
+                easing: pieceAnimEasing
+            });
+        }
     }
 }
 

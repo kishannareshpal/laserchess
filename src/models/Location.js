@@ -60,7 +60,7 @@ class Location {
     static getX(colIndex, gridCellSize, centered = true) {
         const x = (colIndex * gridCellSize);
         if (centered) {
-            return x + Math.floor(gridCellSize / 2);
+            return x + (gridCellSize / 2);
         }
         return x;
     }
@@ -76,7 +76,7 @@ class Location {
     static getY(rowIndex, gridCellSize, centered = true) {
         const y = (rowIndex * gridCellSize);
         if (centered) {
-            return y + Math.floor(gridCellSize / 2);
+            return y + (gridCellSize / 2);
         }
         return y;
     }
