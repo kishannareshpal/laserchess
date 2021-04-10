@@ -192,6 +192,7 @@ class Board {
                 if ((rowIndex < 0 || rowIndex > 7) || (colIndex < 0 || colIndex > 9)) {
                     // If it is out of bound. Stop the laser right here
                     eventType = LaserEventsEnum.END;
+                    completeRoute.push(new LaserPath(eventType, null, actionType, new Location(colIndex, rowIndex).serialize()).serialize());
                     continue;
                 }
 
