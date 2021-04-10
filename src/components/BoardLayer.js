@@ -246,12 +246,17 @@ const BoardLayer = ({ reference, cellSize, onBoardPieceMove }) => {
 
 
 	return (
-		<Layer ref={reference}>
-			{drawGrid()}
-			{drawPieces()}
-			{drawPossibleMovesHighlight()}
-			{drawLaser()}
-		</Layer>
+		<>
+			<Layer ref={reference}>
+				{drawGrid()}
+				{drawPieces()}
+				{drawPossibleMovesHighlight()}
+			</Layer>
+			<Layer>
+				{/* I am drawing this laser on a different layer because it was overlapping with the piece onDrag */}
+				{drawLaser()}
+			</Layer>
+		</>
 	);
 };
 

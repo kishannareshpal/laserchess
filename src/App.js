@@ -108,12 +108,7 @@ function App() {
 	}, [dispatch, aiMovement, getCellSize]);
 
 
-
 	// Renderers
-
-
-
-
 	return (
 		<div>
 			<nav className="navbar lc-nav border-bottom">
