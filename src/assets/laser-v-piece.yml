@@ -1,7 +1,7 @@
 # Laser v. Piece hit relations
 # ––––––––––––––––––––––––––––
 # How to interpret this file:
-#   top, left, right and bottom - represents the direction FROM WHERE the laser is hitting a piece from.
+#   top, left, right and bottom - represents the direction FROM WHERE the laser is hitting a piece.
 #   l, d, b, k and s - represents the TYPE OF THE PIECE BEING HIT from the direction of the parent key.
 #   0, 90, 180 and 270 - represents the ORIENTATION OF THE PIECE BEING HIT.
 #   nothing, kill, left, right, top and bottom values - represent THE ACTION TAKEN BY THE LASER WHEN IT HITS A PIECE THAT IS ROTATED IN THAT ORIENTATION:
