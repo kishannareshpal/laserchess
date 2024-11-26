@@ -58,12 +58,6 @@ The action to take when the laser coming from one of the four directions (`left`
 
 ## Piece orientations
 
-<style>
-    .center {
-        text-align:center
-    }
-</style>
-
 <table>
    <thead>
       <tr>
