@@ -15,8 +15,6 @@ import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import RotateRightIcon from "@material-ui/icons/RotateRight";
 import Movement from "./models/Movement";
 
-
-
 function App() {
 
 	// The stage width. This is dynamic, and changes on window resize.
