@@ -1,7 +1,19 @@
-import { PieceTypesEnum, PlayerTypesEnum } from "../models/Enums";
+import type { OrientationDegrees, PieceName, PieceType } from "@/types";
 import { isLowerCase } from "../utils/Utils";
 
-class Piece {
+export type SerializedPiece = {
+    color: 'red' | 'blue',
+    type: PieceType,
+    orientation: OrientationDegrees,
+    imageName: string
+};
+
+export class Piece_Depr {
+    color: 'red' | 'blue';
+    type: PieceType;
+    orientation: OrientationDegrees;
+    imageName: string;
+
     /**
      * A class representing a single piece.
      * 
@@ -10,18 +22,18 @@ class Piece {
      *
      * @see PieceTypesEnum for type param
      */
-    constructor(type, orientation) {
-        this.color = isLowerCase(type) ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE; // color (red, blue)
-        this.type = type.toLowerCase();
+    constructor(type: PieceType | Uppercase<PieceType>, orientation: OrientationDegrees) {
+        this.color = isLowerCase(type) ? 'red' : 'blue'; // color (red, blue)
+        this.type = type.toLowerCase() as PieceType;
         this.orientation = orientation;
-        this.imageName = `${this.color}-${PieceUtils.getPieceName(type)}`;
+        this.imageName = `${this.color}-${PieceUtils.getPieceName(this.type)}`;
     }
 
     /**
      * Serializes the Piece object into an Object.
-     * @returns {Object} plain object, representing this instance
+     * @returns plain object, representing this instance
      */
-    serialize() {
+    serialize(): SerializedPiece {
         return {
             color: this.color,
             type: this.type,
@@ -29,37 +41,25 @@ class Piece {
             imageName: this.imageName
         };
     }
-
 }
 
 
-class PieceUtils {
-
-    /**
-     * Get the piece name.
-     * 
-     * @returns {string} the piece name. See example:
-     * @example 
-     * "king"
-     * "laser"
-     * "defender"
-     * ...
-     */
-    static getPieceName(pieceType) {
-        switch (pieceType.toLowerCase()) {
-            case PieceTypesEnum.KING:
+export class PieceUtils {
+    static getPieceName(pieceType: PieceType): PieceName {
+        switch (pieceType) {
+            case 'k':
                 return "king";
 
-            case PieceTypesEnum.LASER:
+            case 'l':
                 return "laser";
 
-            case PieceTypesEnum.DEFENDER:
+            case 'd':
                 return "defender";
 
-            case PieceTypesEnum.DEFLECTOR:
+            case 'b':
                 return "deflector";
 
-            case PieceTypesEnum.SWITCH:
+            case 's':
                 return "switch";
         }
     }
@@ -69,7 +69,7 @@ class PieceUtils {
      * Rotates a piece clockwise or counter-clockwise.
      * Mutates the piece directly. Returns nothing.
      * 
-     * @param {Piece} piece the piece to rotate
+     * @param {Piece_Depr} piece the piece to rotate
      * @param {boolean} clockwise if true will rotate clockwise, otherwise counter-clockwise
      * @example
      * 0  -> cw   -> 0 + 90 = 90
@@ -82,7 +82,7 @@ class PieceUtils {
      * 270 -> ccw -> 270 - 90 = 180
      * 
      */
-    static applyRotation(piece, clockwise = true) {
+    static applyRotation(piece: Piece_Depr, clockwise: boolean = true): void {
         // Check if clockwise (default) or counter-clockwise
         if (clockwise) {
             // clockwise
@@ -110,6 +110,3 @@ class PieceUtils {
         }
     }
 }
-
-export default Piece;
-export { PieceUtils };

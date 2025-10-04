@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * A really common need is to get the current size of the browser window. 

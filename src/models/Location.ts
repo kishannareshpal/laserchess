@@ -7,12 +7,24 @@
  */
 const COLS_IN_NOTATION = "abcdefghij";
 
+export type SerializedLocation = {
+    colIndex: number,
+    rowIndex: number,
+    col: string,
+    row: number,
+    an: string
+}
+
 /**
- * @description
  * A class representing a location in the board.
  */
-class Location {
-    constructor(colIndex, rowIndex) {
+export class Location_Depr {
+    colIndex: number;
+    rowIndex: number;
+    col: string
+    row: number;
+
+    constructor(colIndex: number, rowIndex: number) {
         this.colIndex = colIndex; // 0-indexed column (x) for internal use.
         this.rowIndex = rowIndex; // 0-indexed row (y) for internal use.
         this.col = COLS_IN_NOTATION.charAt(colIndex); // the column in Algebraic Notation
@@ -23,14 +35,14 @@ class Location {
     * Parse an AN location text into a Location object.
     * 
     * @param {string} notation the location notation to convert [col][row].
-    * @returns {Location} the location object parsed from the AN.
+    * @returns {Location_Depr} the location object parsed from the AN.
     */
-    static fromAN(notation) {
+    static fromAN(notation: string): Location_Depr {
         const col = notation[0];
         const row = parseInt(notation[1]);
         const colIndex = COLS_IN_NOTATION.indexOf(col);
         const rowIndex = 8 - row;
-        return new Location(colIndex, rowIndex);
+        return new Location_Depr(colIndex, rowIndex);
     }
 
 
@@ -42,10 +54,10 @@ class Location {
      * @param {*} gridCellSize the size of a single cell in the grid.
      * @returns {number}
      */
-    static fromXY(x, y, gridCellSize) {
+    static fromXY(x: number, y: number, gridCellSize: number): Location_Depr {
         const colIndex = Math.floor(x / gridCellSize);
         const rowIndex = Math.floor(y / gridCellSize);
-        return new Location(colIndex, rowIndex);
+        return new Location_Depr(colIndex, rowIndex);
     }
 
 
@@ -57,7 +69,7 @@ class Location {
      * @param {boolean} centered [default=true] if true, the X position returned will be centered in the cell, if false, it will be at the top left corner of the
      * @returns {number}
      */
-    static getX(colIndex, gridCellSize, centered = true) {
+    static getX(colIndex: number, gridCellSize: number, centered: boolean = true): number {
         const x = (colIndex * gridCellSize);
         if (centered) {
             return x + (gridCellSize / 2);
@@ -73,7 +85,7 @@ class Location {
      * @param {boolean} centered [default=true] if true, the X position returned will be centered in the cell, if false, it will be at the top left corner of the cell.
      * @returns {number}
      */
-    static getY(rowIndex, gridCellSize, centered = true) {
+    static getY(rowIndex: number, gridCellSize: number, centered: boolean = true): number {
         const y = (rowIndex * gridCellSize);
         if (centered) {
             return y + (gridCellSize / 2);
@@ -87,15 +99,15 @@ class Location {
      * 
      * @returns {string} the location in AN format. E.g: location -> a8, location -> b3
      */
-    get an() {
+    get an(): string {
         return `${this.col}${this.row}`;
     }
 
     /**
      * Serializes the Location object into an Object.
-     * @returns {Object} plain object, representing this instance
+     * @returns plain object, representing this instance
      */
-    serialize() {
+    serialize(): SerializedLocation {
         return {
             colIndex: this.colIndex,
             rowIndex: this.rowIndex,
@@ -105,5 +117,3 @@ class Location {
         };
     }
 }
-
-export default Location;

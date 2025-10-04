@@ -1,32 +1,34 @@
 import { isString, isEmpty, reduce } from "lodash";
-import { isLowerCase } from "./Utils";
-import Square from "../models/Square";
-import Location from "../models/Location";
-import Piece from "../models/Piece";
-import { PlayerTypesEnum, SquareTypesEnum } from "../models/Enums";
+import type { CellType, OrientationDegrees, PieceType, PlayerType } from "@/types";
+import type { Cell, CellGrid } from "@/models/models/cell";
+import type { Location } from "@/models/models/location";
+import type { Piece } from "@/models/models/piece";
+import { PieceHelper } from "@/models/helpers/piece-helper";
 
 
 // const boardGridNotationText = "lR6rR/r8R/r8R/r8R/r8R/r8R/r8R/rR6rL";
-const SPECIAL_SQUARES = [
-    {
-        location_an: "a8",
-        type: SquareTypesEnum.LASER_RED
-    },
-    {
-        location_an: "j1",
-        type: SquareTypesEnum.LASER_BLUE
-    },
-    {
-        location_an: "j8",
-        type: SquareTypesEnum.LASER_BLUE
-    }
-];
+
+// TODO: what's this used for?
+// const SPECIAL_SQUARES: { location_an: string, type: SquareType }[] = [
+//     {
+//         location_an: "a8",
+//         type: 'laser-red'
+//     },
+//     {
+//         location_an: "j1",
+//         type: 'laser-blue'
+//     },
+//     {
+//         location_an: "j8",
+//         type: 'laser-blue'
+//     }
+// ];
 
 
 /**
  * Class representing Setup Notation.
  */
-class SN {
+export class SN {
 
     /**
      * Validates a SN according to the notation.
@@ -52,10 +54,10 @@ class SN {
      * @returns {boolean} true if valid, otherwise false or will throw if throwOnInvalid param is set to true.
      * @throws Invalid Notation if notation is invalid, and the throwOnInvalid param is set to true.
      */
-    static validate(notationText, throwOnInvalid = false) {
+    static validate(notationText: string, throwOnInvalid: boolean = false): boolean {
         if (!isString(notationText)) {
             if (throwOnInvalid) {
-                throw "Invalid notation – Must be string";
+                throw "Invalid notation - Must be string";
             }
             return false;
         }
@@ -63,7 +65,7 @@ class SN {
         const hasNoSpaces = notationText.indexOf(" ") === -1;
         if (!hasNoSpaces) {
             if (throwOnInvalid) {
-                throw "Invalid notation – Must not contain space";
+                throw "Invalid notation - Must not contain space";
             }
             return false;
         }
@@ -71,7 +73,7 @@ class SN {
         const hasEightRows = notationText.split("/").length === 8;
         if (!hasEightRows) {
             if (throwOnInvalid) {
-                throw "Invalid notation – Must contain 8 rows (7 slashes)";
+                throw "Invalid notation - Must contain 8 rows (7 slashes)";
             }
             return false;
         }
@@ -79,7 +81,7 @@ class SN {
         const hasValidCharsOnly = (/^([ksdbl1-9*/]\+{0,3})+$/gi).test(notationText);
         if (!hasValidCharsOnly) {
             if (throwOnInvalid) {
-                throw "Invalid notation – Must only contain 'ksdbl123456789*/+'";
+                throw "Invalid notation - Must only contain 'ksdbl123456789*/+'";
             }
             return false;
         }
@@ -91,86 +93,85 @@ class SN {
     /**
      * Parse a given Setup Notation (SN) string into board!
      * 
-     * @param {string} notationText a valid setup SN string.
-     * @returns {Array} parsed board with pieces.
+     * @param notationText a valid setup SN string.
+     * @returns parsed board with pieces.
      * @see https://github.com/kishannareshpal/laserchess/blob/master/docs/SetupNotation.md
      * 
      * TODO: It validates a row like: "2ldb" (which has 5cols only). Instead, should error and ask to finish the rest of cols with EMPTY squares! Expected: This is what should be valid "2ldb5", by adding 5 empty squares on the end to complete 10cols.
      * 
      */
-    static parse(notationText) {
+    static parse(notationText: string): CellGrid {
         // Validate the SN. 
         // throw on invalid notation
         this.validate(notationText, true);
 
         const notationArray = [];
-        const rows = notationText.split("/");
+        const rows: string[] = notationText.split("/");
         rows.forEach((row, rowIndex) => {
             // Make sure it only has valid characters
             const colsRaw = row.match(/([ksdbl1-9*]\+{0,3})/gi);
 
             // Track the number of columns so we can validate rows, which must have only 10 squares (cols)! 
             let squaresCount = 0;
-            const cols = colsRaw.flatMap(col => {
-                if (col === "*") {
-                    // It's 10 empty spaces.
-                    // Transform it into the literal number 10, so i can map it into 10 empty squares.
-                    col = 10;
-                }
-
-                if (isNaN(col)) {
+            const cols = colsRaw.flatMap((col: string) => {
+                if (col === '*' || !isNaN(parseInt(col))) {
+                    // It's a number (which represents n empty squares) or the * symbol (which represents 10 empty squares)
+                    // Increment the number of cols
+                    const numberOfEmptySquares = parseInt(col);
+                    squaresCount += numberOfEmptySquares;
+                    return new Array(numberOfEmptySquares).fill("");
+                } else {
                     // It's a letter (which represents the piece type and color, and optionally the orientation)
                     // Increment the column count.
                     // - ignore + symbols(which represents orientation) as it adds no squares(cols) to a row.
                     squaresCount += 1;
                     return col;
-                } else {
-                    // It's a number (which represents the number of empty spaces from this col)
-                    // Increment the number of cols
-                    const numberOfEmptySquares = parseInt(col);
-                    squaresCount += numberOfEmptySquares;
-                    return new Array(numberOfEmptySquares).fill("");
                 }
             });
 
             // Make sure that the row has 10 cols.
             if (squaresCount !== 10) {
-                throw `Invalid Notation – Must contain 10 Columns per Row. Found ${squaresCount} Columns in row ${rowIndex + 1} instead`;
+                throw `Invalid Notation - Must contain 10 Columns per Row. Found ${squaresCount} Columns in row ${rowIndex + 1} instead`;
             }
 
             notationArray.push(cols);
         });
 
-        const parsedBoard = notationArray.map((row, rowIndex) => {
-            const squares = [];
+        return notationArray.map((row, rowIndex) => {
+            const cells = [];
             row.forEach((col, colIndex) => {
-                const location = new Location(colIndex, rowIndex).serialize(); // the location of the square
-                let piece = null; // null means, no piece in the square
-                let squareType = SquareTypesEnum.NORMAL; // represents the square type in this location
+                const location: Location = { colIndex, rowIndex };
+
+                let piece: Piece | null = null; // holds the piece on this cell, if any. Otherwise null
+                let cellType: CellType = 'normal'; // holds the type of cell in this location.
 
                 // Check if we need a piece on this square
                 if (!isEmpty(col)) {
-                    // Find out which piece we need.
-                    const pieceType = col[0]; // type (Kk, Ll, Bb, Dd, Ss)
-                    let orientation = 0; // orientation in 90deg increments (0, 90, 180, 270)
+                    // Determine the player this piece belongs to
+                    const pieceType: PieceType = PieceHelper.determinePieceType(col[0]); // type (k, l, b, d, s)
+                    const playerType: PlayerType = PieceHelper.determinePiecePlayerType(col[0]) // type (Kk, Ll, Bb, Dd, Ss)
+
+                    // Determine the orientation
+                    let orientation: OrientationDegrees = 0; // orientation in 90deg increments (0, 90, 180, 270)
                     if (col.indexOf("+") != -1) {
                         const rotations = col.substring(1);
                         orientation = reduce(rotations, (prev) => {
-                            return prev + 90;
+                            return (prev + 90) as OrientationDegrees;
                         }, 0);
                     }
-                    piece = new Piece(pieceType, orientation).serialize();
+
+                    piece = { type: pieceType, playerType: playerType, orientation }
                 }
 
                 if (colIndex === 0 && rowIndex === 0) {
                     // This square is reserved for the red player's laser piece only.
                     // No other piece can be put in here
-                    squareType = SquareTypesEnum.LASER_RED;
+                    cellType = 'laser-red';
 
                 } else if (colIndex === 9 && rowIndex === 7) {
                     // This square is reserved for the blue player's laser piece only. 
                     // No other piece can be put in here
-                    squareType = SquareTypesEnum.LASER_BLUE;
+                    cellType = 'laser-blue';
 
                 } else if ((colIndex === 0 && (rowIndex >= 1 && rowIndex <= 7) ||
                     (colIndex === 8 && (rowIndex === 0 || rowIndex === 7)))) {
@@ -179,7 +180,7 @@ class SN {
                     //  - Square at Column: 8 and Rows: either 0 or 7
                     // These squares are reserved for pieces of the red player only.
                     // The other player pieces cannot be put or moved into these squares.
-                    squareType = SquareTypesEnum.RESERVED_RED;
+                    cellType = 'reserved-red';
 
                 } else if ((colIndex === 1 && (rowIndex === 0 || rowIndex === 7)) ||
                     (colIndex === 9 && (rowIndex >= 0 && rowIndex <= 6))) {
@@ -188,17 +189,14 @@ class SN {
                     //  - Square at Column: 1 and Rows: either 0 or 7
                     // These squares are reserved for pieces of the blue player only.
                     // The other player pieces cannot be put or moved into these squares.
-                    squareType = SquareTypesEnum.RESERVED_BLUE;
+                    cellType = 'reserved-blue';
                 }
 
-                const square = new Square(squareType, piece, location).serialize();
-                squares.push(square);
+                const cell: Cell = { type: cellType, location, piece };
+                cells.push(cell);
             });
-            return squares;
-        });
 
-        return parsedBoard;
+            return cells;
+        });
     }
 }
-
-export default SN;

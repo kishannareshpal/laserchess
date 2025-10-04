@@ -3,14 +3,6 @@ import { PlayerTypesEnum, GameStatusEnum } from "../../models/Enums";
 import Board from "../../models/Board";
 import AI from "../../utils/ai/AI";
 
-/** 
- * The default board setup (ACE).
- * TODO: Make it dynamic, so the player can choose between different board setups.
- * ? In future, consider allowing the user to create their own board setup!
- * @constant {string}
- * @default
- */
-const DEFAULT_BOARD_SN = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7B++2/2B+DKD3L";
 
 
 const gameSlice = createSlice({

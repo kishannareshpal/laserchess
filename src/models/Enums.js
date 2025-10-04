@@ -1,5 +1,7 @@
 /**
  * Game
+ * 
+ * @deprecated
  */
 export const PlayerTypesEnum = Object.freeze({
     RED: "red",
@@ -15,6 +17,9 @@ export const CellTypesEnum = Object.freeze({
     RESERVED: "r"
 });
 
+/**
+ * @deprecated
+ */
 export const SquareTypesEnum = Object.freeze({
     NORMAL: "normal",
     LASER_BLUE: "laser-blue",
@@ -23,6 +28,9 @@ export const SquareTypesEnum = Object.freeze({
     RESERVED_RED: "reserved-red"
 });
 
+/**
+ * @deprecated
+ */
 export const GameStatusEnum = Object.freeze({
     PLAYING: "playing",
     PAUSED: "paused",
@@ -39,6 +47,9 @@ export const GameStatusEnum = Object.freeze({
 //     BLUE: "blue"
 // });
 
+/**
+ * @deprecated
+ */
 export const PieceTypesEnum = Object.freeze({
     KING: "k",
     DEFLECTOR: "b",
@@ -50,6 +61,8 @@ export const PieceTypesEnum = Object.freeze({
 
 /**
  * Laser
+ * 
+ * @deprecated
  */
 export const LaserEventsEnum = Object.freeze({
     START: "start",
@@ -57,6 +70,9 @@ export const LaserEventsEnum = Object.freeze({
     END: "end"
 });
 
+/**
+ * @deprecated
+ */
 export const LaserDirectionsEnum = Object.freeze({
     TOP: "top",
     RIGHT: "right",
@@ -64,6 +80,9 @@ export const LaserDirectionsEnum = Object.freeze({
     LEFT: "left"
 });
 
+/**
+ * @deprecated
+ */
 export const LaserActionTypesEnum = Object.freeze({
     DEFLECT: "deflect",
     KILL: "kill",
@@ -74,12 +93,17 @@ export const LaserActionTypesEnum = Object.freeze({
 
 /**
  * Movement
+ * 
+ * @deprecated
  */
 export const RotationTypesEnum = Object.freeze({
     CLOCKWISE: "+", // indicates a clockwise rotation of a piece.
     COUNTER_CLOCKWISE: "-" // indicates a counter-clockwise rotation of a piece.
 });
 
+/**
+ * @deprecated
+ */
 export const MovementTypesEnum = Object.freeze({
     INVALID: "invalid", // indicates an invalid move. This can be when the destLocation is not a valid square on the board
     NORMAL: "normal", // indicates the normal move. Simply from one location to another.

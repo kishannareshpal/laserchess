@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { isEqual } from "lodash";
 import Konva from "konva";
-import Location from "../models/Location";
-import Movement from "../models/Movement";
+import { Location_Depr } from "../models/Location";
+import { Movement_Depr } from "../models/Movement";
 import useImage from "use-image";
 import { MovementTypesEnum, PieceTypesEnum } from "../models/Enums";
 import { Image } from "react-konva";
-import Board from "../models/Board";
+import { Board } from "../models/Board";
 
 /**
  * @constant
@@ -20,15 +20,15 @@ export const pieceAnimDuration = 0.332;
  */
 export const pieceAnimEasing = Konva.Easings.BackEaseOut;
 
-const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, onGrab, cellSize, currentPlayer, movementIsLocked }) => {
+export const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect, onGrab, cellSize, currentPlayer, movementIsLocked }) => {
 	const [lastXY, setLastXY] = useState({ x: undefined, y: undefined });
 	const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${piece.imageName}.svg`);
 
 
 	useEffect(() => {
 		const xy = {
-			x: Location.getX(location.colIndex, cellSize),
-			y: Location.getY(location.rowIndex, cellSize)
+			x: Location_Depr.getX(location.colIndex, cellSize),
+			y: Location_Depr.getY(location.rowIndex, cellSize)
 		};
 		setLastXY(xy);
 	}, [location, cellSize]);
@@ -86,8 +86,8 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 
 				const hasChangedLocation = !isEqual(lastXY, { x: endX, y: endY });
 				if (hasChangedLocation) {
-					const srcLocation = Location.fromXY(lastXY.x, lastXY.y, cellSize);
-					const destLocation = Location.fromXY(endX, endY, cellSize);
+					const srcLocation = Location_Depr.fromXY(lastXY.x, lastXY.y, cellSize);
+					const destLocation = Location_Depr.fromXY(endX, endY, cellSize);
 
 					// Validate!
 					// Check if the destLocation square is a neighbor of the srcLocation.
@@ -182,12 +182,10 @@ const BoardPiece = ({ id, square: { piece, location }, squares, onMove, onSelect
 			image={pieceImage}
 			rotation={piece.orientation}
 			listening={(piece.color === currentPlayer) && (!movementIsLocked)}
-			x={Location.getX(location.colIndex, cellSize)}
-			y={Location.getY(location.rowIndex, cellSize)}
+			x={Location_Depr.getX(location.colIndex, cellSize)}
+			y={Location_Depr.getY(location.rowIndex, cellSize)}
 			width={cellSize}
 			height={cellSize}
 		/>
 	);
 };
-
-export default BoardPiece;

@@ -11,7 +11,7 @@
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
-        }
+        },
     },
     "rules": {
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
@@ -24,6 +24,10 @@
         "no-empty": "warn",
         "no-unused-vars": "off",
         "no-cond-assign": ["error", "always"],
-        "no-undef": "off"
+        "no-undef": "off",
+
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-empty-object-type": "off"
     }
 }

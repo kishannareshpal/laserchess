@@ -1,26 +1,26 @@
-import { LaserDirectionsEnum, PlayerTypesEnum, MovementTypesEnum, LaserActionTypesEnum, PieceTypesEnum, LaserEventsEnum, SquareTypesEnum } from "./Enums";
-import Location from "./Location";
+import { Location_Depr } from "./Location";
 import { PieceUtils } from "./Piece";
-import { SquareUtils } from "./Square";
-import SN from "../utils/SN";
+import { Square_Depr, SquareUtils, type SerializedSquare } from "./Square";
+import { SN } from "../utils/SN";
 import LHAN from "../utils/LHAN";
 import { flatMap, toLower, toUpper } from "lodash";
-import Movement from "./Movement";
-import LaserPath from "./LaserPath";
+import { Movement_Depr } from "./Movement";
+import { LaserPath_Depr } from "./LaserPath";
 import { point, polygon } from "@turf/helpers";
 import isPointInPolygon from "@turf/boolean-point-in-polygon";
 import { pieceAnimDuration, pieceAnimEasing } from "../components/BoardPiece";
+import type { LaserActionType, LaserDirection, LaserEvent, PlayerType } from "@/types";
 
+import { repeat } from 'lodash';
 
 /**
  * @constant
  * Ace
  */
-const DEFAULT_BOARD_SN = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7B++2/2B+DKD3L";
+const DEFAULT_BOARD_SN: string = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+++1B+1S+S1b++1B/6b+++3/7B++2/2B+DKD3L";
 
 /**
  * @constant
- * @type {Object}
  * 
  * Lookup object of individual piece scores.
  */
@@ -30,24 +30,43 @@ const PIECE_TO_SCORE = {
     s: 0, // Switch
     l: 0 // Laser
     // k: -1000, // King. We ignore adding king's score, because when the king is not present, a default of -1000 will be given and the game is already over.
-};
+} as const;
 
+export type BoardOptions = {
+    /**
+     * Create a new instance of the board class using an already parsed board squares. You may use {@see SN#parse} method to do so.
+     */
+    squares?: Square_Depr[][], // 2D array of squares,
 
-class Board {
+    /**
+     * Create a new instance of the board class using a setupNotation
+     */
+    setupNotation?: string
+}
+
+export type SerializedBoard = {
+    winner: PlayerType | null,
+    squares: SerializedSquare[][],
+    sn: string
+}
+
+export class Board {
+    squares: Square_Depr[][];
+    winner: PlayerType | null;
+
     /**
      * @description
      * Intantiate a new board class.
      * 
-     * @param {Object} options Use either {@param options.squares} or {@param options.setupNotation}. 
+     * @param options Use either {@param options.squares} or {@param options.setupNotation}. 
      *                         - Please only pass one of the options. Not both.
      *                         - If both are passed, options.squares will take priority and options.setupNotation will be ignored.
      *                         - If no options object is passed, will initialize the board with the default Ace Board Setup Notation.
-     * @param {Array} options.squares Create a new instance of the board class using an already parsed board squares. You may use {@see SN#parse} method to do so.
-     * @param {String} options.setupNotation Create a new instance of the board class using a setupNotation
      */
-    constructor(options) {
+    constructor(options?: BoardOptions | null) {
         // Parse the options
         options = options || {};
+
         if (options.squares) {
             // If squares is provided, prioritize this
             this.squares = options.squares;
@@ -60,6 +79,7 @@ class Board {
             // If opts.squares nor opts.setupNotation is provided, use the default (ace) setup notation
             this.squares = SN.parse(DEFAULT_BOARD_SN);
         }
+
         this.winner = null;
     }
 
@@ -68,13 +88,15 @@ class Board {
      * Get a square from the the current board that is at the specified location
      * ? TODO: validate location
      * 
-     * @param {Location} location the location of the square on the board.
-     * @returns {Square} the square or null if no square was found on the specified location.
+     * @param {Location_Depr} location the location of the square on the board.
+     * @returns {Square_Depr} the square or null if no square was found on the specified location.
+     * 
+     * @deprecated use {@see BoardHelper#getCellAt} instead //!
      */
-    getSquare(location) {
-        let row = this.squares[location.rowIndex];
+    getSquare(location: Location_Depr): Square_Depr {
+        const row = this.squares[location.rowIndex];
         if (row) {
-            let squareAtLocation = row[location.colIndex];
+            const squareAtLocation: Square_Depr = row[location.colIndex];
             return squareAtLocation;
         }
         return null;
@@ -86,6 +108,8 @@ class Board {
      * 
      * @param {PlayerTypesEnum} player
      * @returns {Array}
+     * 
+     * @deprecated use {@see BoardHelper#getCellsWithPlayerPiece} instead //!
      */
     getPlayerSquares(player) {
         // flatten all rows into a single array
@@ -119,7 +143,7 @@ class Board {
          * @see PIECE_TO_SCORE the lookup object constant
          */
         squaresOfPlayer.forEach(square => {
-            if (square.piece.type === PieceTypesEnum.KING) {
+            if (square.piece.type === 'k') {
                 isKingAvailable = true;
             } else {
                 playerScore += PIECE_TO_SCORE[square.piece.type];
@@ -140,47 +164,47 @@ class Board {
     /**
      * Get the route that the laser will travel when enabled for the specified playerType
      * 
-     * @param {PlayerTypesEnum} playerType the player who will applying the laser
+     * @param playerType the player who will applying the laser
      */
-    getLaserRoute(playerType) {
+    getLaserRoute(playerType: PlayerType) {
         const completeRoute = []; // holds the laser path!
 
         // Get the laser of the player on the move
         // Starting from the laser, start scanning squares in the direction where laser is pointing.
-        const an = (playerType === PlayerTypesEnum.BLUE) ? "j1" : "a8"; // We know exactly where the laser for each player is! As those are immovable pieces.
-        const laserSquareLocation = Location.fromAN(an);
+        const an = (playerType === 'blue') ? "j1" : "a8"; // We know exactly where the laser for each player is! As those are immovable pieces.
+        const laserSquareLocation = Location_Depr.fromAN(an);
         const laserSquare = this.getSquare(laserSquareLocation);
         if (SquareUtils.hasPiece(laserSquare)) {
             // Begin!
             // Get the starting laser beam's direction based on the laser piece's orientation
             const laserPiece = laserSquare.piece;
-            let direction = SquareUtils.getLaserBeamDirection(laserPiece);
+            let direction: LaserDirection = SquareUtils.getLaserBeamDirection(laserPiece);
 
             let colIndex = laserSquareLocation.colIndex;
             let rowIndex = laserSquareLocation.rowIndex;
 
             // Start scanning in the pointing direction of the laser beam
-            let eventType = LaserEventsEnum.START;
-            let actionType = LaserActionTypesEnum.NOTHING;
+            let eventType: LaserEvent = 'start';
+            let actionType: LaserActionType = 'nothing';
 
-            completeRoute.push(new LaserPath(eventType, direction, actionType, laserSquareLocation.serialize()).serialize()); // start from the player's laser piece.
-            while (eventType !== LaserEventsEnum.END) {
-                eventType = LaserEventsEnum.CENTRAL;
+            completeRoute.push(new LaserPath_Depr(eventType, direction, actionType, laserSquareLocation).serialize()); // start from the player's laser piece.
+            while (eventType !== 'end') {
+                eventType = 'central';
 
-                let dx, dy;
-                if (direction === LaserDirectionsEnum.TOP) {
+                let dx: number, dy: number;
+                if (direction === 'top') {
                     dx = 0;
                     dy = -1;
 
-                } else if (direction === LaserDirectionsEnum.RIGHT) {
+                } else if (direction === 'right') {
                     dx = 1;
                     dy = 0;
 
-                } else if (direction === LaserDirectionsEnum.BOTTOM) {
+                } else if (direction === 'bottom') {
                     dx = 0;
                     dy = 1;
 
-                } else if (direction === LaserDirectionsEnum.LEFT) {
+                } else if (direction === 'left') {
                     dx = -1;
                     dy = 0;
 
@@ -191,41 +215,41 @@ class Board {
                 // Make sure the indexes are not out of bound from the board.
                 if ((rowIndex < 0 || rowIndex > 7) || (colIndex < 0 || colIndex > 9)) {
                     // If it is out of bound. Stop the laser right here
-                    eventType = LaserEventsEnum.END;
-                    completeRoute.push(new LaserPath(eventType, null, actionType, new Location(colIndex, rowIndex).serialize()).serialize());
+                    eventType = 'end';
+                    completeRoute.push(new LaserPath_Depr(eventType, null, actionType, new Location_Depr(colIndex, rowIndex)).serialize());
                     continue;
                 }
 
                 // Get the square in the scanning location!
-                const nextScanningSquareLocation = new Location(colIndex, rowIndex);
+                const nextScanningSquareLocation = new Location_Depr(colIndex, rowIndex);
                 const nextScanningSquare = this.getSquare(nextScanningSquareLocation);
 
                 // Check if it has a piece in this square
                 if (SquareUtils.hasPiece(nextScanningSquare)) {
                     // If piece was found, check what we have to do, based on the Laser Hit Action Notation of the piece in the scanning square
                     const action = LHAN.getHitAction(direction, nextScanningSquare.piece);
-                    if (action.type === LaserActionTypesEnum.KILL) {
+                    if (action.type === 'kill') {
                         // The piece in this square should be killed/eaten/captured.
-                        eventType = LaserEventsEnum.END; // end the scanning, we reached the limit for this laser beam.
+                        eventType = 'end'; // end the scanning, we reached the limit for this laser beam.
 
-                    } else if (action.type === LaserActionTypesEnum.DEFLECT) {
+                    } else if (action.type === 'deflect') {
                         // The piece in this square changes the direction of my laser beam.
                         direction = action.newDirection;
 
-                    } else if (action.type === LaserActionTypesEnum.NOTHING) {
+                    } else if (action.type === 'nothing') {
                         // The piece in this square is probably (1) another laser or (2) a defender
                         // So, do nothing! Stop the laser now.
-                        eventType = LaserEventsEnum.END;
+                        eventType = 'end';
                     }
                     actionType = action.type;
 
                 } else {
                     // Continue if no piece in the scanning square.
                     // Did nothing.
-                    actionType = LaserActionTypesEnum.NOTHING;
+                    actionType = 'nothing';
                 }
 
-                completeRoute.push(new LaserPath(eventType, direction, actionType, nextScanningSquareLocation.serialize()).serialize());
+                completeRoute.push(new LaserPath_Depr(eventType, direction, actionType, nextScanningSquareLocation).serialize());
             }
         }
         return completeRoute;
@@ -236,7 +260,7 @@ class Board {
      * Returns all moves for all of the pieces of the specified player.
      * 
      * @param {PlayerTypesEnum} playerType
-     * @returns {Movement[]}
+     * @returns {Movement_Depr[]}
      */
     getMovesForPlayer(playerType) {
         const moves = [];
@@ -255,10 +279,10 @@ class Board {
     /**
      * Get all moves for a particular piece at the specified location
      * 
-     * @param {Location} location the location on which the piece to get the moves is.
-     * @returns {Movement[]} a list of all Movement possible for the piece in that location
+     * @param {Location_Depr} location the location on which the piece to get the moves is.
+     * @returns {Movement_Depr[]} a list of all Movement possible for the piece in that location
      */
-    getMovesForPieceAtLocation(location) {
+    getMovesForPieceAtLocation(location: Location_Depr): Movement_Depr[] {
         const moves = [];
 
         const srcX = location.colIndex;
@@ -296,10 +320,10 @@ class Board {
                 return; // skip to next itteration, because this dx or dy is outside the bound of the board.
             }
 
-            const possibleDestLocation = new Location(dx, dy);
+            const possibleDestLocation = new Location_Depr(dx, dy);
             const movePossibility = this.checkMovePossibility(location, possibleDestLocation);
 
-            if (movePossibility.type !== MovementTypesEnum.INVALID) {
+            if (movePossibility.type !== 'invalid') {
                 // Only return moves that are possible
                 moves.push(movePossibility);
             }
@@ -315,43 +339,43 @@ class Board {
      * 
      * TODO: add rotation possibility as well
      *
-     * @param {Location} srcLocation the square from where we are moving from.
-     * @param {Location} destLocation the square to where we are moving.
-     * @returns {Movement} which can contain a type of MovementTypesEnum#INVALID when the move is not possible
+     * @param {Location_Depr} srcLocation the square from where we are moving from.
+     * @param {Location_Depr} destLocation the square to where we are moving.
+     * @returns {Movement_Depr} which can contain a type of MovementTypesEnum#INVALID when the move is not possible
      */
-    checkMovePossibility(srcLocation, destLocation) {
+    checkMovePossibility(srcLocation: Location_Depr, destLocation: Location_Depr): Movement_Depr {
         const squareAtSrc = this.getSquare(srcLocation);
         const squareAtDest = this.getSquare(destLocation);
 
         // todo: remove the last OR statement, and add draggable={piece is not laser} instead in BoardPiece
-        if ((squareAtDest === null) || (squareAtSrc === null) || (squareAtSrc.piece.type === PieceTypesEnum.LASER)) {
+        if ((squareAtDest === null) || (squareAtSrc === null) || (squareAtSrc.piece.type === 'l')) {
             // Invalid destLocation, as it has no square there. Most likely this is out of bound.
             // Or, we are trying to move a Laser Piece, which is not a possible move according to the rules of the game.
             // Return as not possible to move.
-            return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+            return new Movement_Depr('invalid', srcLocation, destLocation);
         }
 
         const pieceTypeAtSrc = squareAtSrc.piece.type;
         const pieceTypeAtDest = squareAtDest.piece ? squareAtDest.piece.type : null;
         const pieceColorAtSrc = squareAtSrc.piece.color;
 
-        if (squareAtDest.type === SquareTypesEnum.RESERVED_BLUE && pieceColorAtSrc !== PlayerTypesEnum.BLUE) {
+        if (squareAtDest.type === 'reserved-blue' && pieceColorAtSrc !== 'blue') {
             // Trying to make a movement to a square reserved for blue player pieces only,
             // with a red player's piece.
-            return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+            return new Movement_Depr('invalid', srcLocation, destLocation);
 
-        } else if (squareAtDest.type === SquareTypesEnum.RESERVED_RED && pieceColorAtSrc !== PlayerTypesEnum.RED) {
+        } else if (squareAtDest.type === 'reserved-red' && pieceColorAtSrc !== 'red') {
             // Trying to make a movement to a square reserved for red player pieces only,
             // with a blue player's piece.
-            return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+            return new Movement_Depr('invalid', srcLocation, destLocation);
         }
 
         // Special Move (swap)
-        if ((pieceTypeAtSrc === PieceTypesEnum.SWITCH) &&
-            (pieceTypeAtDest === PieceTypesEnum.DEFENDER || pieceTypeAtDest === PieceTypesEnum.DEFLECTOR)) {
+        if ((pieceTypeAtSrc === 's') &&
+            (pieceTypeAtDest === 'd' || pieceTypeAtDest === 'b')) {
             // If the piece is a switch, 
             // allow swap if the destination piece is either a defender or deflector of any color!
-            return new Movement(MovementTypesEnum.SPECIAL, srcLocation, destLocation);
+            return new Movement_Depr('special', srcLocation, destLocation);
 
         } else {
             // Normal movement (to an empty neighbor square)
@@ -360,10 +384,10 @@ class Board {
             if (SquareUtils.hasPiece(squareAtDest)) {
                 // Trying to move into a square which already has a piece (and is not a valid swap).
                 // Invalid move
-                return new Movement(MovementTypesEnum.INVALID, srcLocation, destLocation);
+                return new Movement_Depr('invalid', srcLocation, destLocation);
 
             } else {
-                return new Movement(MovementTypesEnum.NORMAL, srcLocation, destLocation);
+                return new Movement_Depr('normal', srcLocation, destLocation);
             }
         }
     }
@@ -373,29 +397,29 @@ class Board {
 
     /**
      * Apply a movement to this board
-     * @param {Movement} movement the movement to be applied on the board
+     * @param {Movement_Depr} movement the movement to be applied on the board
      */
-    applyMovement(movement) {
+    applyMovement(movement: Movement_Depr) {
         const squareAtSrc = this.getSquare(movement.srcLocation);
         // Check what type of move is being performed
-        if (movement.type === MovementTypesEnum.NORMAL) { // dislocate
+        if (movement.type === 'normal') { // dislocate
             // Normal movement (from one square to an empty one)
             const squareAtDest = this.squares[movement.destLocation.rowIndex][movement.destLocation.colIndex];
             // Move the piece from the src to dest.
             squareAtDest.piece = squareAtSrc.piece;
             squareAtSrc.piece = null;
 
-        } else if (movement.type === MovementTypesEnum.ROTATION_CLOCKWISE) {
+        } else if (movement.type === 'clockwise_rotation') {
             // Rotation movement (clockwise)
             const clockwise = true;
             PieceUtils.applyRotation(squareAtSrc.piece, clockwise);
 
-        } else if (movement.type === MovementTypesEnum.ROTATION_C_CLOCKWISE) {
+        } else if (movement.type === 'anticlockwise_rotation') {
             // Rotation movement (counter-clockwise)
             const c_clockwise = false;
             PieceUtils.applyRotation(squareAtSrc.piece, c_clockwise);
 
-        } else if (movement.type === MovementTypesEnum.SPECIAL) {
+        } else if (movement.type === 'special') {
             // Special movement (Switch piece is swapping places with either a Deflector or Defender piece)
             const squareAtDest = this.getSquare(movement.destLocation);
 
@@ -410,10 +434,9 @@ class Board {
     /**
      * Applies the laser hit action notation in the current board.
      * 
-     * @param {PlayerTypesEnum} playerType the player whose laser is being switched on.
-     * @returns {number[][]} the
+     * @param playerType the player whose laser is being switched on.
      */
-    applyLaser(playerType) {
+    applyLaser(playerType: PlayerType): void {
         if (!playerType) {
             throw new Error("applyLaser - Please specify the player whose laser is being switched on.");
         }
@@ -423,13 +446,13 @@ class Board {
         const finalLaserPath = laserRoute[laserRoute.length - 1];
 
         // handle the laser hit
-        if (finalLaserPath.actionType === LaserActionTypesEnum.KILL) {
+        if (finalLaserPath.actionType === 'kill') {
             const squareAtHit = this.squares[finalLaserPath.location.rowIndex][finalLaserPath.location.colIndex];
             // Check if we killed the King!
-            if (squareAtHit.piece.type === PieceTypesEnum.KING) {
+            if (squareAtHit.piece.type === 'k') {
                 // Oh lord, the king is dead, I repeat, the king is dead!
                 // Check which king is dead and declare the winner! 🏴‍☠️
-                const winnerPlayerColor = squareAtHit.piece.color === PlayerTypesEnum.BLUE ? PlayerTypesEnum.RED : PlayerTypesEnum.BLUE;
+                const winnerPlayerColor = squareAtHit.piece.color === 'blue' ? 'red' : 'blue';
                 this.winner = winnerPlayerColor;
 
             }
@@ -441,10 +464,10 @@ class Board {
 
     /**
      * Returns a new board from move without modifying current board.
-     * @param {Movement} movement the movement being performed on the board
-     * @param {PlayerTypesEnum} playerType the player that is moving
+     * @param movement the movement being performed on the board
+     * @param playerType the player that is moving
      */
-    newBoardFromMovement(movement, playerType) {
+    newBoardFromMovement(movement: Movement_Depr, playerType: PlayerType): Board {
         const newBoard = new Board({ setupNotation: this.toSN() }); // clone this board
         newBoard.applyMovement(movement);
         newBoard.applyLaser(playerType);
@@ -456,12 +479,12 @@ class Board {
      * Converts the current board into Setup Notation string.
      * @returns {string} SN string
      */
-    toSN() {
+    toSN(): string {
         let sn = "";
         let emptySquaresCount = 0;
 
         this.squares.forEach((row, rowIndex) => {
-            row.forEach((square, colIndex) => {
+            row.forEach((square) => {
                 if (SquareUtils.hasPiece(square)) {
                     if (emptySquaresCount > 0) {
                         sn += `${emptySquaresCount}`;
@@ -469,7 +492,7 @@ class Board {
                     }
 
                     // type?
-                    if (square.piece.color === PlayerTypesEnum.BLUE) {
+                    if (square.piece.color === 'blue') {
                         // Blue uses upper case letters for piece type representation (L D B K S)
                         sn += toUpper(square.piece.type);
 
@@ -480,7 +503,7 @@ class Board {
 
                     // orientation?
                     const orientation = square.piece.orientation;
-                    sn += _.repeat("+", orientation / 90);
+                    sn += repeat("+", orientation / 90);
 
                 } else {
                     emptySquaresCount += 1;
@@ -505,7 +528,7 @@ class Board {
      * Serializes the Board object into an Object.
      * @returns {Object} plain object, representing this instance
      */
-    serialize() {
+    serialize(): SerializedBoard {
         return {
             winner: this.winner,
             squares: this.squares,
@@ -513,64 +536,17 @@ class Board {
         };
     }
 
-
-    // CLI Related (dev only)
-
-    /**
-     * Logs a prettier version of SN into the CLI
-     */
-    _viewInCLI() {
-        let sn = "";
-        let emptySquaresCount = 0;
-
-        this.squares.forEach((row, rowIndex) => {
-            row.forEach((square, colIndex) => {
-                if (SquareUtils.hasPiece(square)) {
-
-                    if (emptySquaresCount > 0) {
-                        sn += `${emptySquaresCount}`;
-                        emptySquaresCount = 0;
-                    }
-
-                    // type?
-                    if (square.piece.color === PlayerTypesEnum.BLUE) {
-                        // Blue uses upper case letters for piece type representation (L D B K S)
-                        sn += toUpper(square.piece.type);
-
-                    } else {
-                        // Red uses lower case letter for piece type representation (l d b k s);
-                        sn += toLower(square.piece.type);
-                    }
-
-                    sn += " ";
-
-                    // orientation?
-                    // const orientation = square.piece.orientation;
-                    // sn += _.repeat("+", orientation / 90);
-
-                } else {
-                    sn += ". ";
-                }
-            });
-
-            // Append / to sepparate rows, but not at the end of the notation.
-            if (rowIndex !== 7) {
-                sn += "\n"; // separates the rows
-            }
-        });
-        console.log(sn);
-    }
-
-
     /**
      * Check if a piece a srcLocation is moving to a neighboring location.
      * Uses the point-in-polygon concept.
      * 
-     * @param {Location} srcLocation the source location
-     * @param {Location} destLocation the destination location
+     * @param {Location_Depr} srcLocation the source location
+     * @param {Location_Depr} destLocation the destination location
      * @returns {boolean} true if the destLocation square is a neighboring square, otherwise false for every other square.
+     * 
+     * @deprecated //!
      */
-    static isMovingToNeighborSquare(srcLocation, destLocation) {
+    static isMovingToNeighborSquare(srcLocation: Location_Depr, destLocation: Location_Depr): boolean {
         /**
          * Minimum squares to be moved to, given xy as srcLocation
          * 
@@ -617,60 +593,60 @@ class Board {
     /**
      * Get flattened xy points from the laser route, that is used in the board's laser drawing.
      * 
-     * @param {LaserPath[]} route the route travelled by the laser. Use { #getLaserRoute() }
+     * @param {LaserPath_Depr[]} route the route travelled by the laser. Use { #getLaserRoute() }
      * @param {number} cellSize the size of indidual cells of the board.
      * @returns {number[]} a flattened array of the x,y coordinates for the laser to be drawn in the board.
      */
-    static linePointsFromLaserRoute(laserRoute, cellSize) {
+    static linePointsFromLaserRoute(laserRoute: LaserPath_Depr[], cellSize: number): number[] {
         const points = laserRoute.map(path => {
             let x, y;
-            if ((path.eventType === LaserEventsEnum.START) || (path.eventType === LaserEventsEnum.END)) {
+            if ((path.eventType === 'start') || (path.eventType === 'end')) {
                 // Start from the middle of the laser piece,
                 y = path.location.rowIndex * cellSize + (cellSize / 2);
                 x = path.location.colIndex * cellSize + (cellSize / 2);
 
-            } else if (path.eventType === LaserEventsEnum.CENTRAL) {
+            } else if (path.eventType === 'central') {
                 // Laser is going ways....
-                if (path.direction === LaserDirectionsEnum.TOP) {
+                if (path.direction === 'top') {
                     // going top
-                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                    if (path.actionType === 'deflect') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
 
-                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                    } else if (path.actionType === 'nothing') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize;
                     }
 
-                } else if (path.direction === LaserDirectionsEnum.LEFT) {
+                } else if (path.direction === 'left') {
                     // going left
-                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                    if (path.actionType === 'deflect') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
 
-                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                    } else if (path.actionType === 'nothing') {
                         x = path.location.colIndex * cellSize;
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
                     }
 
-                } else if (path.direction === LaserDirectionsEnum.RIGHT) {
+                } else if (path.direction === 'right') {
                     // going right
-                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                    if (path.actionType === 'deflect') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
 
-                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                    } else if (path.actionType === 'nothing') {
                         x = path.location.colIndex * cellSize + cellSize;
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
                     }
 
-                } else if (path.direction === LaserDirectionsEnum.BOTTOM) {
+                } else if (path.direction === 'bottom') {
                     // going bottom
-                    if (path.actionType === LaserActionTypesEnum.DEFLECT) {
+                    if (path.actionType === 'deflect') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize + (cellSize / 2);
 
-                    } else if (path.actionType === LaserActionTypesEnum.NOTHING) {
+                    } else if (path.actionType === 'nothing') {
                         x = path.location.colIndex * cellSize + (cellSize / 2);
                         y = path.location.rowIndex * cellSize + cellSize;
                     }
@@ -687,44 +663,44 @@ class Board {
     /**
      * Simply presents a piece movement visually on the canvas stage.
      * 
-     * @param {Ref} stagePiecesRef React.Ref of the layer where the board pieces are drawn in the canvas
-     * @param {Movement} movement The movement being performed
+     * @param {any} stagePiecesRef React.Ref of the layer where the board pieces are drawn in the canvas
+     * @param {Movement_Depr} movement The movement being performed
      * @param {number} cellSize The width of individual squares of the board
      */
-    static presentPieceMovement(stagePiecesRef, movement, cellSize) {
+    static presentPieceMovement(stagePiecesRef, movement: Movement_Depr, cellSize: number) {
         const [srcBoardPiece] = stagePiecesRef.current.find(`#${movement.srcLocation.an}`);
 
         // Check the type of movement, which could be either "special" or "normal"
-        if (movement.type === MovementTypesEnum.SPECIAL) {
+        if (movement.type === 'special') {
             const [destBoardPiece] = stagePiecesRef.current.find(`#${movement.destLocation.an}`);
             // Special move (Switch can swap)
             // Swap the piece from destLocation with the piece at srcLocation!
             // - First move the piece from src to dest
             srcBoardPiece.to({
-                x: Location.getX(movement.destLocation.colIndex, cellSize),
-                y: Location.getY(movement.destLocation.rowIndex, cellSize),
+                x: Location_Depr.getX(movement.destLocation.colIndex, cellSize),
+                y: Location_Depr.getY(movement.destLocation.rowIndex, cellSize),
                 duration: pieceAnimDuration,
                 easing: pieceAnimEasing
             });
             // - Now move the piece from src to dest
             destBoardPiece.to({
-                x: Location.getX(movement.srcLocation.colIndex, cellSize),
-                y: Location.getY(movement.srcLocation.rowIndex, cellSize),
+                x: Location_Depr.getX(movement.srcLocation.colIndex, cellSize),
+                y: Location_Depr.getY(movement.srcLocation.rowIndex, cellSize),
                 duration: pieceAnimDuration,
                 easing: pieceAnimEasing
             });
 
-        } else if (movement.type === MovementTypesEnum.NORMAL) {
+        } else if (movement.type === 'normal') {
             // Normal move (moving to a new empty target square)
             // - Just put the piece from src in dest square
             srcBoardPiece.to({
-                x: Location.getX(movement.destLocation.colIndex, cellSize),
-                y: Location.getY(movement.destLocation.rowIndex, cellSize),
+                x: Location_Depr.getX(movement.destLocation.colIndex, cellSize),
+                y: Location_Depr.getY(movement.destLocation.rowIndex, cellSize),
                 duration: pieceAnimDuration,
                 easing: pieceAnimEasing
             });
 
-        } else if (movement.type === MovementTypesEnum.ROTATION_CLOCKWISE) {
+        } else if (movement.type === 'clockwise_rotation') {
             const prevOrientation = srcBoardPiece.rotation();
             srcBoardPiece.to({
                 rotation: prevOrientation + 90,
@@ -732,7 +708,7 @@ class Board {
                 easing: pieceAnimEasing
             });
 
-        } else if (movement.type === MovementTypesEnum.ROTATION_C_CLOCKWISE) {
+        } else if (movement.type === 'anticlockwise_rotation') {
             const prevOrientation = srcBoardPiece.rotation();
             srcBoardPiece.to({
                 rotation: prevOrientation - 90,
@@ -742,5 +718,3 @@ class Board {
         }
     }
 }
-
-export default Board;
