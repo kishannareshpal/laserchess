@@ -9,11 +9,21 @@ export type SquareType = CellType;
 
 export type GameStatus = 'playing' | 'paused' | 'over';
 
+/**
+ * @deprecated
+ */
 export type LaserActionType = 'kill' | 'deflect' | 'nothing';
 
+/**
+ * @deprecated
+ */
 export type LaserDirection = 'top' | 'right' | 'bottom' | 'left';
 
+/**
+ * @deprecated
+ */
 export type LaserEvent = 'start' | 'central' | 'end';
+
 
 export type KingPieceType = 'k';
 export type DefenderPieceType = 'd';

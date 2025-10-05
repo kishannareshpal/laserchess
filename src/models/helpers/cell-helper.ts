@@ -9,8 +9,8 @@ export class CellHelper {
      * 
      * @param cell - the cell to check
      */
-    static hasPiece(cell: Cell): boolean {
-        return !!cell.piece;
+    static hasPiece(cell: Cell | undefined): boolean {
+        return !!cell?.piece;
     }
 
     /**
@@ -21,6 +21,18 @@ export class CellHelper {
      */
     static getCellAt(cellGrid: CellGrid, location: Location): Cell | null {
         return cellGrid[location.rowIndex]?.[location.colIndex] || null;
+    }
+
+    static getPlayerLaserCell(playerType: PlayerType, cellGrid: CellGrid): Cell | null {
+        let playerLaserCellLocation: Location;
+
+        if (playerType === 'blue') {
+            playerLaserCellLocation = { colIndex: 9, rowIndex: 7 }
+        } else {
+            playerLaserCellLocation = { colIndex: 0, rowIndex: 0 }
+        }
+
+        return this.getCellAt(cellGrid, playerLaserCellLocation)
     }
 
     /**
@@ -37,7 +49,7 @@ export class CellHelper {
 
     static prettyPrintCellGrid(cellGrid: CellGrid): void {
         console.table(
-            map2dWithTransform(cellGrid, (cell) => {
+            map2d(cellGrid, (cell) => {
                 return PieceHelper.getPieceName(cell.piece?.type)
             })
         )
@@ -45,7 +57,7 @@ export class CellHelper {
 }
 
 // TODO: move this somewhere else
-export const map2dWithTransform = <Thing>(whatever: Thing[][], tranformer: (thing: Thing) => unknown) => {
+export const map2d = <Thing>(whatever: Thing[][], tranformer: (thing: Thing) => unknown) => {
     return whatever.map((row) => {
         return row.map((thing) => {
             return tranformer(thing);

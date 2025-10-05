@@ -11,10 +11,9 @@ type HighlightProps = {
 export const Highlight = observer(({
     cellLength
 }: HighlightProps) => {
-    const selectedPieceLocation = use$(game$.selectedPieceLocation);
+    const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
 
     if (!selectedPieceLocation) {
-        console.log('not sel')
         return null;
     }
 

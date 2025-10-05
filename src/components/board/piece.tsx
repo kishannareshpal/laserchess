@@ -44,7 +44,7 @@ export const Piece = (
             { centered: true }
         )
     })
-    const currentPlayer = use$(game$.currentPlayer);
+    const currentPlayer = use$(game$.turn.player);
     
     const draggingCellSourcePositionRef = useRef<Position | null>(null);
     const isDraggable = cell.piece.type !== 'l';
@@ -94,6 +94,11 @@ export const Piece = (
                 };
             }}
             onDragStart={(e) => {
+                if (draggingCellSourcePositionRef.current) {
+                    // Prevent drag of multiple pieces at the same time
+                    return;
+                }
+
                 // Handle piece dragging:
                 draggingCellSourcePositionRef.current = e.target.position();
                 game$.togglePieceAt(cellPlacement.location, { forcedState: true })
@@ -161,14 +166,12 @@ export const Piece = (
                 }
 
                 if (movement.type !== 'invalid') {
-                    game$.recordMovement(movement);
                     setCellPlacement({
                         position: targetCellPosition,
                         location: targetCell.location
                     });
+                    game$.recordTurnMovement(movement);
                 }
-
-                CellHelper.prettyPrintCellGrid(game$.board.cellGrid.peek())
 
                 const container = e.target.getStage().container();
                 container.style.cursor = "grab";

@@ -1,3 +1,5 @@
+import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
+import type { LaserDirection } from "../models/laser";
 import type { Location } from "../models/location";
 import type { Position } from "../models/position";
 
@@ -38,5 +40,64 @@ export class LocationHelper {
     static equals(locationA: Location, locationB: Location): boolean {
         return (locationA.colIndex === locationB.colIndex)
             && (locationA.rowIndex === locationB.rowIndex)
+    }
+
+    /**
+     * Returns whether {@link location} is within the board bounds.
+     * 
+     * @param location - The location to look up.
+     */
+    static isWithinBounds(location: Location): boolean {
+        // Make sure that dx and dy are within the bounds of the board
+        const isColumnWithinBounds = (location.colIndex >= 0) && (location.colIndex < COLUMN_COUNT);
+        const isRowWithinBounds = (location.rowIndex >= 0) && (location.rowIndex < ROW_COUNT);
+
+        return isColumnWithinBounds && isRowWithinBounds;
+    }
+
+    /**
+     * Find the cell location at the direction of {@link currentLocation} if there is one. 
+     * - Otherwise returns `null` if there's no cell at that direction
+     * 
+     * @param currentLocation - The current location
+     * @param direction - The direction to look at
+     */
+    static findAdjacentLocation(currentLocation: Location, direction: LaserDirection): Location | null {
+        let dx: number, dy: number;
+        switch (direction) {
+            case 'top':
+                dx = 0;
+                dy = -1;
+                break;
+
+            case 'right':
+                dx = 1;
+                dy = 0
+                break;
+
+            case 'bottom':
+                dx = 0;
+                dy = 1
+                break;
+
+            case 'left':
+                dx = -1;
+                dy = 0
+                break;
+
+            default:
+                return null;
+        }
+
+        const adjacentLocation: Location = {
+            colIndex: currentLocation.colIndex + dx,
+            rowIndex: currentLocation.rowIndex + dy
+        }
+
+        if (!this.isWithinBounds(adjacentLocation)) {
+            return null;
+        }
+
+        return adjacentLocation;
     }
 }

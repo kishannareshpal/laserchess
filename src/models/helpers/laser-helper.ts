@@ -1,0 +1,189 @@
+import type { PlayerType } from "@/types";
+import LHAN_RELATIONS_JSON from "@/assets/laser-v-piece.json";
+import type { LaserDirection, LaserEffect, LaserEffectDeflect, LaserEffectKill, LaserEffectNone, LaserPath, LaserPathFlattenedPoints as LaserPathPointsFlattened } from "../models/laser";
+import { CellHelper } from "./cell-helper";
+import type { Cell, CellGrid } from "../models/cell";
+import type { Piece } from "../models/piece";
+import { LocationHelper } from "./location-helper";
+import type { Location } from "../models/location";
+import { PositionHelper } from "./position-helper";
+
+type SegmentEffectResult =
+    { effect: LaserEffectDeflect, nextDirection: LaserDirection }
+    | { effect: LaserEffectKill | LaserEffectNone }
+
+export class LaserHelper {
+    static computeLaserPath(playerType: PlayerType, cellGrid: CellGrid): LaserPath {
+        const laserCell = CellHelper.getPlayerLaserCell(playerType, cellGrid);
+        if (!laserCell || !CellHelper.hasPiece(laserCell)) {
+            return [];
+        }
+
+        let currentSegmentEffect: LaserEffect = 'none';
+        let currentSegmentLaserDirection = this.getLaserBeamDirection(laserCell.piece)
+        let currentSegmentLocation: Readonly<Location> = structuredClone(laserCell.location);
+
+        if (!currentSegmentLaserDirection) {
+            return [];
+        }
+
+        // Initiate from the laser beam cell
+        const path: LaserPath = [
+            {
+                effect: currentSegmentEffect,
+                direction: currentSegmentLaserDirection,
+                location: currentSegmentLocation,
+            }
+        ];
+
+        let isPathOpen: boolean = true;
+        while (isPathOpen) {
+            currentSegmentLocation = LocationHelper.findAdjacentLocation(
+                currentSegmentLocation,
+                currentSegmentLaserDirection
+            );
+
+            if (!currentSegmentLocation) {
+                // Beam will leave the board - previous segment is considered the last
+                currentSegmentEffect = 'none';
+                currentSegmentLaserDirection = null;
+                isPathOpen = false;
+                break;
+            } else {
+                const cellUnderCurrentSegment = CellHelper.getCellAt(cellGrid, currentSegmentLocation);
+                if (!CellHelper.hasPiece(cellUnderCurrentSegment)) {
+                    // No piece at this cell, beam continues through the same direction
+                    currentSegmentEffect = 'none';
+                    // currentSegmentLaserDirection = null;
+
+                } else {
+                    // Piece was found, figure out it's effect on the beam
+                    const effectResult = this.determineSegmentEffectAt(cellUnderCurrentSegment, currentSegmentLaserDirection);
+                    currentSegmentEffect = effectResult.effect;
+                    currentSegmentLaserDirection = effectResult.effect === 'deflect' ? effectResult.nextDirection : currentSegmentLaserDirection;
+                }
+
+                isPathOpen = true;
+            }
+
+            // Register this segment
+            path.push({
+                effect: currentSegmentEffect,
+                direction: currentSegmentLaserDirection,
+                location: currentSegmentLocation
+            })
+        }
+
+        return path;
+    }
+
+    static convertLaserPathToFlattenedPoints(laserPath: LaserPath, cellLength: number): LaserPathPointsFlattened {
+        const halfOfCellLength = cellLength / 2;
+        const points = laserPath.map((segment, index) => {
+            const isEdge = index === 0 || index === (laserPath.length - 1);
+            const segmentPosition = PositionHelper.fromLocation(segment.location, cellLength, { centered: isEdge });
+            if (isEdge) {
+                return segmentPosition
+            }
+
+            const { rowIndex, colIndex } = segment.location;
+
+            let posX = 0;
+            let posY = 0;
+            switch (segment.direction) {
+                case 'top':
+                    posX = colIndex * cellLength + halfOfCellLength;
+                    posY = segment.effect === 'deflect'
+                        ? rowIndex * cellLength + halfOfCellLength
+                        : rowIndex * cellLength;
+                    break;
+
+                case 'bottom':
+                    posX = colIndex * cellLength + halfOfCellLength;
+                    posY = segment.effect === 'deflect'
+                        ? rowIndex * cellLength + halfOfCellLength
+                        : rowIndex * cellLength + cellLength;
+                    break;
+
+                case 'left':
+                    posX = segment.effect === 'deflect'
+                        ? colIndex * cellLength + halfOfCellLength
+                        : colIndex * cellLength;
+                    posY = rowIndex * cellLength + halfOfCellLength;
+                    break;
+
+                case 'right':
+                    posX = segment.effect === 'deflect'
+                        ? colIndex * cellLength + halfOfCellLength
+                        : colIndex * cellLength + cellLength;
+                    posY = rowIndex * cellLength + halfOfCellLength;
+                    break;
+            }
+
+            return {
+                x: posX,
+                y: posY
+            };
+        });
+
+        return points.flatMap((point) => [point.x, point.y]);
+    }
+
+    static computeFlattenedLaserPathPoints(
+        playerType: PlayerType,
+        cellGrid: CellGrid,
+        cellLength: number
+    ): LaserPathPointsFlattened {
+        const laserPath = this.computeLaserPath(playerType, cellGrid);
+        return this.convertLaserPathToFlattenedPoints(laserPath, cellLength);
+    }
+
+    /**
+     * Returns the direction where the laser is currently pointing, based on it's orientation
+     * 
+     * @param piece the laser piece of which we want to get the direction from.
+     * @returns the laser beam direction
+     */
+    static getLaserBeamDirection(piece: Piece): LaserDirection | null {
+        // Invalid piece. Must be a laser piece.
+        if (piece.type !== 'l') {
+            return null;
+        }
+
+        const orientation = piece.orientation;
+        switch (orientation) {
+            case 0:
+                return 'top';
+
+            case 90:
+                return 'right';
+
+            case 180:
+                return 'bottom';
+
+            case 270:
+                return 'left';
+        }
+    }
+
+    static determineSegmentEffectAt(cell: Cell, segmentLaserDirection: LaserDirection): SegmentEffectResult {
+        if (!CellHelper.hasPiece(cell)) {
+            return { effect: 'none' }
+        }
+
+        const orientation = cell.piece.orientation;
+        const type = cell.piece.type;
+        const hitAction = LHAN_RELATIONS_JSON[segmentLaserDirection][type][orientation];
+
+        if (hitAction === "kill") {
+            return { effect: 'kill' };
+        } else if (hitAction === "nothing") {
+            return { effect: 'none' };
+        } else {
+            return {
+                effect: 'deflect',
+                nextDirection: hitAction as LaserDirection
+            };
+        }
+    }
+}

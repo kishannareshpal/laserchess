@@ -6,7 +6,6 @@ import type { Movement } from "../models/movement";
 import { CellHelper } from "./cell-helper";
 import { LocationHelper } from "./location-helper";
 import type { OrientationDegrees } from "@/types";
-import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
 
 export class MovementHelper {
     static toAN(movement: Movement): string {
@@ -57,7 +56,7 @@ export class MovementHelper {
          *  - Moves are only possible to an extreme that is within the board's bounds. 
          *    For example, if the |x| is at the right-most edge of our board, then moves to |TR|, |R| and |BR| are guaranteed to never be possible.
          */
-        const TARGET_RANGE = [
+        const TARGET_LOCATION_INDEX_RANGES = [
             [sourceCol - 1, sourceRow - 1], // TL
             [sourceCol + 0, sourceRow - 1], // T
             [sourceCol + 1, sourceRow - 1], // TR
@@ -68,25 +67,22 @@ export class MovementHelper {
             [sourceCol - 1, sourceRow + 0], // L
         ];
 
-        TARGET_RANGE.forEach(([targetCol, targetRow]) => {
-            // Make sure that dx and dy are within the bounds of the board
-            const isTargetColWithinBounds = (targetCol >= 0) && (targetCol < COLUMN_COUNT);
-            const isTargetRowWithinBounds = (targetRow >= 0) && (targetRow < ROW_COUNT);
-
-            if (!isTargetColWithinBounds || !isTargetRowWithinBounds) {
-                // Movement to this target location is not possible as it's out of bounds
-                return; // skip ot the next iteration
-            }
-
+        TARGET_LOCATION_INDEX_RANGES.forEach(([targetColIndex, targetRowIndex]) => {
             const maybeTargetLocation: Location = {
-                colIndex: targetCol,
-                rowIndex: targetRow
+                colIndex: targetColIndex,
+                rowIndex: targetRowIndex
             };
 
-            const sourceCell = CellHelper.getCellAt(cellGrid, location);
-            const targetCell = CellHelper.getCellAt(cellGrid, maybeTargetLocation);
+            // Ensure the target location is within the board bounds
+            if (!LocationHelper.isWithinBounds(maybeTargetLocation)) {
+                return; // skip this iteration
+            }
 
-            const movePossibility = this.checkMove(sourceCell, targetCell);
+            const sourceCell = CellHelper.getCellAt(cellGrid, location);
+            const maybeTargetCell = CellHelper.getCellAt(cellGrid, maybeTargetLocation);
+
+            // Ensure the movement possibility
+            const movePossibility = this.checkMove(sourceCell, maybeTargetCell);
             if (movePossibility.type === 'invalid') {
                 // According to the rules of movements, this move is not possible
                 return;
@@ -103,42 +99,35 @@ export class MovementHelper {
     static checkMove(sourceCell: Cell, targetCell: Cell): Movement {
         if (!CellHelper.hasPiece(sourceCell) || sourceCell.piece.type === 'l') {
             // Source cell cannot be moved
-            console.error('a - source cell has no piece or is a laser piece')
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location };
         }
 
         // Ensure source and target cells are different - actually moving to somewhere else
         if (LocationHelper.equals(sourceCell.location, targetCell.location)) {
-            console.error('b - same location', { sourceCell, targetCell })
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location };
         }
 
         // Ensure that the cells are neighbors
-        if (!this.areCellsNeighbors(sourceCell.location, targetCell.location)) {
-            console.error('c - not neighbors')
+        if (!this.areCellsAdjacent(sourceCell.location, targetCell.location)) {
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location };
         }
 
         // Ensure other player's piece isn't being moved to a reserved cell
         if (sourceCell.piece.playerType !== 'blue' && targetCell.type === 'reserved-blue') {
-            console.error('d - reserved for blue')
             // Cannot move a piece that's not blue player's (e.g. red player's piece) to a cell reserved for blue player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }
 
         if (sourceCell.piece.playerType !== 'red' && targetCell.type === 'reserved-red') {
-            console.error('e - reserved for red')
             // Cannot move a piece that's not red player's (e.g. blue player's piece) to a cell reserved for red player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }
 
         if (sourceCell.piece.type === 's' && (targetCell.piece?.type === 'd' || targetCell.piece?.type === 'b')) {
-            console.error('f - switching not allowed')
             // A 'Switch' piece can be swapped with any player's target cell of type: 'Defender' or 'Deflector'
             return { type: 'special', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
 
         } else if (CellHelper.hasPiece(targetCell)) {
-            console.error('g - has a piece', { sourceCell, targetCell })
             // Target cell already has a piece, and the source cell isn't a 'Switch' piece
             // - Invalid move
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
@@ -155,7 +144,7 @@ export class MovementHelper {
     * @param sourceCell 
     * @param targetCell 
     */
-    static areCellsNeighbors(sourceCellLocation: Location, targetCellLocation: Location): boolean {
+    static areCellsAdjacent(sourceCellLocation: Location, targetCellLocation: Location): boolean {
         /**
          * A polygon defining the maximum range the source cell can move into.
          * - Basically a square offset by 1 col/row index outwards.
