@@ -47,7 +47,7 @@ type GameStoreActions = {
     setupBoard: () => void,
     recordMovement: (movment: Movement) => void,
     finishMovement: () => void,
-    togglePieceAt: (location: Location) => void,
+    togglePieceAt: (location: Location, options?: { forcedState?: boolean }) => void,
     pause: () => void,
     resume: () => void,
 }
@@ -90,6 +90,8 @@ export const game$ = observable<GameStore>({
     },
 
     recordMovement: (movement) => {
+        game$.togglePieceAt(movement.sourceCellLocation, { forcedState: false });
+
         if (movement.type === 'invalid') {
             return;
         }
@@ -118,7 +120,7 @@ export const game$ = observable<GameStore>({
                 return;
             }
 
-            const nextOrientation = MovementHelper.getNetOrientation(
+            const nextOrientation = MovementHelper.getNextOrientation(
                 targetPiece.orientation.peek(),
                 movement.type === 'clockwise_rotation' ? 'clockwise' : 'anticlockwise'
             )
@@ -172,13 +174,18 @@ export const game$ = observable<GameStore>({
         // }
     },
 
-    togglePieceAt: (location) => {
+    togglePieceAt: (location, options) => {
         const currentlySelectedPieceLocation = game$.selectedPieceLocation.peek();
 
-        if (currentlySelectedPieceLocation && LocationHelper.equals(location, currentlySelectedPieceLocation)) {
-            game$.selectedPieceLocation.set(null);
-        } else {
+        const shouldSelect = options?.forcedState
+            || !currentlySelectedPieceLocation
+            || !LocationHelper.equals(location, currentlySelectedPieceLocation);
+
+        if (shouldSelect) {
             game$.selectedPieceLocation.set(location);
+        } else {
+            // The same piece was clicked again → deselect
+            game$.selectedPieceLocation.set(null);
         }
     },
 

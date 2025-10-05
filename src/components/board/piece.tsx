@@ -29,7 +29,7 @@ type BoardPieceProps = {
     cellLength: number,
 }
 
-export const BoardPiece = (
+export const Piece = (
     {
         cell,
         cellLength
@@ -51,7 +51,7 @@ export const BoardPiece = (
     const canDrag = isDraggable && (cell.piece.playerType === currentPlayer) // && (!movementIsLocked)
 
     const handlePieceSelection = (): void => {
-        game$.togglePieceAt(cell.location);
+        game$.togglePieceAt(cellPlacement.location);
     }
 
     return (
@@ -95,12 +95,11 @@ export const BoardPiece = (
             }}
             onDragStart={(e) => {
                 // Handle piece dragging:
-                
                 draggingCellSourcePositionRef.current = e.target.position();
-                // onGrab(location);
+                game$.togglePieceAt(cellPlacement.location, { forcedState: true })
 
-                // Move the draging cell's layer to the top, so it doesn't get overlayed by other cells 
-                // while dragging
+                // Move the draging cell's layer to the top, so it doesn't get overlayed 
+                // by other cells while dragging.
                 e.target.moveToTop();
 
                 // Change the cursor type on the cell's container to have the "grabbing" hand style

@@ -1,13 +1,105 @@
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { point, polygon } from "@turf/helpers";
 import type { Location } from "../models/location";
-import type { Cell } from "../models/cell";
+import type { Cell, CellGrid } from "../models/cell";
 import type { Movement } from "../models/movement";
 import { CellHelper } from "./cell-helper";
 import { LocationHelper } from "./location-helper";
 import type { OrientationDegrees } from "@/types";
+import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
 
 export class MovementHelper {
+    static toAN(movement: Movement): string {
+        const sourceCellLocationAN = LocationHelper.toAN(movement.sourceCellLocation);
+        const targetCellLocationAN = LocationHelper.toAN(movement.targetCellLocation);
+
+        return `${sourceCellLocationAN}${targetCellLocationAN}`;
+    }
+
+    /**
+     * Get all moves for a particular piece at the specified location
+     * 
+     * @param location the location on which the piece to get the moves is.
+     * @returns a list of all possible movements for a piece at the given location
+     */
+    static getMovesForPieceAt(location: Location, cellGrid: CellGrid): Movement[] {
+        const possibleMovements = [];
+
+        const sourceCol = location.colIndex;
+        const sourceRow = location.rowIndex;
+
+        /**
+         * Defines possible move targets for a piece.
+         * - Every piece, except for Laser, have up to 10 possible moves (these are, moving to one of the neighbor cells (sides or diagonally) or rotating clockwise/anti-clockwise): 
+         * - The Laser pieces are immovable throughout the entire game.
+         * 
+         * ```
+         * -------------
+         * |TL| |T| |TR|
+         * |L|  |x|  |R|
+         * |BL| |B| |BR|
+         * -------------
+         * 
+         * Where:
+         *   |x| represents our piece's initial location
+         *   |L| represents a possible move to the left of our piece
+         *   |R| represents a possible move to the right of our piece
+         *   |T| represents a possible move above our piece
+         *   |B| represents a possible move below our piece
+         *   |TL| represents a possible move to the top-left of our piece
+         *   |TR| represents a possible move to the top-right of our piece
+         *   |BL| represents a possible move to the bottom-left of our piece
+         *   |BR| represents a possible move to the bottom-right of our piece
+         * ```
+         * 
+         * @remarks
+         *  - Moves are only possible according to the documented rules here: https://github.com/kishannareshpal/laserchess/blob/master/docs/AlgebraicNotation.md#movement
+         *  - Moves are only possible to an extreme that is within the board's bounds. 
+         *    For example, if the |x| is at the right-most edge of our board, then moves to |TR|, |R| and |BR| are guaranteed to never be possible.
+         */
+        const TARGET_RANGE = [
+            [sourceCol - 1, sourceRow - 1], // TL
+            [sourceCol + 0, sourceRow - 1], // T
+            [sourceCol + 1, sourceRow - 1], // TR
+            [sourceCol + 1, sourceRow + 0], // R
+            [sourceCol + 1, sourceRow + 1], // BR
+            [sourceCol + 0, sourceRow + 1], // B
+            [sourceCol - 1, sourceRow + 1], // BL
+            [sourceCol - 1, sourceRow + 0], // L
+        ];
+
+        TARGET_RANGE.forEach(([targetCol, targetRow]) => {
+            // Make sure that dx and dy are within the bounds of the board
+            const isTargetColWithinBounds = (targetCol >= 0) && (targetCol < COLUMN_COUNT);
+            const isTargetRowWithinBounds = (targetRow >= 0) && (targetRow < ROW_COUNT);
+
+            if (!isTargetColWithinBounds || !isTargetRowWithinBounds) {
+                // Movement to this target location is not possible as it's out of bounds
+                return; // skip ot the next iteration
+            }
+
+            const maybeTargetLocation: Location = {
+                colIndex: targetCol,
+                rowIndex: targetRow
+            };
+
+            const sourceCell = CellHelper.getCellAt(cellGrid, location);
+            const targetCell = CellHelper.getCellAt(cellGrid, maybeTargetLocation);
+
+            const movePossibility = this.checkMove(sourceCell, targetCell);
+            if (movePossibility.type === 'invalid') {
+                // According to the rules of movements, this move is not possible
+                return;
+            }
+
+            // Move is possible
+            possibleMovements.push(movePossibility);
+        });
+
+        // TODO: add rotation possibility as well?
+        return possibleMovements;
+    }
+
     static checkMove(sourceCell: Cell, targetCell: Cell): Movement {
         if (!CellHelper.hasPiece(sourceCell) || sourceCell.piece.type === 'l') {
             // Source cell cannot be moved
@@ -75,12 +167,12 @@ export class MovementHelper {
          * -----------
          * 
          * Where:
-         *   |x| is our sourceCellLocation.
-         *   and 'a', 'b', 'c' and 'd' denote where the target cell location can move to, but cannot go past
-         *      |a| is the extreme top-left – (x.col - 1) and (x.row - 1)
-         *      |b| is the extreme bottom-left (x.col - 1) and (x.row + 1)
-         *      |c| is the extreme bottom-right (x.col + 1) and (x.row + 1)
-         *      |d| is the extreme top-right (x.col + 1) and (x.row - 1)
+         *   - |x| is our sourceCellLocation.
+         *   - 'a', 'b', 'c' and 'd' denote where the target cell location can move to, but cannot go past
+         *      |a| is the top-left extreme – (x.col - 1) and (x.row - 1)
+         *      |b| is the bottom-left extreme (x.col - 1) and (x.row + 1)
+         *      |c| is the bottom-right extreme (x.col + 1) and (x.row + 1)
+         *      |d| is the top-right extreme (x.col + 1) and (x.row - 1)
          * 
          * @see https://github.com/kishannareshpal/laserchess/blob/master/docs/Guide.md#How-to-play-steps
          */
@@ -116,7 +208,7 @@ export class MovementHelper {
      * OrientationHelper.rotateOrientation(180, 'anticlockwise'); // 90
      * ```
      */
-    static getNetOrientation(orientation: OrientationDegrees, direction: 'clockwise' | 'anticlockwise'): OrientationDegrees {
+    static getNextOrientation(orientation: OrientationDegrees, direction: 'clockwise' | 'anticlockwise'): OrientationDegrees {
         // The amount to rotate by. This game only supports 90deg rotations
         const step = direction === 'clockwise' ? 90 : -90;
 

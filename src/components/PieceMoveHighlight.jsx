@@ -6,7 +6,6 @@ import NormalMoveSVG from "../assets/normal-move-highlight.svg";
 import { MovementTypesEnum } from "../models/Enums";
 
 const PieceMoveHighlight = ({ cellSize, movement, onChoose }) => {
-
     const [specialMoveSVG] = useImage(SpecialMoveSVG);
     const [normalMoveSVG] = useImage(NormalMoveSVG);
 
@@ -20,9 +19,6 @@ const PieceMoveHighlight = ({ cellSize, movement, onChoose }) => {
             width={cellSize}
             height={cellSize} />
     );
-
-
-
 };
 
 export default PieceMoveHighlight;
