@@ -4,15 +4,32 @@ import type { LaserPathSegment } from "@/models/models/laser";
 import type { Position } from "@/models/models/position";
 import { game$ } from "@/utils/store/game";
 import { useObserveEffect } from "@legendapp/state/react";
-import { useState } from "react";
+import Konva from "konva";
+import { useState, type RefObject } from "react";
 import { Group, Line, Rect } from "react-konva";
+import { LocationHelper } from "@/models/helpers/location-helper";
+
+/**
+ * The duration of the animation of a piece movement.
+ */
+const KILL_ANIMATION_DURATION = 0.332 as const;
+
+/**
+ * @constant
+ * The easing of the tween for any piece movement
+ */
+const KILL_ANIMATION_EASING_FN = Konva.Easings.BackEaseOut;
 
 type LaserProps = {
-    cellLength: number
+    cellLength: number,
+    gridLayerRef: RefObject<Konva.Layer>
 }
 
 export const Laser = (
-    { cellLength }: LaserProps
+    { 
+        cellLength, 
+        gridLayerRef 
+    }: LaserProps
 ) => {
     const [laserPathInfo, setLaserPathInfo] = useState<{
         flattenedPathPoints: number[],
@@ -27,12 +44,25 @@ export const Laser = (
         ({ value: phase }) => {
             if (phase === 'firing') {
                 const laserPath = game$.turn.laserPath.peek();
+                const lastLaserSegment = laserPath[laserPath.length - 1];
                 const flattenedLaserPathPoints = LaserHelper.convertLaserPathToFlattenedPoints(laserPath, cellLength);
 
                 setLaserPathInfo({
                     flattenedPathPoints: flattenedLaserPathPoints,
-                    lastSegment: laserPath[laserPath.length - 1]
+                    lastSegment: lastLaserSegment
                 });
+
+                if (lastLaserSegment) {
+                    setTimeout(() => {
+                        const pieceAtfinalLocation = gridLayerRef.current.findOne(`#${LocationHelper.toAN(lastLaserSegment.location)}`);
+                        pieceAtfinalLocation?.to({
+                            scaleY: 0,
+                            scaleX: 0,
+                            duration: KILL_ANIMATION_DURATION,
+                            easing: KILL_ANIMATION_EASING_FN
+                        });
+                    }, 1000);
+                }
 
                 // Complete the current player's turn
                 setTimeout(() => {

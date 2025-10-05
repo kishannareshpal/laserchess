@@ -63,7 +63,7 @@ export class LaserHelper {
                     currentSegmentLaserDirection = effectResult.effect === 'deflect' ? effectResult.nextDirection : currentSegmentLaserDirection;
                 }
 
-                isPathOpen = true;
+                isPathOpen = currentSegmentEffect !== 'kill';
             }
 
             // Register this segment

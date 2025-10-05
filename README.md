@@ -33,6 +33,14 @@ PRs are welcome. To begin developing, do this:
 ```bash
 $ git clone git@github.com:kishannareshpal/laserchess.git
 $ cd laserchess/
-$ npm install
-$ npm start
+$ bun install
+$ bun dev
 ```
+
+##### Debugging using VSCode
+
+To debug using Firefox or Chrome:
+
+1. `bun dev`
+2. Open the `Run & Debug` menu in VSCode and tap to run `Debug with Firefox/Chrome`.
+3. Add breakpoints anywhere and your browser should stop and show the debug interative menu.

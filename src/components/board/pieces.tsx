@@ -3,16 +3,19 @@ import { LocationHelper } from "@/models/helpers/location-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import { Piece } from "./piece";
 import type { CellGrid } from "@/models/models/cell";
-import type { JSX } from "react";
+import { useState, type JSX, type RefObject } from "react";
+import type Konva from "konva";
 
 type PiecesProps = {
     cellGrid: CellGrid,
-    cellLength: number
+    cellLength: number,
+    gridLayerRef: RefObject<Konva.Layer>,
 }
 
 export const Pieces = ({
     cellGrid,
-    cellLength
+    cellLength,
+    gridLayerRef
 }: PiecesProps) => {
     const render = (): JSX.Element[] => {
 		const pieceElements: JSX.Element[] = [];
@@ -28,6 +31,7 @@ export const Pieces = ({
 						key={LocationHelper.toAN(cell.location)}
 						cell={cell}
 						cellLength={cellLength}
+                        gridLayerRef={gridLayerRef}
 					/>
 				)
 			});

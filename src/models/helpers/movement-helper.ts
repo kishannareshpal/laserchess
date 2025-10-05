@@ -134,7 +134,6 @@ export class MovementHelper {
         }
 
         // Target cell is neighbouring and is empty
-        console.info('h')
         return { type: 'normal', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
     }
 

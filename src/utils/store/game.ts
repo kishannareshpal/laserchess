@@ -106,13 +106,13 @@ export const game$ = observable<GameStore>({
             game$.board.cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex]
                 .assign({
                     piece: targetPiece,
-                    // location: movement.targetCellLocation
+                    location: movement.targetCellLocation
                 });
 
             game$.board.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex]
                 .assign({
                     piece: sourcePiece,
-                    // location: movement.sourceCellLocation
+                    location: movement.sourceCellLocation
                 });
 
         } else if (movement.type === 'clockwise_rotation' || movement.type === 'anticlockwise_rotation') {
@@ -130,11 +130,14 @@ export const game$ = observable<GameStore>({
         }
 
         // Fire the laser
-        const laserPath = LaserHelper.computeLaserPath(game$.turn.player.peek(), game$.board.cellGrid.peek());
+        const cellGrid = game$.board.cellGrid.peek();
+        const laserPath = LaserHelper.computeLaserPath(game$.turn.player.peek(), cellGrid);
         game$.turn.assign({
             phase: 'firing',
             laserPath: laserPath
-        })
+        });
+
+        CellHelper.prettyPrintCellGrid(cellGrid)
     },
 
     finishTurn: () => {

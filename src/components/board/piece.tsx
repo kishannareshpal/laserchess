@@ -9,7 +9,7 @@ import { LocationHelper } from "@/models/helpers/location-helper";
 import { use$ } from "@legendapp/state/react";
 import { MovementHelper } from "@/models/helpers/movement-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
-import { useRef, useState } from "react";
+import { useRef, useState, type RefObject } from "react";
 import type { Position } from "@/models/models/position";
 import type { Location } from "@/models/models/location";
 
@@ -27,12 +27,14 @@ const MOVE_ANIMATION_EASING_FN = Konva.Easings.BackEaseOut;
 type BoardPieceProps = {
     cell: Cell,
     cellLength: number,
+    gridLayerRef: RefObject<Konva.Layer>
 }
 
 export const Piece = (
     {
         cell,
-        cellLength
+        cellLength,
+        gridLayerRef
     }: BoardPieceProps
 ) => {
     const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${cell.piece.playerType}-${PieceHelper.getPieceName(cell.piece.type)}.svg`);
@@ -44,11 +46,11 @@ export const Piece = (
             { centered: true }
         )
     })
-    const currentPlayer = use$(game$.turn.player);
+    const turn = use$(game$.turn);
     
     const draggingCellSourcePositionRef = useRef<Position | null>(null);
     const isDraggable = cell.piece.type !== 'l';
-    const canDrag = isDraggable && (cell.piece.playerType === currentPlayer) // && (!movementIsLocked)
+    const canDrag = isDraggable && (cell.piece.playerType === turn.player) && turn.phase === 'moving';
 
     const handlePieceSelection = (): void => {
         game$.togglePieceAt(cellPlacement.location);
@@ -156,7 +158,7 @@ export const Piece = (
                     // Special move involves swapping the source and target pieces.
                     // - We've already moved the source cell to the target position
                     // - We're now need to move the target piece to the source piece's location
-                    const targetCellNode = e.target.parent.findOne(`#${LocationHelper.toAN(movement.targetCellLocation)}`);
+                    const targetCellNode = gridLayerRef.current.findOne(`#${LocationHelper.toAN(movement.targetCellLocation)}`);
                     targetCellNode.to({
                         x: sourceCellPosition.x,
                         y: sourceCellPosition.y,
