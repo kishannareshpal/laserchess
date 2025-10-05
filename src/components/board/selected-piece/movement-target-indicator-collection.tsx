@@ -4,6 +4,7 @@ import { observer } from "@legendapp/state/react"
 import { use$ } from "@legendapp/state/react"
 import { Group } from "react-konva"
 import { MovementTargetIndicator } from "./movement-target-indicator"
+import type { Movement } from "@/models/models/movement"
 
 type MovementTargetIndicatorCollectionProps = {
     cellLength: number
@@ -12,36 +13,31 @@ type MovementTargetIndicatorCollectionProps = {
 export const MovementTargetIndicatorCollection = observer(({
     cellLength
 }: MovementTargetIndicatorCollectionProps) => {
+    const cellGrid = use$(game$.board.cellGrid);
     const selectedPieceLocation = use$(game$.selectedPieceLocation);
+    
+    if (!selectedPieceLocation) {
+        return null;
+    }
 
-    const renderCollection = () => {
-        if (!selectedPieceLocation) {
-            return null;
-        }
+    const possibleMovements = MovementHelper.getMovesForPieceAt(
+      selectedPieceLocation,
+      cellGrid
+    )
 
-        const possibleMovements = MovementHelper.getMovesForPieceAt(selectedPieceLocation, game$.board.cellGrid.peek());
-        return possibleMovements.map((movement) => {
-            return (
-                <MovementTargetIndicator
-                    key={`mt-${MovementHelper.toAN(movement)}`}
-                    cellLength={cellLength}
-                    movement={movement}
-                    onPress={() => {
-						// Board.presentPieceMovement(reference, move.serialize(), cellSize);
-						// dispatch(unselectPiece()); // unselect the piece
-						// // Apply the ai movement on the board state
-						// setTimeout(() => {
-						// 	dispatch(applyMovement({ movement: movement.serialize() }));
-						// }, 400);
-					}}
-                />
-            )
-        })
+    const handlePress = (movement: Movement) => {
     }
 
     return (
         <Group>
-            {renderCollection()}
+            {possibleMovements.map((movement) => (
+                <MovementTargetIndicator
+                    key={`mt-${MovementHelper.toAN(movement)}`}
+                    cellLength={cellLength}
+                    movement={movement}
+                    onPress={() => handlePress(movement)}
+                />
+            ))}
         </Group>
     )
 })
