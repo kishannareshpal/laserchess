@@ -1,7 +1,7 @@
 import Konva from "konva";
 import useImage from "use-image";
 import { Image } from "react-konva";
-import type { Cell } from "@/models/models/cell";
+import type { Cell as TCell } from "@/models/models/cell";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import { PieceHelper } from "@/models/helpers/piece-helper";
 import { game$ } from "@/utils/store/game";
@@ -12,25 +12,15 @@ import { CellHelper } from "@/models/helpers/cell-helper";
 import { useRef, useState, type RefObject } from "react";
 import type { Position } from "@/models/models/position";
 import type { Location } from "@/models/models/location";
-
-/**
- * The duration of the animation of a piece movement.
- */
-const MOVE_ANIMATION_DURATION = 0.332 as const;
-
-/**
- * @constant
- * The easing of the tween for any piece movement
- */
-const MOVE_ANIMATION_EASING_FN = Konva.Easings.BackEaseOut;
+import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 
 type BoardPieceProps = {
-    cell: Cell,
+    cell: TCell,
     cellLength: number,
     gridLayerRef: RefObject<Konva.Layer>
 }
 
-export const Piece = (
+export const Cell = (
     {
         cell,
         cellLength,
@@ -58,7 +48,7 @@ export const Piece = (
 
     return (
         <Image
-            id={LocationHelper.toAN(cell.location)}
+            id={`c-${cell.id}`}
             image={pieceImage}
             x={cellPlacement.position.x}
             y={cellPlacement.position.y}
@@ -124,13 +114,14 @@ export const Piece = (
 
                 // The target position is exactly where the pointer (mouse or finger) is at the end of dragging
                 const endPosition: Position = e.target.getPosition();
-                const sourceCell: Cell = {
+                const sourceCell: TCell = {
+                    id: cell.id,
                     location: structuredClone(cellPlacement.location), // we can't use cell.location because it changes on drag+drop
                     type: cell.type,
                     piece: cell.piece
                 }
-                const targetCell: Cell = CellHelper.getCellAt(
-                    game$.board.cellGrid.peek(), 
+                const targetCell: TCell = CellHelper.getCellAt(
+                    game$.cellGrid.peek(), 
                     LocationHelper.fromPosition(endPosition, cellLength)
                 );
 
@@ -150,20 +141,20 @@ export const Piece = (
                 e.target.to({
                     x: targetCellPosition.x,
                     y: targetCellPosition.y,
-                    duration: MOVE_ANIMATION_DURATION,
-                    easing: MOVE_ANIMATION_EASING_FN
+                    duration: PIECE_MOVEMENT_ANIMATION_DURATION,
+                    easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
                 });
 
                 if (movement.type === 'special') {
                     // Special move involves swapping the source and target pieces.
                     // - We've already moved the source cell to the target position
                     // - We're now need to move the target piece to the source piece's location
-                    const targetCellNode = gridLayerRef.current.findOne(`#${LocationHelper.toAN(movement.targetCellLocation)}`);
+                    const targetCellNode = gridLayerRef.current.findOne(`#c-${targetCell.id}`);
                     targetCellNode.to({
                         x: sourceCellPosition.x,
                         y: sourceCellPosition.y,
-                        duration: MOVE_ANIMATION_DURATION,
-                        easing: MOVE_ANIMATION_EASING_FN
+                        duration: PIECE_MOVEMENT_ANIMATION_DURATION,
+                        easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
                     });
                 }
 

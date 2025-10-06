@@ -4,6 +4,7 @@ import specialMoveHighlightSvg from "@/assets/special-move-highlight.svg";
 import normalMoveHighlightSvg from "@/assets/normal-move-highlight.svg";
 import type { Movement } from "@/models/models/movement";
 import { PositionHelper } from "@/models/helpers/position-helper";
+import { MovementHelper } from "@/models/helpers/movement-helper";
 
 type MovementTargetIndicatorProps = {
     movement: Movement,
@@ -29,7 +30,9 @@ export const MovementTargetIndicator = (
     const position = PositionHelper.fromLocation(movement.targetCellLocation, cellLength)
 
     return (
-        <Image image={image}
+        <Image 
+            id={`mt-${MovementHelper.toAN(movement)}`}
+            image={image}
             x={position.x}
             y={position.y}
             width={cellLength}

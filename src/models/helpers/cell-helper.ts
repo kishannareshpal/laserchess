@@ -50,7 +50,7 @@ export class CellHelper {
     static prettyPrintCellGrid(cellGrid: CellGrid): void {
         console.table(
             map2d(cellGrid, (cell) => {
-                return PieceHelper.getPieceName(cell.piece?.type)
+                return `${cell.location.rowIndex}${cell.location.colIndex}\n${PieceHelper.getPieceName(cell.piece?.type) || ' '}`
             })
         )
     }

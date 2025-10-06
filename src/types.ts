@@ -7,7 +7,7 @@ export type CellType = 'normal' | 'reserved-red' | 'reserved-blue' | 'laser-red'
  */
 export type SquareType = CellType;
 
-export type GameStatus = 'playing' | 'paused' | 'over';
+export type GameStatus = 'idle' | 'playing' | 'paused' | 'over';
 
 /**
  * @deprecated

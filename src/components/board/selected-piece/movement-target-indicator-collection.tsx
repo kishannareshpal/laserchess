@@ -13,7 +13,7 @@ type MovementTargetIndicatorCollectionProps = {
 export const MovementTargetIndicatorCollection = observer(({
     cellLength
 }: MovementTargetIndicatorCollectionProps) => {
-    const cellGrid = use$(game$.board.cellGrid);
+    const cellGrid = use$(game$.cellGrid);
     const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
     
     if (!selectedPieceLocation) {
@@ -25,12 +25,11 @@ export const MovementTargetIndicatorCollection = observer(({
       cellGrid
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handlePress = (movement: Movement) => {
     }
 
     return (
-        <Group>
+        <Group id="movement-target-collection">
             {possibleMovements.map((movement) => (
                 <MovementTargetIndicator
                     key={`mt-${MovementHelper.toAN(movement)}`}

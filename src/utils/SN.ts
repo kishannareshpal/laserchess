@@ -4,6 +4,7 @@ import type { Cell, CellGrid } from "@/models/models/cell";
 import type { Location } from "@/models/models/location";
 import type { Piece } from "@/models/models/piece";
 import { PieceHelper } from "@/models/helpers/piece-helper";
+import { nanoid } from 'nanoid';
 
 
 // const boardGridNotationText = "lR6rR/r8R/r8R/r8R/r8R/r8R/r8R/rR6rL";
@@ -192,7 +193,12 @@ export class SN {
                     cellType = 'reserved-blue';
                 }
 
-                const cell: Cell = { type: cellType, location, piece };
+                const cell: Cell = {
+                    id: nanoid(),
+                    type: cellType,
+                    location,
+                    piece
+                };
                 cells.push(cell);
             });
 

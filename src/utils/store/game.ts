@@ -1,6 +1,6 @@
 import type { CellGrid } from "@/models/models/cell";
 import type { GameStatus, PlayerType } from "@/types";
-import { observable } from "@legendapp/state";
+import { event, observable } from "@legendapp/state";
 import { SN } from "../SN";
 import type { Location } from "@/models/models/location";
 import { LocationHelper } from "@/models/helpers/location-helper";
@@ -21,21 +21,14 @@ const DEFAULT_BOARD_SN: string = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+
 
 type GameStoreState = {
     status: GameStatus
-
-    board: {
-        setupNotation: string,
-        cellGrid: CellGrid,
-    },
-
+    cellGrid: CellGrid,
     winner: PlayerType
-
     turn: {
         phase: 'moving' | 'firing',
         player: PlayerType,
         selectedPieceLocation: Location | null,
         laserPath: LaserPath,
     }
-
     ai: {
         enabled: boolean,
         movement: unknown[]
@@ -43,33 +36,25 @@ type GameStoreState = {
 };
 
 type GameStoreActions = {
-    setupBoard: () => void,
+    startGame: (reset?: boolean) => void,
     recordTurnMovement: (movment: Movement) => void,
     finishTurn: () => void,
     togglePieceAt: (location: Location, options?: { forcedState?: boolean }) => void,
-    pause: () => void,
-    resume: () => void,
+    togglePause: (forcePause?: boolean) => void
 }
 
 type GameStore = GameStoreState & GameStoreActions;
 
 const initialState: GameStoreState = {
-    board: {
-        setupNotation: DEFAULT_BOARD_SN,
-        cellGrid: SN.parse(DEFAULT_BOARD_SN),
-    },
-
-    // currentPlayer: 'blue',
-    status: 'playing',
+    status: 'idle',
+    cellGrid: [],
     winner: null,
-
     turn: {
         phase: 'moving',
         player: 'blue',
         selectedPieceLocation: null,
         laserPath: []
     },
-
     ai: {
         enabled: false,
         movement: []
@@ -79,11 +64,18 @@ const initialState: GameStoreState = {
 export const game$ = observable<GameStore>({
     ...initialState,
 
-    setupBoard: () => {
-        game$.board.set({
-            setupNotation: DEFAULT_BOARD_SN,
-            cellGrid: SN.parse(DEFAULT_BOARD_SN)
-        })
+    startGame: (reset = game$.status.peek() === 'idle') => {
+        if (!reset) {
+            return;
+        }
+
+        const newCellGrid = SN.parse(DEFAULT_BOARD_SN);
+        game$.assign({
+            status: 'playing',
+            cellGrid: newCellGrid,
+        });
+
+        console.log("Pieces set!", CellHelper.getPlayerLaserCell('blue', newCellGrid));
     },
 
     recordTurnMovement: (movement) => {
@@ -100,24 +92,26 @@ export const game$ = observable<GameStore>({
 
         if (movement.type === 'normal' || movement.type === 'special') {
             // Swap source and target pieces (on a normal move, the target piece is empty/null, so the source will become empty/null)
-            const sourcePiece = game$.board.cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex].piece.peek();
-            const targetPiece = game$.board.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].piece.peek();
+            const sourceCell = structuredClone(game$.cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex].peek());
+            const targetCell = structuredClone(game$.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].peek());
 
-            game$.board.cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex]
+            game$.cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex]
                 .assign({
-                    piece: targetPiece,
-                    location: movement.targetCellLocation
+                    id: targetCell.id,
+                    piece: targetCell.piece,
+                    location: movement.sourceCellLocation
                 });
 
-            game$.board.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex]
+            game$.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex]
                 .assign({
-                    piece: sourcePiece,
-                    location: movement.sourceCellLocation
+                    id: sourceCell.id,
+                    piece: sourceCell.piece,
+                    location: movement.targetCellLocation
                 });
 
         } else if (movement.type === 'clockwise_rotation' || movement.type === 'anticlockwise_rotation') {
             // Rotate the target piece clockwise or anti-clockwise (which should always be assumed to be the same as source piece in this case, but we use the target piece for correctness)
-            const targetPiece = game$.board.cellGrid[movement.targetCellLocation.colIndex][movement.targetCellLocation.rowIndex].piece;
+            const targetPiece = game$.cellGrid[movement.targetCellLocation.colIndex][movement.targetCellLocation.rowIndex].piece;
             if (!targetPiece) {
                 return;
             }
@@ -130,7 +124,7 @@ export const game$ = observable<GameStore>({
         }
 
         // Fire the laser
-        const cellGrid = game$.board.cellGrid.peek();
+        const cellGrid = game$.cellGrid.peek();
         const laserPath = LaserHelper.computeLaserPath(game$.turn.player.peek(), cellGrid);
         game$.turn.assign({
             phase: 'firing',
@@ -155,14 +149,11 @@ export const game$ = observable<GameStore>({
         let isGameOver: boolean = false;
         if (lastLaserSegment.effect === 'kill') {
             // Remove a piece off the board
-            const killedCell = CellHelper.getCellAt(game$.board.cellGrid.peek(), lastLaserSegment.location);
+            const killedCell = CellHelper.getCellAt(game$.cellGrid.peek(), lastLaserSegment.location);
             if (!killedCell || !CellHelper.hasPiece(killedCell)) {
                 // no piece in the killed cell for some reason - ignore
                 return;
             }
-
-            // Remove the killed piece from the cell in the grid
-            game$.board.cellGrid[lastLaserSegment.location.rowIndex][lastLaserSegment.location.colIndex].piece.set(null);
 
             if (killedCell.piece.type === 'k') {
                 // Game over: Killed a king piece - the player whose king got killed loses
@@ -174,6 +165,9 @@ export const game$ = observable<GameStore>({
 
                 isGameOver = true;
             }
+
+            // Remove the killed piece from the cell in the grid
+            game$.cellGrid[lastLaserSegment.location.rowIndex][lastLaserSegment.location.colIndex].piece.set(null);
         }
 
         if (!isGameOver) {
@@ -203,11 +197,21 @@ export const game$ = observable<GameStore>({
         }
     },
 
-    pause: () => {
-        game$.status.set('paused');
-    },
+    togglePause: (forcePause = false) => {
+        const currentGameStatus = game$.status.peek();
+        if (currentGameStatus === 'over') {
+            // Cannot modify game state if game is paused
+            return;
+        }
 
-    resume: () => {
-        game$.status.set('playing');
+        const shouldBePaused = forcePause === true || currentGameStatus === 'playing';
+        game$.status.set(shouldBePaused ? 'paused' : 'playing');
     }
 });
+
+
+// Events
+export const onSelectedPieceRotate$ = {
+    left: event(),
+    right: event(),
+} as const;

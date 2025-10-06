@@ -56,10 +56,12 @@ export const Grid = ({
             return row.map((cell) => {
                 const cellPosition = PositionHelper.fromLocation(cell.location, cellLength);
                 const cellImage = getCellImage(cell.type);
+                const locationNotation = LocationHelper.toAN(cell.location);
 
                 return (
                     <Image
-                        key={LocationHelper.toAN(cell.location)}
+                        key={locationNotation}
+                        id={`cg-${locationNotation}`}
                         x={cellPosition.x}
                         y={cellPosition.y}
                         image={cellImage}

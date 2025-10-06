@@ -21,6 +21,7 @@ export const Highlight = observer(({
 
     return (
         <Rect
+            id="selected-piece-highlight"
             x={position.x}
             y={position.y}
             width={cellLength}

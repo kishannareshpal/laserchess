@@ -3,6 +3,7 @@ import type { Piece } from "./piece"
 import type { Location } from "./location"
 
 export type Cell = {
+    id: string,
     type: CellType,
     location: Location,
     piece?: Piece | null
