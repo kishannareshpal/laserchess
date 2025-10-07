@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { Stage } from "react-konva";
-import BoardLayer from "./components/board/layer";
+import BoardLayer from "./components/board/layers";
 import { pieceAnimDuration, pieceAnimEasing } from "./components/BoardPiece";
 import "./App.scss";
 import LogoPNG from "./assets/logo.png";

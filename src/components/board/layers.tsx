@@ -2,7 +2,7 @@ import { Layer } from "react-konva";
 import { SelectedPiece } from "./selected-piece";
 import { Grid } from "./grid";
 import { Cells } from "./cells";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { Laser } from "./laser";
 import type Konva from "konva";
 import type { CellGrid } from "@/models/models/cell";
@@ -15,7 +15,7 @@ type BoardLayerProps = {
 	cellLength: number
 }
 
-export const BoardLayer = (
+export const Layers = (
 	{ 
 		cellGrid,
 		cellLength 
@@ -41,7 +41,7 @@ export const BoardLayer = (
 			}
 
 			selectedCellElement.to({
-				rotation: selectedCellElement.rotation() + 90,
+				rotation: selectedCellElement.rotation() - 90,
 				duration: PIECE_MOVEMENT_ANIMATION_DURATION,
 				easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
 			});
@@ -70,7 +70,7 @@ export const BoardLayer = (
 			}
 
 			selectedCellElement.to({
-				rotation: selectedCellElement.rotation() - 90,
+				rotation: selectedCellElement.rotation() + 90,
 				duration: PIECE_MOVEMENT_ANIMATION_DURATION,
 				easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
 			});
@@ -89,7 +89,7 @@ export const BoardLayer = (
 	}, []);
 
 	return (
-		<>
+		<Fragment>
 			<Layer ref={gridLayerRef} id="main-layer">
 				<Grid
 					cellGrid={cellGrid} 
@@ -115,6 +115,6 @@ export const BoardLayer = (
 					gridLayerRef={gridLayerRef}
 				/>
 			</Layer>
-		</>
+		</Fragment>
 	);
 };

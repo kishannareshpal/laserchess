@@ -1,5 +1,4 @@
 
-import { LocationHelper } from "@/models/helpers/location-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import { Cell } from "./cell";
 import type { CellGrid } from "@/models/models/cell";
@@ -27,7 +26,7 @@ export const Cells = ({
 
 					return (
 						<Cell
-							key={LocationHelper.toAN(cell.location)}
+							key={cell.id}
 							cell={cell}
 							cellLength={cellLength}
 							gridLayerRef={gridLayerRef}

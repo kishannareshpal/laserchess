@@ -74,8 +74,6 @@ export const game$ = observable<GameStore>({
             status: 'playing',
             cellGrid: newCellGrid,
         });
-
-        console.log("Pieces set!", CellHelper.getPlayerLaserCell('blue', newCellGrid));
     },
 
     recordTurnMovement: (movement) => {
@@ -131,7 +129,7 @@ export const game$ = observable<GameStore>({
             laserPath: laserPath
         });
 
-        CellHelper.prettyPrintCellGrid(cellGrid)
+        // CellHelper.prettyPrintCellGrid(cellGrid)
     },
 
     finishTurn: () => {

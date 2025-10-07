@@ -1,5 +1,5 @@
 import { Stage } from "react-konva";
-import { BoardLayer } from "./layer";
+import { Layers } from "./layers";
 import type { Size } from "@/models/models/size";
 import { SizeHelper } from "@/models/helpers/size-helper";
 import type { CellGrid } from "@/models/models/cell";
@@ -15,7 +15,7 @@ type BoardProps = {
 export const Board = ({ cellGrid }: BoardProps) => {
     return (
         <Stage width={BOARD_SIZE.width} height={BOARD_SIZE.height} className="border-2">
-            <BoardLayer cellGrid={cellGrid} cellLength={CELL_LENGTH} />
+            <Layers cellGrid={cellGrid} cellLength={CELL_LENGTH} />
         </Stage>
     );
 }
