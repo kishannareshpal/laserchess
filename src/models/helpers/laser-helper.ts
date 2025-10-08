@@ -150,8 +150,6 @@ export class LaserHelper {
             return null;
         }
 
-        console.log(piece)
-
         const orientation = piece.orientation;
         switch (orientation) {
             case 0:

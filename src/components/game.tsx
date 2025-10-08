@@ -3,12 +3,12 @@ import { game$, onSelectedPieceRotate$ } from "@/utils/store/game";
 import { use$ } from "@legendapp/state/react";
 
 export const Game = () => {
-    const cellGrid = use$(structuredClone(game$.cellGrid.peek()));
+    const initialCellGrid = use$(() => structuredClone(game$.cellGrid.peek()));
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
             <div>
-                <Board cellGrid={cellGrid} />
+                <Board cellGrid={initialCellGrid} />
             </div>
 
             <div className="flex">

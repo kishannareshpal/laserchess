@@ -113,7 +113,6 @@ export class Board {
      */
     getPlayerSquares(player) {
         // flatten all rows into a single array
-        // console.log(board);
         const flattenedSquares = flatMap(this.squares);
         return flattenedSquares.filter((square) => {
             // Filter out the squares with no pieces in it.

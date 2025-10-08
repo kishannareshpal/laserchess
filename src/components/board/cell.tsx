@@ -40,7 +40,8 @@ export const Cell = (
     const turn = use$(game$.turn);
     
     const draggingCellSourcePositionRef = useRef<Position | null>(null);
-    const canDrag = cell.piece.type !== 'l' && (cell.piece.playerType === turn.player) && turn.phase === 'moving';
+    const canInteract = (cell.piece.playerType === turn.player) && turn.phase === 'moving';
+    const canDrag = canInteract && cell.piece.type !== 'l';
 
     const handlePieceSelection = (): void => {
         game$.togglePieceAt(cellPlacement.location);
@@ -57,6 +58,7 @@ export const Cell = (
             offset={PositionHelper.fromScalar(cellLength / 2)}
             width={cellLength}
             height={cellLength}
+            listening={canInteract}
             rotation={cell.piece.orientation}
             draggable={canDrag}
             onMouseEnter={(e) => {

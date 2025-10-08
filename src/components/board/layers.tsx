@@ -92,7 +92,7 @@ export const Layers = (
 		<Fragment>
 			<Layer ref={gridLayerRef} id="main-layer">
 				<Grid
-					cellGrid={cellGrid} 
+					cellGrid={cellGrid}
 					cellLength={cellLength} 
 				/>
 

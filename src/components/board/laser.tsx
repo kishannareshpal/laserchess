@@ -54,7 +54,6 @@ export const Laser = (
                     const cellAtFinalLocation = CellHelper.getCellAt(game$.cellGrid.peek(), lastLaserSegment.location);
                     const pieceElementFinalLocation = gridLayerRef.current.findOne(`#c-${cellAtFinalLocation.id}`);
                 
-                    console.log('found piece at loc', pieceElementFinalLocation, cellAtFinalLocation, gridLayerRef.current);
                     setTimeout(() => {
                         pieceElementFinalLocation?.to({
                             scaleY: 0,
