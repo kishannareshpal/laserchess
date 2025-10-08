@@ -2,13 +2,12 @@
 import { CellHelper } from "@/models/helpers/cell-helper";
 import { Cell } from "./cell";
 import type { CellGrid } from "@/models/models/cell";
-import { type RefObject } from "react";
-import type Konva from "konva";
+import type { GridLayerRef } from "@/types";
 
 type PiecesProps = {
     cellGrid: CellGrid,
     cellLength: number,
-    gridLayerRef: RefObject<Konva.Layer>,
+    gridLayerRef: GridLayerRef
 }
 
 export const Cells = ({

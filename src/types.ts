@@ -1,3 +1,6 @@
+import type Konva from "konva";
+import type { RefObject } from "react";
+
 export type PlayerType = 'red' | 'blue';
 
 export type CellType = 'normal' | 'reserved-red' | 'reserved-blue' | 'laser-red' | 'laser-blue';
@@ -41,3 +44,5 @@ export type RotationType = ClockwiseRotationType | AnticlockwiseRotationType;
 export type OrientationDegrees = 0 | 90 | 180 | 270; // in degrees
 
 export type MovementType = 'invalid' | 'normal' | 'special' | 'clockwise_rotation' | 'anticlockwise_rotation';
+
+export type GridLayerRef = RefObject<Konva.Layer>;

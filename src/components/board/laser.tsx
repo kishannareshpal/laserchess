@@ -4,9 +4,10 @@ import type { LaserPathSegment } from "@/models/models/laser";
 import type { Position } from "@/models/models/position";
 import { game$ } from "@/utils/store/game";
 import Konva from "konva";
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useState } from "react";
 import { Group, Line, Rect } from "react-konva";
 import { CellHelper } from "@/models/helpers/cell-helper";
+import type { GridLayerRef } from "@/types";
 
 /**
  * The duration of the animation of a piece movement.
@@ -21,7 +22,7 @@ const KILL_ANIMATION_EASING_FN = Konva.Easings.BackEaseOut;
 
 type LaserProps = {
     cellLength: number,
-    gridLayerRef: RefObject<Konva.Layer>
+    gridLayerRef: GridLayerRef
 }
 
 export const Laser = (

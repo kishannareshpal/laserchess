@@ -40,6 +40,12 @@ export const MovementTargetIndicator = (
             fill="#16db6576"
             onClick={handleOnPress}
             onTap={handleOnPress}
+            onMouseOver={(e) => {
+                e.target.getStage().container().style.cursor = "pointer";
+            }}
+            onMouseOut={(e) => {
+                e.target.getStage().container().style.cursor = "default";
+            }}
         />
     );
 };

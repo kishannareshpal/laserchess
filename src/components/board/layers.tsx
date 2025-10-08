@@ -1,5 +1,5 @@
 import { Layer } from "react-konva";
-import { SelectedPiece } from "./selected-piece";
+import { SelectedCell } from "./selected-piece";
 import { Grid } from "./grid";
 import { Cells } from "./cells";
 import { Fragment, useEffect, useRef } from "react";
@@ -102,9 +102,10 @@ export const Layers = (
 					gridLayerRef={gridLayerRef}
 				/>
 
-				<SelectedPiece.Highlight cellLength={cellLength} />
-				<SelectedPiece.MovementTargetIndicatorCollection
+				<SelectedCell.Highlight cellLength={cellLength} />
+				<SelectedCell.MovementTargetIndicatorCollection
 					cellLength={cellLength}
+					gridLayerRef={gridLayerRef}
 				/>
 			</Layer>
 
