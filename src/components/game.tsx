@@ -1,5 +1,5 @@
 import { Board } from "./board/board";
-import { game$, onSelectedPieceRotate$ } from "@/utils/store/game";
+import { game$, onSelectedPieceRotate$ } from "@/utils/store/game$";
 import { use$ } from "@legendapp/state/react";
 
 export const Game = () => {

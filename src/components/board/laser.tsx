@@ -2,7 +2,7 @@ import { LaserHelper } from "@/models/helpers/laser-helper";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import type { LaserPathSegment } from "@/models/models/laser";
 import type { Position } from "@/models/models/position";
-import { game$ } from "@/utils/store/game";
+import { game$ } from "@/utils/store/game$";
 import Konva from "konva";
 import { useEffect, useState } from "react";
 import { Group, Line, Rect } from "react-konva";

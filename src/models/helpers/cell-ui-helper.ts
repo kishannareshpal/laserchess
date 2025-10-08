@@ -5,7 +5,8 @@ import { MovementHelper } from "./movement-helper";
 import type { Cell } from "../models/cell";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { GridLayerHelper } from "./grid-layer-helper";
-import { game$ } from "@/utils/store/game";
+import { game$ } from "@/utils/store/game$";
+import type Konva from "konva";
 
 type PresentMovementOptions = {
     source: {
@@ -20,6 +21,11 @@ type PresentMovementOptions = {
 }
 
 export class CellUIHelper {
+    static setCursorStyle(node: Konva.Node, cursorStyle: CSSStyleDeclaration['cursor']): void {
+        const stageContainer = node.getStage().container();
+        stageContainer.style.cursor = cursorStyle;
+    }
+
     static performMovement(options: PresentMovementOptions): Movement {
         const sourceCellNode = GridLayerHelper.findCellNodeById(options.source.cell.id, options.gridLayerRef);
         const checkedMovement = MovementHelper.checkMove(options.source.cell, options.target.cell);

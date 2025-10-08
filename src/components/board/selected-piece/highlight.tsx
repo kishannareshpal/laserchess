@@ -1,5 +1,5 @@
 import { PositionHelper } from "@/models/helpers/position-helper"
-import { game$ } from "@/utils/store/game"
+import { game$ } from "@/utils/store/game$"
 import { observer } from "@legendapp/state/react"
 import { use$ } from "@legendapp/state/react"
 import { Rect } from "react-konva"

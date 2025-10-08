@@ -1,5 +1,5 @@
 import { MovementHelper } from "@/models/helpers/movement-helper"
-import { game$ } from "@/utils/store/game"
+import { game$ } from "@/utils/store/game$"
 import { observer } from "@legendapp/state/react"
 import { use$ } from "@legendapp/state/react"
 import { Group } from "react-konva"

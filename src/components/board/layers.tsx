@@ -6,7 +6,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { Laser } from "./laser";
 import type Konva from "konva";
 import type { CellGrid } from "@/models/models/cell";
-import { game$, onSelectedPieceRotate$ } from "@/utils/store/game";
+import { game$, onSelectedPieceRotate$ } from "@/utils/store/game$";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { CellHelper } from "@/models/helpers/cell-helper";
 

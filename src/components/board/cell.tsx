@@ -3,37 +3,36 @@ import { Image } from "react-konva";
 import type { Cell as TCell } from "@/models/models/cell";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import { PieceHelper } from "@/models/helpers/piece-helper";
-import { game$ } from "@/utils/store/game";
+import { game$ } from "@/utils/store/game$";
 import { LocationHelper } from "@/models/helpers/location-helper";
 import { use$ } from "@legendapp/state/react";
 import { CellHelper } from "@/models/helpers/cell-helper";
-import { useRef } from "react";
 import type { Position } from "@/models/models/position";
 import type { KonvaEventObject, NodeConfig } from "konva/lib/Node";
 import type { GridLayerRef } from "@/types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
+import { cells$ } from "@/utils/store/cells$";
 
 type BoardPieceProps = {
     cell: TCell,
     cellLength: number,
-    gridLayerRef: GridLayerRef
+    gridLayerRef: GridLayerRef,
 }
 
 export const Cell = (
     {
         cell,
         cellLength,
-        gridLayerRef
+        gridLayerRef,
     }: BoardPieceProps
 ) => {
     const [pieceImage] = useImage(`https://laserchess.s3.us-east-2.amazonaws.com/pieces/${cell.piece.playerType}-${PieceHelper.getPieceName(cell.piece.type)}.svg`);
     const turn = use$(game$.turn);
-    
-    const draggingCellSourcePositionRef = useRef<Position | null>(null);
 
     const initialCellPosition = PositionHelper.fromLocation(cell.location, cellLength, { centered: true });
     const canInteract = (cell.piece.playerType === turn.player) && turn.phase === 'moving';
     const canDrag = canInteract && cell.piece.type !== 'l';
+
 
     const keepInBoundsWhileDragging: NodeConfig['dragBoundFunc'] = (currentPosition) => {
         // Limit drag to inside the canvas.
@@ -70,26 +69,32 @@ export const Cell = (
             listening={canInteract}
             rotation={cell.piece.orientation}
             draggable={canDrag}
+            onMouseDown={(e) => {
+                CellUIHelper.setCursorStyle(e.target, 'grabbing');
+            }}
+            onMouseUp={(e) => {
+                CellUIHelper.setCursorStyle(e.target, 'grab');
+            }}
             onMouseOver={(e) => {
-                const container = e.target.getStage().container();
-                container.style.cursor = "grab";
+                CellUIHelper.setCursorStyle(e.target, 'grab');
             }}
             onMouseOut={(e) => {
-                const container = e.target.getStage().container();
-                container.style.cursor = "default";
+                CellUIHelper.setCursorStyle(e.target, 'default');
             }}
             onTap={handleSelection}
             onClick={handleSelection}
             dragBoundFunc={keepInBoundsWhileDragging}
             onDragStart={(e) => {
-                if (draggingCellSourcePositionRef.current) {
-                    // Prevent drag of multiple pieces at the same time
+                // Ensure multiple pieces can't be dragged at once
+                if (cells$.isAnyPieceBeingDragged()) {
                     return;
                 }
+                
+                const sourceCellPosition = e.target.position();
+                cells$.setCurrentDraggingPieceSourcePosition(sourceCellPosition);
 
                 // Handle piece dragging:
-                draggingCellSourcePositionRef.current = e.target.position();
-                const sourceCellLocation = LocationHelper.fromPosition(draggingCellSourcePositionRef.current, cellLength);
+                const sourceCellLocation = LocationHelper.fromPosition(sourceCellPosition, cellLength);
                 game$.togglePieceAt(sourceCellLocation, { forcedState: true })
 
                 // Move the draging cell's layer to the top, so it doesn't get overlayed 
@@ -97,17 +102,14 @@ export const Cell = (
                 e.target.moveToTop();
 
                 // Change the cursor type on the cell's container to have the "grabbing" hand style
-                const container = e.target.getStage().container();
-                container.style.cursor = "grabbing";
+                CellUIHelper.setCursorStyle(e.target, 'grabbing');
             }}
             onDragEnd={(e) => {
-                const sourceCellPosition = draggingCellSourcePositionRef.current;
-                draggingCellSourcePositionRef.current = null;
-
-                if (!sourceCellPosition) {
-                    // Did not initiate a drag, somehow
+                if (!cells$.isAnyPieceBeingDragged()) {
                     return;
                 }
+
+                const sourceCellPosition: Position = cells$.currentDraggingPieceSourcePosition.peek();
 
                 // The end position refers to the exact position where the pointer (mouse or finger) when finished dragging
                 const endPosition: Position = e.target.getPosition();
@@ -145,8 +147,8 @@ export const Cell = (
                     gridLayerRef
                 });
 
-                const container = e.target.getStage().container();
-                container.style.cursor = "grab";
+                CellUIHelper.setCursorStyle(e.target, 'grab');
+                cells$.setCurrentDraggingPieceSourcePosition(undefined);
             }}
         />
     );
