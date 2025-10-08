@@ -13,6 +13,7 @@ import { useRef, useState, type RefObject } from "react";
 import type { Position } from "@/models/models/position";
 import type { Location } from "@/models/models/location";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
+import { LaserHelper } from "@/models/helpers/laser-helper";
 
 type BoardPieceProps = {
     cell: TCell,
@@ -39,10 +40,12 @@ export const Cell = (
     const turn = use$(game$.turn);
     
     const draggingCellSourcePositionRef = useRef<Position | null>(null);
-    const canDrag = (cell.piece.playerType === turn.player) && turn.phase === 'moving';
+    const canDrag = cell.piece.type !== 'l' && (cell.piece.playerType === turn.player) && turn.phase === 'moving';
 
     const handlePieceSelection = (): void => {
         game$.togglePieceAt(cellPlacement.location);
+
+        LaserHelper.computeLaserPath('blue', game$.cellGrid.peek());
     }
 
     return (
@@ -66,7 +69,6 @@ export const Cell = (
             }}
             onTap={handlePieceSelection}
             onClick={handlePieceSelection}
-            listening={canDrag}
             dragBoundFunc={(currentPosition) => {
                 // Limit drag to inside the canvas.
                 const firstCell = cellLength - (cellLength / 2);

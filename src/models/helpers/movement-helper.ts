@@ -190,13 +190,14 @@ export class MovementHelper {
      *
      * @example
      * ```ts
-     * OrientationHelper.rotateOrientation(0, 'clockwise');       // 90
-     * OrientationHelper.rotateOrientation(270, 'clockwise');    // 0
-     * OrientationHelper.rotateOrientation(0, 'anticlockwise');  // 270
-     * OrientationHelper.rotateOrientation(180, 'anticlockwise'); // 90
+     * MovementHelper.getNextOrientation(0, 'clockwise');       // 90
+     * MovementHelper.getNextOrientation(270, 'clockwise');    // 0
+     * MovementHelper.getNextOrientation(0, 'anticlockwise');  // 270
+     * MovementHelper.getNextOrientation(180, 'anticlockwise'); // 90
      * ```
      */
     static getNextOrientation(orientation: OrientationDegrees, direction: 'clockwise' | 'anticlockwise'): OrientationDegrees {
+        alert(orientation);
         // The amount to rotate by. This game only supports 90deg rotations
         const step = direction === 'clockwise' ? 90 : -90;
 

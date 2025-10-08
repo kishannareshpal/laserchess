@@ -109,16 +109,16 @@ export const game$ = observable<GameStore>({
 
         } else if (movement.type === 'clockwise_rotation' || movement.type === 'anticlockwise_rotation') {
             // Rotate the target piece clockwise or anti-clockwise (which should always be assumed to be the same as source piece in this case, but we use the target piece for correctness)
-            const targetPiece = game$.cellGrid[movement.targetCellLocation.colIndex][movement.targetCellLocation.rowIndex].piece;
+            const targetPiece = game$.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].piece.peek();
             if (!targetPiece) {
                 return;
             }
 
             const nextOrientation = MovementHelper.getNextOrientation(
-                targetPiece.orientation.peek(),
+                targetPiece.orientation,
                 movement.type === 'clockwise_rotation' ? 'clockwise' : 'anticlockwise'
             )
-            targetPiece.orientation.set(nextOrientation);
+            game$.cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].piece.orientation.set(nextOrientation);
         }
 
         // Fire the laser

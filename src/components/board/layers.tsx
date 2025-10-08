@@ -41,7 +41,7 @@ export const Layers = (
 			}
 
 			selectedCellElement.to({
-				rotation: selectedCellElement.rotation() - 90,
+				rotation: selectedCell.piece.orientation - 90,
 				duration: PIECE_MOVEMENT_ANIMATION_DURATION,
 				easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
 			});
@@ -70,7 +70,7 @@ export const Layers = (
 			}
 
 			selectedCellElement.to({
-				rotation: selectedCellElement.rotation() + 90,
+				rotation: selectedCell.piece.orientation + 90,
 				duration: PIECE_MOVEMENT_ANIMATION_DURATION,
 				easing: PIECE_MOVEMENT_ANIMATION_EASING_FN
 			});
