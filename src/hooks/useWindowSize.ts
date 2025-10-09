@@ -1,3 +1,4 @@
+import type { Size } from "@/models/models/size";
 import { useState, useEffect } from "react";
 
 /**
@@ -6,10 +7,10 @@ import { useState, useEffect } from "react";
  * 
  * @see https://usehooks.com/useWindowSize/
  */
-function useWindowSize() {
+export const useWindowSize = (): Size => {
 	// Initialize state with undefined width/height so server and client renders match
 	// Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-	const [windowSize, setWindowSize] = useState({
+	const [windowSize, setWindowSize] = useState<Size>({
 		width: undefined,
 		height: undefined,
 	});
@@ -36,5 +37,3 @@ function useWindowSize() {
 
 	return windowSize;
 }
-
-export default useWindowSize;
