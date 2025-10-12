@@ -1,24 +1,54 @@
-import type { Position } from "@/models/models/position";
 import { Group, Rect, Shape } from "react-konva";
+import type { PieceProps } from "./types";
+import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
+import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
 
-type DefenderProps = {
-  position: Position;
-  length: number;
-};
+type DefenderProps = PieceProps;
 
-export const Defender = ({ position, length }: DefenderProps) => {
+export const Defender = ({
+  id,
+  position,
+  length,
+  piece,
+  enabled,
+  onSelect,
+  onDragStart,
+  onDragEnd,
+}: DefenderProps) => {
   const offset = length / 2;
   const pixelLength = length / 8;
 
   return (
     <Group
+      id={id}
       x={position.x + offset}
       y={position.y + offset}
       width={length}
       height={length}
       offsetX={offset}
       offsetY={offset}
-      // rotation={270}
+      rotation={piece.orientation}
+      listening={enabled}
+      draggable
+      onMouseDown={(e) => {
+        CellUIHelper.setCursorStyle(e.target, "grabbing");
+      }}
+      onMouseUp={(e) => {
+        CellUIHelper.setCursorStyle(e.target, "grab");
+      }}
+      onMouseOver={(e) => {
+        CellUIHelper.setCursorStyle(e.target, "grab");
+      }}
+      onMouseOut={(e) => {
+        CellUIHelper.setCursorStyle(e.target, "default");
+      }}
+      onTap={onSelect}
+      onClick={onSelect}
+      dragBoundFunc={(position) =>
+        PieceUIHelper.clampPositionToBoardBounds(position, length)
+      }
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
     >
       <Rect
         x={pixelLength}
