@@ -1,5 +1,5 @@
 import type { CellType } from "@/types";
-import { Image } from "react-konva";
+import { Rect } from "react-konva";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import { useImage } from "react-konva-utils";
 import blueLaserCellSvg from '@/assets/blue-laser-cell.svg';
@@ -9,18 +9,8 @@ import redReservedCellSvg from '@/assets/red-reserved-cell.svg';
 import { LocationHelper } from "@/models/helpers/location-helper";
 import type { CellGrid } from "@/models/models/cell";
 import type { JSX } from "react";
+import { CELL_BACKGROUND_COLOR, CELL_STROKE_WIDTH } from "@/constants";
 
-/**
- * Hex color representing the cell background
- * @constant
- */
-const CELL_BACKGROUND_COLOR: string = "#E2C8B6"; // a sort of dark grey #313134 FFD9C6 E2C8B6
-
-/**
- * Hex color representing the cell's stroke
- * @constant
- */
-const CELL_STROKE_COLOR: string = "#FFE8D6"; // a sort of dark grey #313134
 
 type GridProps = {
     cellGrid: CellGrid,
@@ -59,19 +49,30 @@ export const Grid = ({
                 const locationNotation = LocationHelper.toAN(cell.location);
 
                 return (
-                    <Image
+                    <Rect 
                         key={locationNotation}
-                        id={`cg-${locationNotation}`}
+                        fill={CELL_BACKGROUND_COLOR}
                         x={cellPosition.x}
                         y={cellPosition.y}
-                        image={cellImage}
-                        fill={CELL_BACKGROUND_COLOR}
-                        stroke={CELL_STROKE_COLOR}
-                        strokeWidth={2}
-                        strokeEnabled
                         width={cellLength}
                         height={cellLength}
+                        stroke="black"
+                        strokeWidth={CELL_STROKE_WIDTH}
+                        strokeEnabled
                     />
+                    // <Image
+                    //     key={locationNotation}
+                    //     id={`cg-${locationNotation}`}
+                    //     x={cellPosition.x}
+                    //     y={cellPosition.y}
+                    //     image={cellImage}
+                    //     fill={CELL_BACKGROUND_COLOR}
+                    //     stroke={CELL_STROKE_COLOR}
+                    //     strokeWidth={2}
+                    //     strokeEnabled
+                    //     width={cellLength}
+                    //     height={cellLength}
+                    // />
                 )
             })
         })
