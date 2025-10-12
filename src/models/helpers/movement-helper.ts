@@ -197,7 +197,6 @@ export class MovementHelper {
      * ```
      */
     static getNextOrientation(orientation: OrientationDegrees, direction: 'clockwise' | 'anticlockwise'): OrientationDegrees {
-        alert(orientation);
         // The amount to rotate by. This game only supports 90deg rotations
         const step = direction === 'clockwise' ? 90 : -90;
 
