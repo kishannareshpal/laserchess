@@ -64,7 +64,7 @@ export const King = ({
       />
 
       <Shape
-        fill="yellow"
+        fill="white"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"
@@ -100,24 +100,28 @@ export const King = ({
       <Circle
         x={pixelLength}
         y={pixelLength * 3}
-        fill="black"
-        strokeEnabled={false}
+        fill="lightgrey"
+        stroke="black"
+        strokeWidth={4}
+        strokeEnabled
         radius={pixelLength / 2}
       />
 
       <Circle
         x={length / 2}
         y={pixelLength}
-        fill="black"
-        strokeEnabled={false}
+        fill="lightgrey"
+        stroke="black"
+        strokeWidth={4}
         radius={pixelLength / 2}
       />
 
       <Circle
         x={length - pixelLength}
         y={pixelLength * 3}
-        fill="black"
-        strokeEnabled={false}
+        fill="lightgrey"
+        stroke="black"
+        strokeWidth={4}
         radius={pixelLength / 2}
       />
     </Group>

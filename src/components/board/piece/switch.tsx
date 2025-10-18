@@ -51,7 +51,7 @@ export const Switch = ({
       onDragEnd={onDragEnd}
     >
       <Shape
-        fill="yellow"
+        fill="lightgrey"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"
@@ -70,7 +70,7 @@ export const Switch = ({
       />
 
       <Shape
-        fill="yellow"
+        fill="lightgrey"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"
@@ -89,7 +89,7 @@ export const Switch = ({
       />
 
       <Shape
-        fill="red"
+        fill="white"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"

@@ -9,7 +9,6 @@ import type { GridLayerRef } from "@/types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { cells$ } from "@/utils/store/cells$";
 import { Piece } from "./piece";
-import { HALF_OF_CELL_STROKE_WIDTH } from "@/constants";
 import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 
 type BoardPieceProps = {
@@ -19,12 +18,9 @@ type BoardPieceProps = {
 };
 
 export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
-  const cellId = `c-${cell.id}`;
   const turn = use$(game$.turn);
 
-  const piecePosition = PositionHelper.fromLocation(cell.location, cellLength, {
-    offset: PositionHelper.fromScalar(HALF_OF_CELL_STROKE_WIDTH),
-  });
+  const piecePosition = PositionHelper.fromLocation(cell.location, cellLength);
 
   const enabled =
     cell.piece.playerType === turn.player && turn.phase === "moving";
@@ -42,7 +38,7 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
 
   return (
     <Piece.Factory
-      id={cellId}
+      id={`c-${cell.id}`}
       piece={cell.piece}
       length={cellLength}
       position={piecePosition}

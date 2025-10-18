@@ -12,7 +12,7 @@ const pieceTypeComponentMap: Record<Piece["type"], JSX.ElementType> = {
   b: Deflector,
   k: King,
   l: Laser,
-  s: Switch,
+  s: Switch
 } as const;
 
 type RendererProps = PieceProps;

@@ -51,7 +51,7 @@ export const Deflector = ({
       onDragEnd={onDragEnd}
     >
       <Shape
-        fill="red"
+        fill="white"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"
@@ -70,7 +70,7 @@ export const Deflector = ({
       />
 
       <Shape
-        fill="yellow"
+        fill="lightgrey"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"

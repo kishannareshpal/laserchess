@@ -53,7 +53,7 @@ export const Laser = ({
       <Circle
         x={length / 2}
         y={length / 2}
-        fill="red"
+        fill="white"
         stroke="black"
         strokeWidth={4}
         radius={length / 2 - pixelLength}
@@ -64,7 +64,7 @@ export const Laser = ({
         y={pixelLength / 2}
         width={pixelLength * 2}
         height={length / 2}
-        fill="yellow"
+        fill="lightgrey"
         stroke="black"
         strokeWidth={4}
         cornerRadius={length}
@@ -74,7 +74,7 @@ export const Laser = ({
         x={length / 2}
         y={pixelLength}
         width={pixelLength / 2}
-        fill="green"
+        fill="black"
       />
     </Group>
   );

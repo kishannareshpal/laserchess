@@ -53,7 +53,7 @@ export const Defender = ({
       <Rect
         x={pixelLength}
         y={pixelLength * 2}
-        fill="red"
+        fill="white"
         stroke="black"
         strokeWidth={4}
         lineCap="round"
@@ -63,7 +63,7 @@ export const Defender = ({
       />
 
       <Shape
-        fill="yellow"
+        fill="lightgrey"
         stroke="black"
         strokeWidth={4}
         lineJoin="round"

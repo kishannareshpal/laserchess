@@ -12,13 +12,17 @@ import { CellHelper } from "@/models/helpers/cell-helper";
 
 type BoardLayerProps = {
 	cellGrid: CellGrid,
+	width: number,
+	height: number,
 	cellLength: number
 }
 
 export const Layers = (
 	{ 
 		cellGrid,
-		cellLength 
+		width,
+		height,
+		cellLength
 	}: BoardLayerProps
 ) => {
 	const gridLayerRef = useRef<Konva.Layer>(null!);
@@ -90,9 +94,9 @@ export const Layers = (
 
 	return (
 		<Fragment>
-			<Layer ref={gridLayerRef} id="main-layer">
+			<Layer  id="main-layer" ref={gridLayerRef}>
 				<Grid
-					cellGrid={cellGrid}
+					canvasSize={{ width: width, height: height }}
 					cellLength={cellLength} 
 				/>
 
@@ -103,6 +107,7 @@ export const Layers = (
 				/>
 
 				<SelectedCell.Highlight cellLength={cellLength} />
+
 				<SelectedCell.MovementTargetIndicatorCollection
 					cellLength={cellLength}
 					gridLayerRef={gridLayerRef}
