@@ -96,6 +96,7 @@ export const Layers = (
 		<Fragment>
 			<Layer  id="main-layer" ref={gridLayerRef}>
 				<Grid
+					cellGrid={cellGrid}
 					canvasSize={{ width: width, height: height }}
 					cellLength={cellLength} 
 				/>

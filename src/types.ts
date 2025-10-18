@@ -3,7 +3,7 @@ import type { RefObject } from "react";
 
 export type PlayerType = 'red' | 'blue';
 
-export type CellType = 'normal' | 'reserved-red' | 'reserved-blue' | 'laser-red' | 'laser-blue';
+export type CellType = 'normal' | 'reserved-player-one' | 'reserved-player-two' | 'laser-red' | 'laser-blue';
 
 /**
  * @deprecated

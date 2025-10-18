@@ -8,7 +8,7 @@ import type { Position } from "@/models/models/position";
 import type { GridLayerRef } from "@/types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { cells$ } from "@/utils/store/cells$";
-import { Piece } from "./piece";
+import { Piece } from "./cell/piece";
 import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 
 type BoardPieceProps = {
@@ -20,7 +20,7 @@ type BoardPieceProps = {
 export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
   const turn = use$(game$.turn);
 
-  const piecePosition = PositionHelper.fromLocation(cell.location, cellLength);
+  const cellPosition = PositionHelper.fromLocation(cell.location, cellLength);
 
   const enabled =
     cell.piece.playerType === turn.player && turn.phase === "moving";
@@ -41,7 +41,7 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
       id={`c-${cell.id}`}
       piece={cell.piece}
       length={cellLength}
-      position={piecePosition}
+      position={cellPosition}
       enabled={enabled}
       onSelect={handleSelection}
       onDragStart={(e) => {

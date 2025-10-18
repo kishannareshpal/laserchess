@@ -181,7 +181,7 @@ export class SN {
                     //  - Square at Column: 8 and Rows: either 0 or 7
                     // These squares are reserved for pieces of the red player only.
                     // The other player pieces cannot be put or moved into these squares.
-                    cellType = 'reserved-red';
+                    cellType = 'reserved-player-two';
 
                 } else if ((colIndex === 1 && (rowIndex === 0 || rowIndex === 7)) ||
                     (colIndex === 9 && (rowIndex >= 0 && rowIndex <= 6))) {
@@ -190,7 +190,7 @@ export class SN {
                     //  - Square at Column: 1 and Rows: either 0 or 7
                     // These squares are reserved for pieces of the blue player only.
                     // The other player pieces cannot be put or moved into these squares.
-                    cellType = 'reserved-blue';
+                    cellType = 'reserved-player-one';
                 }
 
                 const cell: Cell = {

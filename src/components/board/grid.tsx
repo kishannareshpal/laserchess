@@ -1,19 +1,43 @@
 import { Group, Shape } from "react-konva";
 import { CELL_STROKE_WIDTH, COLUMN_COUNT, ROW_COUNT } from "@/constants";
 import type { Size } from "@/models/models/size";
+import type { CellGrid } from "@/models/models/cell";
+import { PositionHelper } from "@/models/helpers/position-helper";
+import { Background } from "./cell/background";
 
 
 type GridProps = {
+    cellGrid: CellGrid,
     canvasSize: Size,
     cellLength: number
 }
 
 export const Grid = ({
+    cellGrid,
     canvasSize,
     cellLength,
 }: GridProps) => {
+
+
+    const renderCellBackgrounds = () => {
+        return cellGrid.flatMap((row) => {
+            return row.map((cell) => {
+                return (
+                    <Background.Factory 
+                        key={`cbg-${cell.id}`}
+                        cellType={cell.type}
+                        length={cellLength}
+                        position={PositionHelper.fromLocation(cell.location, cellLength)}
+                    />
+                )
+            });
+        })
+    }
+
     return (
         <Group>
+            {renderCellBackgrounds()}
+
             <Shape
                 width={canvasSize.width}
                 height={canvasSize.height}
@@ -49,10 +73,9 @@ export const Grid = ({
                     }
 
                     context.closePath();
-
                     context.fillStrokeShape(shape);
                 }}
-            />
+            />            
         </Group>
     );
 }
