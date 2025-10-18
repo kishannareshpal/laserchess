@@ -17,7 +17,7 @@ export const Board = ({
     cellGrid
 }: BoardProps) => {
     return (
-        <Stage width={width} height={height} className="rounded-3xl border-black bg-white/50" style={{ borderWidth: BOARD_STROKE_WIDTH }}>
+        <Stage width={width} height={height} className="rounded-3xl border-black bg-white/50" style={{ borderWidth: BOARD_STROKE_WIDTH, overflow: "hidden" }}>
             <Layers width={width} height={height} cellGrid={cellGrid} cellLength={cellLength} />
         </Stage>
     );

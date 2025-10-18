@@ -209,7 +209,7 @@ export const game$ = observable<GameStore>({
 
 
 // Events
-export const onSelectedPieceRotate$ = {
+export const selectedPieceRotationEvent = {
     left: event(),
     right: event(),
 } as const;

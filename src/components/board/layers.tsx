@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { Laser } from "./laser";
 import type Konva from "konva";
 import type { CellGrid } from "@/models/models/cell";
-import { game$, onSelectedPieceRotate$ } from "@/utils/store/game$";
+import { game$, selectedPieceRotationEvent } from "@/utils/store/game$";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import { Cell } from "./cell";
@@ -27,7 +27,7 @@ export const Layers = (
 	const gridLayerRef = useRef<Konva.Layer>(null!);
 
 	useEffect(() => {
-		const disposeOnSelectedPieceRotateLeftEvent = onSelectedPieceRotate$.left.on(() => {
+		const disposeOnSelectedPieceRotateLeftEvent = selectedPieceRotationEvent.left.on(() => {
 			const currentTurn = game$.turn.peek();
 			if (currentTurn.phase !== 'moving' || !currentTurn.selectedPieceLocation) {
 				return;
@@ -56,7 +56,7 @@ export const Layers = (
 			});
 		});
 
-		const disposeOnSelectedPieceRotateRightEvent = onSelectedPieceRotate$.right.on(() => {
+		const disposeOnSelectedPieceRotateRightEvent = selectedPieceRotationEvent.right.on(() => {
 			const currentTurn = game$.turn.peek();
 			if (currentTurn.phase !== 'moving' || !currentTurn.selectedPieceLocation) {
 				return;

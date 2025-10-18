@@ -11,7 +11,7 @@ export const Game = () => {
     const [initialCellGrid] = useState(() => structuredClone(game$.cellGrid.peek()));
     const [boardContainerSize, setBoardContainerSize] = useState<Size>(SizeHelper.zero());
     const boardContainerRef = useRef<HTMLDivElement>(null!);
-   
+
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             const entry = entries[0];
@@ -50,11 +50,11 @@ export const Game = () => {
                         </div>
                     </div>
 
-                    <Board 
+                    <Board
                         width={boardWidth}
                         height={boardHeight}
                         cellLength={cellLength}
-                        cellGrid={initialCellGrid} 
+                        cellGrid={initialCellGrid}
                     />
 
                     <div className="flex justify-between items-start">
