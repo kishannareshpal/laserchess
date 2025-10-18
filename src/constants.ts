@@ -27,7 +27,7 @@ export const CELL_BACKGROUND_COLOR: string = "#ffffff"; // a sort of dark grey #
  */
 export const CELL_STROKE_COLOR: string = "black"; // a sort of dark grey #313134
 
-export const CELL_STROKE_WIDTH: number = 2
-export const BOARD_STROKE_WIDTH: number = CELL_STROKE_WIDTH * 2;
+export const CELL_STROKE_WIDTH: number = 2;
+export const CELL_HIGHLIGHT_STROKE_WIDTH: number = CELL_STROKE_WIDTH * 2;
 
-export const HALF_OF_CELL_STROKE_WIDTH: number = CELL_STROKE_WIDTH / 2;
+export const BOARD_STROKE_WIDTH: number = CELL_STROKE_WIDTH * 2;

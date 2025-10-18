@@ -1,23 +1,18 @@
-import { CellHelper } from "@/models/helpers/cell-helper";
-import { Cell } from "./cell";
 import type { CellGrid } from "@/models/models/cell";
 import type { GridLayerRef } from "@/types";
+import { Cell } from ".";
 
-type PiecesProps = {
+type CollectionProps = {
   cellGrid: CellGrid;
   cellLength: number;
   gridLayerRef: GridLayerRef;
 };
 
-export const Cells = ({ cellGrid, cellLength, gridLayerRef }: PiecesProps) => {
+export const Collection = ({ cellGrid, cellLength, gridLayerRef }: CollectionProps) => {
   return (
     <>
       {cellGrid.map((row) => {
         return row.map((cell) => {
-          if (!CellHelper.hasPiece(cell)) {
-            return null;
-          }
-
           return (
             <Cell
               key={cell.id}

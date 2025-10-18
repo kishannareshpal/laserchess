@@ -1,7 +1,5 @@
 import { Layer } from "react-konva";
-import { SelectedCell } from "./selected-piece";
-import { Grid } from "./grid";
-import { Cells } from "./cells";
+import { GridLines } from "./grid-lines";
 import { Fragment, useEffect, useRef } from "react";
 import { Laser } from "./laser";
 import type Konva from "konva";
@@ -9,6 +7,7 @@ import type { CellGrid } from "@/models/models/cell";
 import { game$, onSelectedPieceRotate$ } from "@/utils/store/game$";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { CellHelper } from "@/models/helpers/cell-helper";
+import { Cell } from "./cell";
 
 type BoardLayerProps = {
 	cellGrid: CellGrid,
@@ -18,7 +17,7 @@ type BoardLayerProps = {
 }
 
 export const Layers = (
-	{ 
+	{
 		cellGrid,
 		width,
 		height,
@@ -39,7 +38,7 @@ export const Layers = (
 				return;
 			}
 
-			const selectedCellElement = gridLayerRef.current.findOne(`#c-${selectedCell.id}`);
+			const selectedCellElement = gridLayerRef.current.findOne(`#cp-${selectedCell.id}`);
 			if (!selectedCellElement) {
 				return;
 			}
@@ -68,7 +67,7 @@ export const Layers = (
 				return;
 			}
 
-			const selectedCellElement = gridLayerRef.current.findOne(`#c-${selectedCell.id}`);
+			const selectedCellElement = gridLayerRef.current.findOne(`#cp-${selectedCell.id}`);
 			if (!selectedCellElement) {
 				return;
 			}
@@ -94,29 +93,28 @@ export const Layers = (
 
 	return (
 		<Fragment>
-			<Layer  id="main-layer" ref={gridLayerRef}>
-				<Grid
+			<Layer id="main-layer" ref={gridLayerRef}>
+				<Cell.Collection
 					cellGrid={cellGrid}
+					cellLength={cellLength}
+					gridLayerRef={gridLayerRef}
+				/>
+
+				<Cell.Selection.PossibleTargets
+					cellLength={cellLength}
+					gridLayerRef={gridLayerRef}
+				/>
+
+				<GridLines
 					canvasSize={{ width: width, height: height }}
-					cellLength={cellLength} 
-				/>
-
-				<Cells
-					cellGrid={cellGrid} 
 					cellLength={cellLength}
-					gridLayerRef={gridLayerRef}
 				/>
 
-				<SelectedCell.Highlight cellLength={cellLength} />
-
-				<SelectedCell.MovementTargetIndicatorCollection
-					cellLength={cellLength}
-					gridLayerRef={gridLayerRef}
-				/>
+				<Cell.Selection.Highlight cellLength={cellLength} />
 			</Layer>
 
-			{/* The laser is drawn on a separate layer so it doesn't overlap with the piece on drag */}
-			<Layer id="laser-layer">
+			{/* The laser is drawn on a separate layer that sits on top of all the other elements so it doesn't overlap with the piece */}
+			<Layer id="top-layer">
 				<Laser
 					cellLength={cellLength}
 					gridLayerRef={gridLayerRef}

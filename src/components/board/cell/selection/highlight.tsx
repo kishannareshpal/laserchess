@@ -1,3 +1,4 @@
+import { CELL_HIGHLIGHT_STROKE_WIDTH } from "@/constants"
 import { PositionHelper } from "@/models/helpers/position-helper"
 import { game$ } from "@/utils/store/game$"
 import { observer } from "@legendapp/state/react"
@@ -21,15 +22,14 @@ export const Highlight = observer(({
 
     return (
         <Rect
-            id="selected-piece-highlight"
+            id="p-highlight"
             x={position.x}
             y={position.y}
             width={cellLength}
             height={cellLength}
-            stroke={"#f8f32b"}
-            cornerRadius={8}
+            stroke="white"
             listening={false}
-            strokeWidth={2}
+            strokeWidth={CELL_HIGHLIGHT_STROKE_WIDTH}
             lineCap="round"
             lineJoin="round"
         />

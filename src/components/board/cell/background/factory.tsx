@@ -12,7 +12,9 @@ const cellTypeBackgroundComponentMap: Record<Cell["type"], JSX.ElementType> = {
     'laser-red': null,
 } as const;
 
-export const Factory = (props: CellBackgroundProps) => {
+type FactoryProps = CellBackgroundProps;
+
+export const Factory = (props: FactoryProps) => {
     const BackgroundComponent = cellTypeBackgroundComponentMap[props.cellType];
     if (!BackgroundComponent) {
         return null;

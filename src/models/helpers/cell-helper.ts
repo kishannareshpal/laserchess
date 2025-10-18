@@ -9,7 +9,7 @@ export class CellHelper {
      * 
      * @param cell - the cell to check
      */
-    static hasPiece(cell: Cell | undefined): boolean {
+    static hasPiece(cell: Cell | undefined): cell is Cell {
         return !!cell?.piece;
     }
 

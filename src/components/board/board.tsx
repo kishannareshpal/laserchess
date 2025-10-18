@@ -10,7 +10,7 @@ type BoardProps = {
     cellGrid: CellGrid;
 }
 
-export const Board = ({ 
+export const Board = ({
     width,
     height,
     cellLength,

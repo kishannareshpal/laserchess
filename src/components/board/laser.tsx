@@ -53,7 +53,7 @@ export const Laser = (
 
                 if (lastLaserSegment?.effect === 'kill') {
                     const cellAtFinalLocation = CellHelper.getCellAt(game$.cellGrid.peek(), lastLaserSegment.location);
-                    const pieceElementFinalLocation = gridLayerRef.current.findOne(`#c-${cellAtFinalLocation.id}`);
+                    const pieceElementFinalLocation = gridLayerRef.current.findOne(`#cp-${cellAtFinalLocation.id}`);
                 
                     setTimeout(() => {
                         pieceElementFinalLocation?.to({

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M0,0 L24,0 L24,24 L0,24 L0,0 Z" id="path-1"></path>
+    </defs>
+    <g id="icon/target-replace-icon" stroke="none" fill="none" xlink:href="#path-1" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1">
+        <g id="icon" transform="translate(3, 3)" stroke="currentColor">
+            <path d="M0,1 C0,0.44771525 0.44771525,0 1,0 M1,7 C0.44771525,7 0,6.55228475 0,6 M7,1 C7,0.44771525 6.55228475,0 6,0 M7,6 C7,6.55228475 6.55228475,7 6,7" id="source" stroke-width="2.125" transform="translate(3.5, 3.5) scale(-1, 1) translate(-3.5, -3.5)"></path>
+            <polyline id="arrow-end" stroke-width="2.125" transform="translate(15, 5.5) scale(-1, 1) translate(-15, -5.5)" points="12 4 15 7 18 4"></polyline>
+            <path d="M11,7 L11,2 C11,0.8954305 11.8954305,0 13,0 L15,0" id="arrow-start" stroke-width="2.125" transform="translate(13, 3.5) scale(-1, 1) translate(-13, -3.5)"></path>
+            <rect id="target" stroke-width="2.125" transform="translate(14.5, 14.5) scale(-1, 1) translate(-14.5, -14.5)" x="11" y="11" width="7" height="7" rx="1.0625"></rect>
+        </g>
+    </g>
+</svg>

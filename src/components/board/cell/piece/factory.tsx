@@ -15,9 +15,9 @@ const pieceTypeComponentMap: Record<Piece["type"], JSX.ElementType> = {
   s: Switch
 } as const;
 
-type RendererProps = PieceProps;
+type FactoryProps = PieceProps;
 
-export const Factory = (props: RendererProps) => {
+export const Factory = (props: FactoryProps) => {
   const PieceComponent = pieceTypeComponentMap[props.piece.type];
   if (!PieceComponent) {
     return null;
