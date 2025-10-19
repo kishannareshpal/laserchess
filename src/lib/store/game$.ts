@@ -22,7 +22,7 @@ const DEFAULT_BOARD_SN: string = "l++3d++kd++b+++2/2b7/3B+6/b++1B1ss+1b+++1B+/b+
 type GameStoreState = {
     status: GameStatus
     cellGrid: CellGrid,
-    winner: PlayerType
+    winner: PlayerType | null;
     turn: {
         phase: 'moving' | 'firing',
         player: PlayerType,
@@ -51,7 +51,7 @@ const initialState: GameStoreState = {
     winner: null,
     turn: {
         phase: 'moving',
-        player: 'player-two',
+        player: 'player-one',
         selectedPieceLocation: null,
         laserPath: []
     },
@@ -64,14 +64,16 @@ const initialState: GameStoreState = {
 export const game$ = observable<GameStore>({
     ...initialState,
 
-    startGame: (reset = game$.status.peek() === 'idle') => {
+    startGame: (reset = (game$.status.peek() === 'idle' || game$.status.peek() === 'over')) => {
         if (!reset) {
             return;
         }
 
         const newCellGrid = SN.parse(DEFAULT_BOARD_SN);
         game$.assign({
+            ...initialState,
             status: 'playing',
+            winner: null,
             cellGrid: newCellGrid,
         });
     },

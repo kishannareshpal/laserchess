@@ -6,15 +6,10 @@ export class PieceHelper {
      * 
      * @param pieceType the type notation of the piece. Lowercase letters represent red pieces, while uppercase letters represent blue pieces.
      */
-    static determinePiecePlayerType(pieceType: PieceType | Uppercase<PieceType>): PlayerType {
-        return pieceType === pieceType.toLowerCase() ? 'player-one' : 'player-two';
+    static determinePlayerTypeForPiece(pieceType: PieceType | Uppercase<PieceType>): PlayerType {
+        return pieceType === pieceType.toLowerCase() ? 'player-two' : 'player-one';
     }
 
-    /**
-     * Determine the player (red or blue) a piece belongs to based on its type notation.
-     * 
-     * @param pieceType the type notation of the piece. Lowercase letters represent red pieces, while uppercase letters represent blue pieces.
-     */
     static determinePieceType(pieceType: PieceType | Uppercase<PieceType>): PieceType {
         return pieceType.toLowerCase() as PieceType;
     }

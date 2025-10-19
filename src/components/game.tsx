@@ -3,9 +3,10 @@ import { game$ } from "@/lib/store/game$";
 import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
 import { useEffect, useRef, useState } from "react";
 import { RotationController } from "./game/controller/rotation-controller";
-import { UserIcon } from "lucide-react"
 import type { Size } from "@/models/size";
 import { SizeHelper } from "@/models/helpers/size-helper";
+import { GameOverOverlay } from "./game/game-over-overlay";
+import { PlayerDetails } from "./game/player-details";
 
 export const Game = () => {
     const [initialCellGrid] = useState(() => structuredClone(game$.cellGrid.peek()));
@@ -43,28 +44,23 @@ export const Game = () => {
             <div ref={boardContainerRef} className="flex flex-1 flex-col">
                 <div className="inline-flex flex-col gap-4 self-center p-2">
                     <div className="flex">
-                        <div className="flex gap-2 rounded-lg">
-                            <UserIcon />
-                            <p>Player two</p>
-                        </div>
+                        <PlayerDetails playerType="player-two" />
                     </div>
 
-                    <Board
-                        width={boardWidth}
-                        height={boardHeight}
-                        cellLength={cellLength}
-                        cellGrid={initialCellGrid}
-                    />
+                    <div className="flex rounded-3xl relative">
+                        <GameOverOverlay />
+
+                        <Board
+                            width={boardWidth}
+                            height={boardHeight}
+                            cellLength={cellLength}
+                            cellGrid={initialCellGrid}
+                        />
+                    </div>
 
                     <div className="flex justify-between items-start">
                         <div className="flex">
-                            <div className="flex justify-center items-center gap-2 rounded-lg">
-                                <UserIcon />
-                                <div>
-                                    <p>Player one</p>
-                                    <p className="text-sm text-white/75">Your turn</p>
-                                </div>
-                            </div>
+                            <PlayerDetails playerType="player-one" />
                         </div>
 
                         <div className="flex flex-col items-end">

@@ -150,7 +150,7 @@ export class SN {
                 if (!isEmpty(col)) {
                     // Determine the player this piece belongs to
                     const pieceType: PieceType = PieceHelper.determinePieceType(col[0]); // type (k, l, b, d, s)
-                    const playerType: PlayerType = PieceHelper.determinePiecePlayerType(col[0]) // type (Kk, Ll, Bb, Dd, Ss)
+                    const playerType: PlayerType = PieceHelper.determinePlayerTypeForPiece(col[0]) // type (Kk, Ll, Bb, Dd, Ss)
 
                     // Determine the orientation
                     let orientation: OrientationDegrees = 0; // orientation in 90deg increments (0, 90, 180, 270)
@@ -167,12 +167,12 @@ export class SN {
                 if (colIndex === 0 && rowIndex === 0) {
                     // This square is reserved for the red player's laser piece only.
                     // No other piece can be put in here
-                    cellType = 'laser-red';
+                    cellType = 'laser-player-two';
 
                 } else if (colIndex === 9 && rowIndex === 7) {
                     // This square is reserved for the blue player's laser piece only. 
                     // No other piece can be put in here
-                    cellType = 'laser-blue';
+                    cellType = 'laser-player-one';
 
                 } else if ((colIndex === 0 && (rowIndex >= 1 && rowIndex <= 7) ||
                     (colIndex === 8 && (rowIndex === 0 || rowIndex === 7)))) {
