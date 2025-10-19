@@ -1,5 +1,5 @@
-import type { Location } from "../models/location";
-import type { Position } from "../models/position";
+import type { Location } from "@/models/location";
+import type { Position } from "@/models/position";
 
 export class PositionHelper {
     /**

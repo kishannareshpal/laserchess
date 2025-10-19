@@ -1,4 +1,4 @@
-import type { Position } from "@/models/models/position";
+import type { Position } from "@/models/position";
 import type { CellType } from "@/types";
 
 export type CellBackgroundProps = {

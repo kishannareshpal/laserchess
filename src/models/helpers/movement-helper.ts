@@ -1,8 +1,8 @@
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { point, polygon } from "@turf/helpers";
-import type { Location } from "../models/location";
-import type { Cell, CellGrid } from "../models/cell";
-import type { Movement } from "../models/movement";
+import type { Location } from "@/models/location";
+import type { Cell, CellGrid } from "@/models/cell";
+import type { Movement } from "@/models/movement";
 import { CellHelper } from "./cell-helper";
 import { LocationHelper } from "./location-helper";
 import type { OrientationDegrees } from "@/types";
@@ -113,12 +113,12 @@ export class MovementHelper {
         }
 
         // Ensure other player's piece isn't being moved to a reserved cell
-        if (sourceCell.piece.playerType !== 'blue' && targetCell.type === 'reserved-player-one') {
+        if (sourceCell.piece.playerType !== 'player-two' && targetCell.type === 'reserved-player-one') {
             // Cannot move a piece that's not blue player's (e.g. red player's piece) to a cell reserved for blue player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }
 
-        if (sourceCell.piece.playerType !== 'red' && targetCell.type === 'reserved-player-two') {
+        if (sourceCell.piece.playerType !== 'player-one' && targetCell.type === 'reserved-player-two') {
             // Cannot move a piece that's not red player's (e.g. blue player's piece) to a cell reserved for red player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }

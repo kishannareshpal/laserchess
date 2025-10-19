@@ -1,7 +1,7 @@
 import { maxBy, minBy } from "lodash";
-import { PlayerTypesEnum } from "../../models/Enums";
-import Board from "../../models/Board";
-import Node from "./Node";
+import { PlayerTypesEnum } from "../@/models/Enums";
+import Board from "../@/models/Board";
+import Node from "./node";
 
 
 class AI {

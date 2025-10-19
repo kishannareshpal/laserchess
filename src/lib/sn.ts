@@ -1,8 +1,8 @@
 import { isString, isEmpty, reduce } from "lodash";
 import type { CellType, OrientationDegrees, PieceType, PlayerType } from "@/types";
-import type { Cell, CellGrid } from "@/models/models/cell";
-import type { Location } from "@/models/models/location";
-import type { Piece } from "@/models/models/piece";
+import type { Cell, CellGrid } from "@/models/cell";
+import type { Location } from "@/models/location";
+import type { Piece } from "@/models/piece";
 import { PieceHelper } from "@/models/helpers/piece-helper";
 import { nanoid } from 'nanoid';
 

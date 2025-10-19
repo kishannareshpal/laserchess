@@ -1,4 +1,4 @@
-import { selectedPieceRotationEvent } from '@/utils/store/game$';
+import { selectedPieceRotationEvent } from '@/lib/store/game$';
 import { RotateCcwIcon, RotateCwIcon } from 'lucide-react';
 
 export const RotationController = () => {

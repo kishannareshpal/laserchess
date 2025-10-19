@@ -1,6 +1,6 @@
 import type { PlayerType } from "@/types";
-import type { Cell, CellGrid } from "../models/cell";
-import type { Location } from "../models/location";
+import type { Cell, CellGrid } from "@/models/cell";
+import type { Location } from "@/models/location";
 import { PieceHelper } from "./piece-helper";
 
 export class CellHelper {
@@ -9,7 +9,7 @@ export class CellHelper {
      * 
      * @param cell - the cell to check
      */
-    static hasPiece(cell: Cell | undefined): cell is Cell {
+    static hasPiece(cell: Cell | undefined): boolean {
         return !!cell?.piece;
     }
 
@@ -26,7 +26,7 @@ export class CellHelper {
     static getPlayerLaserCell(playerType: PlayerType, cellGrid: CellGrid): Cell | null {
         let playerLaserCellLocation: Location;
 
-        if (playerType === 'blue') {
+        if (playerType === 'player-two') {
             playerLaserCellLocation = { colIndex: 9, rowIndex: 7 }
         } else {
             playerLaserCellLocation = { colIndex: 0, rowIndex: 0 }
@@ -39,7 +39,7 @@ export class CellHelper {
      * Retrieve all cells that contain a piece belonging to the specified player.
      * 
      * @param cellGrid - the grid of cells
-     * @param playerType - the player type ('red' or 'blue') to filter pieces by
+     * @param playerType - the player type ('player-one' or 'player-two') to filter pieces by
      */
     static getPlayerCells(cellGrid: CellGrid, playerType: PlayerType): Cell[] {
         return cellGrid.flat().filter(

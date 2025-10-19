@@ -1,6 +1,6 @@
 import { Shape } from "react-konva";
 import { CELL_STROKE_WIDTH, COLUMN_COUNT, ROW_COUNT } from "@/constants";
-import type { Size } from "@/models/models/size";
+import type { Size } from "@/models/size";
 
 
 type GridLinesProps = {

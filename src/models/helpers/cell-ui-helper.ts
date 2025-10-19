@@ -1,11 +1,11 @@
 import type { GridLayerRef } from "@/types";
-import type { Movement } from "../models/movement";
-import type { Position } from "../models/position";
+import type { Movement } from "@/models/movement";
+import type { Position } from "@/models/position";
 import { MovementHelper } from "./movement-helper";
-import type { Cell } from "../models/cell";
+import type { Cell } from "@/models/cell";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { GridLayerHelper } from "./grid-layer-helper";
-import { game$ } from "@/utils/store/game$";
+import { game$ } from "@/lib/store/game$";
 import type Konva from "konva";
 
 type PresentMovementOptions = {

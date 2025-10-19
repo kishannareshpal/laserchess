@@ -1,6 +1,6 @@
 import { Stage } from "react-konva";
 import { Layers } from "./layers";
-import type { CellGrid } from "@/models/models/cell";
+import type { CellGrid } from "@/models/cell";
 import { BOARD_STROKE_WIDTH } from "@/constants";
 
 type BoardProps = {

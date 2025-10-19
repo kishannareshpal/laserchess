@@ -1,4 +1,4 @@
-import type { Cell } from "@/models/models/cell";
+import type { Cell } from "@/models/cell";
 import { ReservedPlayerOne } from "./reserved-player-one";
 import type { CellBackgroundProps } from "./types";
 import type { JSX } from "react";

@@ -1,4 +1,4 @@
-import type { Position } from "../models/position";
+import type { Position } from "@/models/position";
 
 export class PointHelper {
     static flatten(points: Position[]): number[] {

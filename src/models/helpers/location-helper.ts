@@ -1,7 +1,7 @@
 import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
-import type { LaserDirection } from "../models/laser";
-import type { Location } from "../models/location";
-import type { Position } from "../models/position";
+import type { LaserDirection } from "@/models/laser";
+import type { Location } from "@/models/location";
+import type { Position } from "@/models/position";
 
 /**
  * @constant

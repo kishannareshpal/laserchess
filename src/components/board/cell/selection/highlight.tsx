@@ -1,6 +1,6 @@
 import { CELL_HIGHLIGHT_STROKE_WIDTH } from "@/constants"
 import { PositionHelper } from "@/models/helpers/position-helper"
-import { game$ } from "@/utils/store/game$"
+import { game$ } from "@/lib/store/game$"
 import { observer } from "@legendapp/state/react"
 import { use$ } from "@legendapp/state/react"
 import { Rect } from "react-konva"

@@ -1,13 +1,13 @@
-import type { Cell as TCell } from "@/models/models/cell";
+import type { Cell as TCell } from "@/models/cell";
 import { PositionHelper } from "@/models/helpers/position-helper";
-import { game$ } from "@/utils/store/game$";
+import { game$ } from "@/lib/store/game$";
 import { LocationHelper } from "@/models/helpers/location-helper";
 import { use$ } from "@legendapp/state/react";
 import { CellHelper } from "@/models/helpers/cell-helper";
-import type { Position } from "@/models/models/position";
+import type { Position } from "@/models/position";
 import type { GridLayerRef } from "@/types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
-import { cells$ } from "@/utils/store/cells$";
+import { cells$ } from "@/lib/store/cells$";
 import { Piece } from "./piece";
 import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 import { Group } from "react-konva";

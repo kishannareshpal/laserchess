@@ -1,11 +1,11 @@
 import type { PlayerType } from "@/types";
 import LHAN_RELATIONS_JSON from "@/assets/laser-v-piece.json";
-import type { LaserDirection, LaserEffect, LaserEffectDeflect, LaserEffectKill, LaserEffectNone, LaserPath, LaserPathFlattenedPoints, LaserPathPoints } from "../models/laser";
+import type { LaserDirection, LaserEffect, LaserEffectDeflect, LaserEffectKill, LaserEffectNone, LaserPath, LaserPathFlattenedPoints, LaserPathPoints } from "@/models/laser";
 import { CellHelper } from "./cell-helper";
-import type { Cell, CellGrid } from "../models/cell";
-import type { Piece } from "../models/piece";
+import type { Cell, CellGrid } from "@/models/cell";
+import type { Piece } from "@/models/piece";
 import { LocationHelper } from "./location-helper";
-import type { Location } from "../models/location";
+import type { Location } from "@/models/location";
 import { PositionHelper } from "./position-helper";
 import { PointHelper } from "./point-helper";
 

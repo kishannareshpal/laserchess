@@ -1,10 +1,10 @@
 import { Board } from "./board/board";
-import { game$ } from "@/utils/store/game$";
+import { game$ } from "@/lib/store/game$";
 import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
 import { useEffect, useRef, useState } from "react";
 import { RotationController } from "./rotation-controller";
 import { UserIcon } from "lucide-react"
-import type { Size } from "@/models/models/size";
+import type { Size } from "@/models/size";
 import { SizeHelper } from "@/models/helpers/size-helper";
 
 export const Game = () => {

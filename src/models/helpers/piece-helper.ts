@@ -7,7 +7,7 @@ export class PieceHelper {
      * @param pieceType the type notation of the piece. Lowercase letters represent red pieces, while uppercase letters represent blue pieces.
      */
     static determinePiecePlayerType(pieceType: PieceType | Uppercase<PieceType>): PlayerType {
-        return pieceType === pieceType.toLowerCase() ? 'red' : 'blue';
+        return pieceType === pieceType.toLowerCase() ? 'player-one' : 'player-two';
     }
 
     /**

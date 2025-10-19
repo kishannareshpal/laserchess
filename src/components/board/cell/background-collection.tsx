@@ -1,4 +1,4 @@
-import type { CellGrid } from "@/models/models/cell";
+import type { CellGrid } from "@/models/cell";
 import { Background } from "./background";
 import { PositionHelper } from "@/models/helpers/position-helper";
 

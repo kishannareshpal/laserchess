@@ -1,4 +1,4 @@
-import type { Piece } from "@/models/models/piece";
+import type { Piece } from "@/models/piece";
 import type { JSX } from "react";
 import { Defender } from "./defender";
 import { Deflector } from "./deflector";

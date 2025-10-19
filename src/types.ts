@@ -1,7 +1,7 @@
 import type Konva from "konva";
 import type { RefObject } from "react";
 
-export type PlayerType = 'red' | 'blue';
+export type PlayerType = 'player-one' | 'player-two';
 
 export type CellType = 'normal' | 'reserved-player-one' | 'reserved-player-two' | 'laser-red' | 'laser-blue';
 

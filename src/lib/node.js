@@ -1,6 +1,6 @@
 import { maxBy, minBy } from "lodash";
-import { PlayerTypesEnum } from "../../models/Enums";
-import Board from "../../models/Board";
+import { PlayerTypesEnum } from "../@/models/Enums";
+import Board from "../@/models/Board";
 
 class Node {
     /**

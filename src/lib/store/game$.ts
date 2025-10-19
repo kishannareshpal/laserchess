@@ -1,12 +1,12 @@
-import type { CellGrid } from "@/models/models/cell";
+import type { CellGrid } from "@/models/cell";
 import type { GameStatus, PlayerType } from "@/types";
 import { event, observable } from "@legendapp/state";
-import { SN } from "../SN";
-import type { Location } from "@/models/models/location";
+import { SN } from "../sn";
+import type { Location } from "@/models/location";
 import { LocationHelper } from "@/models/helpers/location-helper";
-import type { Movement } from "@/models/models/movement";
+import type { Movement } from "@/models/movement";
 import { MovementHelper } from "@/models/helpers/movement-helper";
-import type { LaserPath } from "@/models/models/laser";
+import type { LaserPath } from "@/models/laser";
 import { LaserHelper } from "@/models/helpers/laser-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
 
@@ -51,7 +51,7 @@ const initialState: GameStoreState = {
     winner: null,
     turn: {
         phase: 'moving',
-        player: 'blue',
+        player: 'player-two',
         selectedPieceLocation: null,
         laserPath: []
     },
@@ -155,7 +155,7 @@ export const game$ = observable<GameStore>({
 
             if (killedCell.piece.type === 'k') {
                 // Game over: Killed a king piece - the player whose king got killed loses
-                const winner = killedCell.piece.playerType === 'blue' ? 'red' : 'blue';
+                const winner: PlayerType = killedCell.piece.playerType === 'player-two' ? 'player-one' : 'player-two';
                 game$.assign({
                     status: 'over',
                     winner: winner
@@ -170,7 +170,7 @@ export const game$ = observable<GameStore>({
 
         if (!isGameOver) {
             // Next player's turn
-            const nextPlayer: PlayerType = game$.turn.player.peek() === 'blue' ? 'red' : 'blue';
+            const nextPlayer: PlayerType = game$.turn.player.peek() === 'player-two' ? 'player-one' : 'player-two';
             game$.turn.set({
                 phase: 'moving',
                 player: nextPlayer,

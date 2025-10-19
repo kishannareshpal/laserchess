@@ -1,4 +1,4 @@
-import type { CellGrid } from "@/models/models/cell";
+import type { CellGrid } from "@/models/cell";
 import type { GridLayerRef } from "@/types";
 import { Cell } from ".";
 

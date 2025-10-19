@@ -1,4 +1,4 @@
-import type { Size } from "../models/size";
+import type { Size } from "@/models/size";
 
 export class SizeHelper {
     static zero(): Size {

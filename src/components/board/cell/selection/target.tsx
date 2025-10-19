@@ -1,6 +1,6 @@
 import { Circle, Group, Rect } from "react-konva";
 import useImage from 'use-image';
-import type { Movement } from "@/models/models/movement";
+import type { Movement } from "@/models/movement";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import { MovementHelper } from "@/models/helpers/movement-helper";
 import targetReplaceIconSvg from '@/assets/target-replace-icon.svg'

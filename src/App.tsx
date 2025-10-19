@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Game } from "./components/game";
 import { Header } from "./components/layout/header";
-import { game$ } from "./utils/store/game$";
+import { game$ } from "@/lib/store/game$";
 
 export const App = () => {
 	const [ready, setReady] = useState(false);
