@@ -11,7 +11,6 @@ import { cells$ } from "@/utils/store/cells$";
 import { Piece } from "./piece";
 import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 import { Group } from "react-konva";
-import { Background } from "./background";
 import { Portal } from "react-konva-utils";
 import { useState } from "react";
 
@@ -25,7 +24,6 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
     const [isPieceBeingDragged, setIsPieceBeingDragged] = useState<boolean>(false);
 
     const cellPosition = PositionHelper.fromLocation(cell.location, cellLength);
-
     const turn = use$(game$.turn);
     const enabled = turn.phase === "moving" && cell.piece?.playerType === turn.player;
 
@@ -41,13 +39,6 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
 
     return (
         <Group id={`cg-${cell.id}`}>
-            <Background.Factory
-                key={`cb-${cell.id}`}
-                cellType={cell.type}
-                length={cellLength}
-                position={PositionHelper.fromLocation(cell.location, cellLength)}
-            />
-
             {CellHelper.hasPiece(cell) ? (
                 <Portal selector="#top-layer" enabled={isPieceBeingDragged}>
                     <Piece.Factory
@@ -64,10 +55,6 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
                             if (cells$.isAnyPieceBeingDragged()) {
                                 return;
                             }
-
-                            // Move the draging cell's layer to the top, so it doesn't get overlayed
-                            // by other cells while dragging.
-                            e.target.moveToTop();
 
                             const sourceCellPosition = e.target.position();
                             cells$.setCurrentDraggingPieceSourcePosition(sourceCellPosition);

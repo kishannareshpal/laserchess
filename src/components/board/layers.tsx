@@ -94,6 +94,11 @@ export const Layers = (
 	return (
 		<Fragment>
 			<Layer id="main-layer" ref={gridLayerRef}>
+				<Cell.BackgroundCollection
+					cellGrid={cellGrid}
+					cellLength={cellLength}
+				/>
+
 				<Cell.Collection
 					cellGrid={cellGrid}
 					cellLength={cellLength}
