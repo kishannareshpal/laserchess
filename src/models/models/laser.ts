@@ -1,4 +1,6 @@
 import type { Location } from "./location";
+import type { Point } from "./point";
+import type { Position } from "./position";
 
 /**
  * @deprecated - no need, cuz can be inferred from the path this segment belongs to
@@ -34,4 +36,6 @@ export type LaserPath = LaserPathSegment[];
 /**
  * [x1, y1, x2, y2, ...]
  */
+export type LaserPathPoints = Point[];
+
 export type LaserPathFlattenedPoints = number[];

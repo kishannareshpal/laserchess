@@ -27,8 +27,7 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
     const cellPosition = PositionHelper.fromLocation(cell.location, cellLength);
 
     const turn = use$(game$.turn);
-    const enabled = cell.piece?.playerType === turn.player && turn.phase === "moving";
-    // const canDrag = canInteract && cell.piece.type !== "l";
+    const enabled = turn.phase === "moving" && cell.piece?.playerType === turn.player;
 
     const handleSelection = (): void => {
         const cellNode = GridLayerHelper.findCellNodeById(cell.id, gridLayerRef);
