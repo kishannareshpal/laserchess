@@ -1,7 +1,6 @@
 import { Circle, Group, Rect } from "react-konva";
 import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
-import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
 
 type LaserProps = PieceProps;
 
@@ -12,8 +11,6 @@ export const Laser = ({
   piece,
   enabled,
   onSelect,
-  onDragStart,
-  onDragEnd,
 }: LaserProps) => {
   const offset = length / 2;
   const pixelLength = length / 8;
@@ -29,7 +26,7 @@ export const Laser = ({
       offsetY={offset}
       rotation={piece.orientation}
       listening={enabled}
-      draggable
+      draggable={false}
       onMouseDown={(e) => {
         CellUIHelper.setCursorStyle(e.target, "grabbing");
       }}
@@ -44,11 +41,6 @@ export const Laser = ({
       }}
       onTap={onSelect}
       onClick={onSelect}
-      dragBoundFunc={(position) =>
-        PieceUIHelper.clampPositionToBoardBounds(position, length)
-      }
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
     >
       <Circle
         x={length / 2}

@@ -1,8 +1,8 @@
-import { Board } from "./board/board";
+import { Board } from "./game/board/board";
 import { game$ } from "@/lib/store/game$";
 import { COLUMN_COUNT, ROW_COUNT } from "@/constants";
 import { useEffect, useRef, useState } from "react";
-import { RotationController } from "./rotation-controller";
+import { RotationController } from "./game/controller/rotation-controller";
 import { UserIcon } from "lucide-react"
 import type { Size } from "@/models/size";
 import { SizeHelper } from "@/models/helpers/size-helper";
@@ -38,7 +38,6 @@ export const Game = () => {
     const boardWidth = cellLength * COLUMN_COUNT;
     const boardHeight = cellLength * ROW_COUNT;
 
-
     return (
         <div className="flex flex-col w-full gap-4">
             <div ref={boardContainerRef} className="flex flex-1 flex-col">
@@ -68,7 +67,7 @@ export const Game = () => {
                             </div>
                         </div>
 
-                        <div className="flex justify-center">
+                        <div className="flex flex-col items-end">
                             <RotationController />
                         </div>
                     </div>
