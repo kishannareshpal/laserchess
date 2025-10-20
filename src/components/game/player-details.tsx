@@ -18,6 +18,7 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
 
     const animationRef = useRef<JSAnimation | undefined>(undefined);
     const turnIndicatorTextRef = useRef<HTMLParagraphElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const { words } = splitText(turnIndicatorTextRef.current, { words: true });
@@ -35,13 +36,13 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
                     to: 1
                 },
             ],
-            autoplay: true,
-            duration: 750,
+            autoplay: false,
             ease: 'inSine',
+            duration: 300,
             delay: stagger(50),
             loop: false,
         });
-    }, [turnPlayer]);
+    }, []);
 
     useEffect(() => {
         animationRef.current.restart();
@@ -62,7 +63,7 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
                     <p className="text-nowrap">{playerName}</p>
                 </div>
 
-                <div style={{ opacity: isPlayerTurn ? 1 : 0 }}>
+                <div ref={containerRef} style={{ opacity: isPlayerTurn ? 1 : 0 }}>
                     <p className="flex">{playerName}</p>
                     <p ref={turnIndicatorTextRef} className="text-sm text-white/75">
                         Your turn

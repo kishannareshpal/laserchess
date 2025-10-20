@@ -10,7 +10,7 @@ export const RotationController = observer(() => {
     const disabled = !selectedPieceLocation;
 
     return (
-        <div className="flex border-0 bg-black/25 border-black/75 p-1 gap-4 rounded-full">
+        <div className="flex border-0 bg-black/25 border-black/75 p-1 gap-4 duration-300 rounded-full aria-disabled:opacity-25" aria-disabled={disabled}>
             <RotateButton
                 disabled={disabled}
                 onClick={rotationEvent.left.fire}
