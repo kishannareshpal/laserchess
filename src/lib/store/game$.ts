@@ -1,6 +1,6 @@
 import type { CellGrid } from "@/models/cell";
 import type { GameStatus, PlayerType } from "@/types";
-import { event, observable } from "@legendapp/state";
+import { observable } from "@legendapp/state";
 import { SN } from "../sn";
 import type { Location } from "@/models/location";
 import { LocationHelper } from "@/models/helpers/location-helper";
@@ -9,6 +9,7 @@ import { MovementHelper } from "@/models/helpers/movement-helper";
 import type { LaserPath } from "@/models/laser";
 import { LaserHelper } from "@/models/helpers/laser-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
+import type { Position } from "@/models/position";
 
 /** 
  * The default board setup (ACE).
@@ -27,6 +28,7 @@ type GameStoreState = {
         phase: 'moving' | 'firing',
         player: PlayerType,
         selectedPieceLocation: Location | null,
+        draggingPieceSourcePosition: Position | null,
         laserPath: LaserPath,
     }
     ai: {
@@ -40,10 +42,16 @@ type GameStoreActions = {
     recordTurnMovement: (movment: Movement) => void,
     finishTurn: () => void,
     togglePieceAt: (location: Location, options?: { forcedState?: boolean }) => void,
+    startDraggingPieceAt: (position: Position) => void,
+    stopDraggingPiece: () => void,
     togglePause: (forcePause?: boolean) => void
 }
 
-type GameStore = GameStoreState & GameStoreActions;
+type GameStoreComputeds = {
+    isAnyPieceBeingDragged: () => boolean,
+}
+
+type GameStore = GameStoreState & GameStoreActions & GameStoreComputeds;
 
 const initialState: GameStoreState = {
     status: 'idle',
@@ -53,6 +61,7 @@ const initialState: GameStoreState = {
         phase: 'moving',
         player: 'player-one',
         selectedPieceLocation: null,
+        draggingPieceSourcePosition: null,
         laserPath: []
     },
     ai: {
@@ -177,7 +186,8 @@ export const game$ = observable<GameStore>({
                 phase: 'moving',
                 player: nextPlayer,
                 laserPath: [],
-                selectedPieceLocation: null
+                selectedPieceLocation: null,
+                draggingPieceSourcePosition: null
             })
         }
     },
@@ -197,6 +207,14 @@ export const game$ = observable<GameStore>({
         }
     },
 
+    startDraggingPieceAt: (position) => {
+        game$.turn.draggingPieceSourcePosition.set(position);
+    },
+
+    stopDraggingPiece: () => {
+        game$.turn.draggingPieceSourcePosition.set(null);
+    },
+
     togglePause: (forcePause = false) => {
         const currentGameStatus = game$.status.peek();
         if (currentGameStatus === 'over') {
@@ -206,12 +224,10 @@ export const game$ = observable<GameStore>({
 
         const shouldBePaused = forcePause === true || currentGameStatus === 'playing';
         game$.status.set(shouldBePaused ? 'paused' : 'playing');
-    }
+    },
+
+    // Computeds
+    isAnyPieceBeingDragged: () => {
+        return !!game$.turn.draggingPieceSourcePosition.get();
+    },
 });
-
-
-// Events
-export const selectedPieceRotationEvent = {
-    left: event(),
-    right: event(),
-} as const;

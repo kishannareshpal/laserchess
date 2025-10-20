@@ -7,7 +7,6 @@ import { CellHelper } from "@/models/helpers/cell-helper";
 import type { Position } from "@/models/position";
 import type { GridLayerRef } from "@/types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
-import { cells$ } from "@/lib/store/cells$";
 import { Piece } from "./piece";
 import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 import { Group } from "react-konva";
@@ -52,12 +51,12 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
                             setIsPieceBeingDragged(true);
 
                             // Ensure multiple pieces can't be dragged at once
-                            if (cells$.isAnyPieceBeingDragged()) {
+                            if (game$.isAnyPieceBeingDragged()) {
                                 return;
                             }
 
                             const sourceCellPosition = e.target.position();
-                            cells$.setCurrentDraggingPieceSourcePosition(sourceCellPosition);
+                            game$.startDraggingPieceAt(sourceCellPosition);
                             // Handle piece dragging:
                             const sourceCellLocation = LocationHelper.fromPosition(
                                 sourceCellPosition,
@@ -71,10 +70,10 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
                         onDragEnd={(e) => {
                             setIsPieceBeingDragged(false);
 
-                            if (!cells$.isAnyPieceBeingDragged()) {
+                            if (!game$.isAnyPieceBeingDragged()) {
                                 return;
                             }
-                            const sourceCellPosition: Position = cells$.currentDraggingPieceSourcePosition.peek();
+                            const sourceCellPosition: Position = game$.turn.draggingPieceSourcePosition.peek();
 
                             // The end position refers to the exact position where the pointer (mouse or finger) when finished dragging
                             const endPosition: Position = e.target.getPosition();
@@ -113,7 +112,7 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
                                 gridLayerRef,
                             });
                             CellUIHelper.setCursorStyle(e.target, "grab");
-                            cells$.setCurrentDraggingPieceSourcePosition(undefined);
+                            game$.stopDraggingPiece();
                         }}
                     />
                 </Portal>

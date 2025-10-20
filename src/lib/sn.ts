@@ -7,25 +7,6 @@ import { PieceHelper } from "@/models/helpers/piece-helper";
 import { nanoid } from 'nanoid';
 
 
-// const boardGridNotationText = "lR6rR/r8R/r8R/r8R/r8R/r8R/r8R/rR6rL";
-
-// TODO: what's this used for?
-// const SPECIAL_SQUARES: { location_an: string, type: SquareType }[] = [
-//     {
-//         location_an: "a8",
-//         type: 'laser-red'
-//     },
-//     {
-//         location_an: "j1",
-//         type: 'laser-blue'
-//     },
-//     {
-//         location_an: "j8",
-//         type: 'laser-blue'
-//     }
-// ];
-
-
 /**
  * Class representing Setup Notation.
  */

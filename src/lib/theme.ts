@@ -1,4 +1,4 @@
-type ValueByPlayer<ValueType> = {
+type ValueByPlayerType<ValueType> = {
   playerOne: ValueType;
   playerTwo: ValueType;
 };
@@ -6,22 +6,26 @@ type ValueByPlayer<ValueType> = {
 type ThemeConfig = {
   colors: {
     pieces: {
-      primary: ValueByPlayer<string>;
-      secondary: ValueByPlayer<string>;
-      accent: ValueByPlayer<string>;
-      stroke: ValueByPlayer<string>;
-      mirror: ValueByPlayer<string>;
-      shield: ValueByPlayer<string>;
+      primary: ValueByPlayerType<string>;
+      secondary: ValueByPlayerType<string>;
+      accent: ValueByPlayerType<string>;
+      stroke: ValueByPlayerType<string>;
+      mirror: ValueByPlayerType<string>;
+      shield: ValueByPlayerType<string>;
     };
   };
 };
 
-type Themes = {
-  [name: string]: ThemeConfig;
-};
+type Themes = Record<ThemeName, ThemeConfig>
+
+export const themeNames = [
+  'classic'
+] as const;
+
+export type ThemeName = typeof themeNames[number]
 
 export const themes: Themes = {
-  classic: {
+  'classic': {
     colors: {
       pieces: {
         primary: {

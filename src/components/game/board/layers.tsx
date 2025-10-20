@@ -4,10 +4,11 @@ import { Fragment, useEffect, useRef } from "react";
 import { Laser } from "./laser";
 import type Konva from "konva";
 import type { CellGrid } from "@/models/cell";
-import { game$, selectedPieceRotationEvent } from "@/lib/store/game$";
+import { game$ } from "@/lib/store/game$";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import { Cell } from "./cell";
+import { rotationEvent } from "@/lib/store/events/rotation-event";
 
 type BoardLayerProps = {
 	cellGrid: CellGrid,
@@ -27,7 +28,7 @@ export const Layers = (
 	const gridLayerRef = useRef<Konva.Layer>(null!);
 
 	useEffect(() => {
-		const disposeOnSelectedPieceRotateLeftEvent = selectedPieceRotationEvent.left.on(() => {
+		const disposeLeftEventRotation = rotationEvent.left.on(() => {
 			const currentTurn = game$.turn.peek();
 			if (currentTurn.phase !== 'moving' || !currentTurn.selectedPieceLocation) {
 				return;
@@ -56,7 +57,7 @@ export const Layers = (
 			});
 		});
 
-		const disposeOnSelectedPieceRotateRightEvent = selectedPieceRotationEvent.right.on(() => {
+		const disposeRightEventRotation = rotationEvent.right.on(() => {
 			const currentTurn = game$.turn.peek();
 			if (currentTurn.phase !== 'moving' || !currentTurn.selectedPieceLocation) {
 				return;
@@ -86,8 +87,8 @@ export const Layers = (
 		});
 
 		return () => {
-			disposeOnSelectedPieceRotateLeftEvent();
-			disposeOnSelectedPieceRotateRightEvent();
+			disposeLeftEventRotation();
+			disposeRightEventRotation();
 		}
 	}, []);
 

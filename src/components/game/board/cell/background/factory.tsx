@@ -8,8 +8,8 @@ const cellTypeBackgroundComponentMap: Record<Cell["type"], JSX.ElementType> = {
     'reserved-player-one': ReservedPlayerOne,
     'reserved-player-two': ReservedPlayerTwo,
     'normal': null,
-    'laser-blue': null,
-    'laser-red': null,
+    'laser-player-one': null,
+    'laser-player-two': null,
 } as const;
 
 type FactoryProps = CellBackgroundProps;
