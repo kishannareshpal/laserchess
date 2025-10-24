@@ -5,7 +5,7 @@ import type { Position } from "@/models/position";
 import { game$ } from "@/lib/store/game$";
 import Konva from "konva";
 import { useEffect, useRef, useState } from "react";
-import { Group, Line, Rect } from "react-konva";
+import { Circle, Group, Line, Rect } from "react-konva";
 import type { GridLayerRef } from "@/types";
 import { PointHelper } from "@/models/helpers/point-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
@@ -43,7 +43,9 @@ export const Laser = (
     });
 
     const laserLineRef = useRef<Konva.Line>(null!);
+    const laserHeadRef = useRef<Konva.Circle>(null!);
     const altLaserLineRef = useRef<Konva.Line>(null!);
+    const trailLaserLineRef = useRef<Konva.Line>(null!);
 
     useEffect(() => {
         game$.turn.phase.onChange(({ value: phase }) => {
@@ -92,19 +94,19 @@ export const Laser = (
             return;
         }
 
+        // spring physics constants
+        const stiffness = 0.025; // how fast it moves (like spring constant)
+        const damping = 3.2; // how quickly it settles
+        const points = laserPathInfo.pathPoints;
+
+        // Simulated spring easing (damped harmonic motion)
+        // value oscillates like a spring and gradually settles to 1
+        const springEase = (time: number) => {
+            return 1 - Math.exp(-damping * time) * Math.cos(stiffness * time * 20);
+        };
+
         const laserLineAnimation = new Konva.Animation((frame) => {
             const time = frame.time; // milliseconds since animation started
-            const points = laserPathInfo.pathPoints;
-
-            // spring physics constants
-            const stiffness = 0.015; // how fast it moves (like spring constant)
-            const damping = 4; // how quickly it settles
-
-            // Simulated spring easing (damped harmonic motion)
-            // value oscillates like a spring and gradually settles to 1
-            const springEase = (time: number) => {
-                return 1 - Math.exp(-damping * time) * Math.cos(stiffness * time * 20);
-            };
 
             // total path length
             let totalLength = 0;
@@ -115,7 +117,7 @@ export const Laser = (
             }
 
             // Map time to progress (0–1) using spring easing
-            const durationInMs = 2000; // ms total animation duration
+            const durationInMs = 5000; // ms total animation duration
             const rawProgress = Math.min(time / durationInMs, 1);
             const springProgress = springEase(rawProgress * 10); // amplify spring motion
 
@@ -148,11 +150,44 @@ export const Laser = (
             laserLineRef.current.points(PointHelper.flatten(drawingPoints));
             altLaserLineRef.current.points(PointHelper.flatten(drawingPoints));
 
+            // Trail
+            // Total trail distance in pixels
+            const trailDistance = cellLength;
+
+            // Walk backward from the end to collect points until reaching the trail length
+            let remainingTrailDistance = trailDistance;
+            const trailPoints = [drawingPoints[drawingPoints.length - 1]];
+            for (let i = drawingPoints.length - 1; i > 0 && remainingTrailDistance > 0; i--) {
+                const p1 = drawingPoints[i];
+                const p0 = drawingPoints[i - 1];
+                const dx = p1.x - p0.x;
+                const dy = p1.y - p0.y;
+                const segLen = Math.sqrt(dx * dx + dy * dy);
+
+                if (segLen >= remainingTrailDistance) {
+                    // interpolate the last partial point
+                    const ratio = remainingTrailDistance / segLen;
+                    trailPoints.unshift({
+                        x: p1.x - dx * ratio,
+                        y: p1.y - dy * ratio,
+                    });
+                    break;
+                } else {
+                    trailPoints.unshift(p0);
+                    remainingTrailDistance -= segLen;
+                }
+            }
+
+            trailLaserLineRef.current.points(PointHelper.flatten(trailPoints));
+
+            // Head point
+            const headPoint = drawingPoints[drawingPoints.length - 1];
+            laserHeadRef.current.position(headPoint)
+
             // Stop the animation when finished
             if (rawProgress >= 1) {
                 laserLineAnimation.stop();
             }
-
         }, laserLineRef.current.getLayer());
 
         laserLineAnimation.start();
@@ -160,7 +195,7 @@ export const Laser = (
         return () => {
             laserLineAnimation.stop();
         };
-    }, [laserPathInfo]);
+    }, [cellLength, laserPathInfo]);
 
     if (!laserPathInfo.flattenedPathPoints.length) {
         return null;
@@ -179,19 +214,38 @@ export const Laser = (
                 strokeWidth={8}
                 shadowEnabled={true}
                 shadowColor="#ff0000"
-                shadowBlur={8}
+                shadowBlur={12}
                 shadowOffsetY={0}
                 shadowOffsetX={0}
                 lineCap="round"
-                lineJoin="bevel"
+                lineJoin="round"
                 listening={false}
             />
 
             <Line
                 ref={altLaserLineRef}
                 stroke="white"
-                lineJoin="bevel"
+                lineJoin="round"
                 lineCap="round"
+                listening={false}
+                strokeWidth={2}
+            />
+
+            <Circle
+                ref={laserHeadRef}
+                radius={6}
+                fill="red"
+                shadowColor="red"
+                shadowBlur={20}
+                shadowOpacity={0.9}
+            />
+
+            <Line
+                ref={trailLaserLineRef}
+                stroke="red"
+                lineJoin="round"
+                lineCap="round"
+                opacity={0.8}
                 listening={false}
                 strokeWidth={2}
             />

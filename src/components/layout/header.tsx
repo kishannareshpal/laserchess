@@ -1,15 +1,29 @@
-import logo from "@/assets/logo-light.png"
+import logo from "@/assets/logo.svg"
+import { useTheme } from "@/lib/hooks/use-theme"
+import { themeNames } from "@/lib/themes/theme"
 
 export const Header = () => {
+    const theme = useTheme();
+
     return (
-        <header className="flex justify-start border-b-1 py-2 pb-6 px-2 border-white/25">
-            <nav className="flex flex-row rounded-lg gap-4 items-center justify-center">
-                <a href="#">
-                    <img src={logo} alt="laser-chess.com logo" className="h-8" />
-                </a>
-                <p className="font-black text-lg">
-                    Laser chess
-                </p>
+        <header className="flex justify-start py-2 pb-6 px-2" style={{ color: theme.colors.page.text }}>
+            <nav className="flex flex-row flex-1 gap-3 items-center justify-between">
+                <div className="flex flex-row gap-4 items-center justify-center">
+                    <a href="#">
+                        <img src={logo} alt="laser-chess.com logo" className="h-8" />
+                    </a>
+                    <p className="font-black text-lg">
+                        Laser chess
+                    </p>
+                </div>
+
+                <div className="flex">
+                    <select>
+                        {themeNames.map((themeName) => (
+                            <option value={themeName}>{themeName}</option>
+                        ))}
+                    </select>
+                </div>
             </nav>
         </header>
     )

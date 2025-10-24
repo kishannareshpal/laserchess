@@ -16,8 +16,8 @@ export const Game = () => {
     return (
         <div className="flex flex-col w-full gap-4">
             <div ref={boardContainerRef} className="flex flex-1 flex-col">
-                <div className="inline-flex flex-col gap-4 self-center p-2">
-                    <div className="flex">
+                <div className="inline-flex flex-col gap-2 self-center p-2">
+                    <div className="flex justify-between items-center">
                         <PlayerDetails playerType="player-two" />
                     </div>
 

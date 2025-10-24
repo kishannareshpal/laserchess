@@ -2,6 +2,7 @@ import { Circle, Group, Line, Shape } from "react-konva";
 import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 type KingProps = PieceProps;
 
@@ -15,6 +16,8 @@ export const King = ({
   onDragStart,
   onDragEnd,
 }: KingProps) => {
+  const theme = useTheme();
+
   const offset = length / 2;
   const pixelLength = length / 8;
 
@@ -57,15 +60,15 @@ export const King = ({
           length - pixelLength - pixelLength / 2,
           length - pixelLength,
         ]}
-        stroke="black"
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         lineCap="round"
         lineJoin="round"
       />
 
       <Shape
-        fill="white"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         lineJoin="round"
         lineCap="round"
@@ -100,8 +103,8 @@ export const King = ({
       <Circle
         x={pixelLength}
         y={pixelLength * 3}
-        fill="lightgrey"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         strokeEnabled
         radius={pixelLength / 2}
@@ -110,8 +113,8 @@ export const King = ({
       <Circle
         x={length / 2}
         y={pixelLength}
-        fill="lightgrey"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         radius={pixelLength / 2}
       />
@@ -119,8 +122,8 @@ export const King = ({
       <Circle
         x={length - pixelLength}
         y={pixelLength * 3}
-        fill="lightgrey"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         radius={pixelLength / 2}
       />

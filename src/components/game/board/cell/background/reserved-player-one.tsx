@@ -1,7 +1,10 @@
 import { Shape } from "react-konva";
 import type { CellBackgroundProps } from "./types";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 export const ReservedPlayerOne = ({ position, length }: CellBackgroundProps) => {
+    const theme = useTheme();
+
     const pixelLength = length / 8;
 
     return (
@@ -10,7 +13,7 @@ export const ReservedPlayerOne = ({ position, length }: CellBackgroundProps) => 
             y={position.y}
             width={length}
             height={length}
-            stroke="black"
+            stroke={theme.colors.cell.reserved.stroke["player-one"]}
             strokeWidth={1}
             sceneFunc={(context, shape) => {
                 context.beginPath();

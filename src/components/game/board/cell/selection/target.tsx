@@ -6,6 +6,7 @@ import { MovementHelper } from "@/models/helpers/movement-helper";
 import targetReplaceIconSvg from '@/assets/target-replace-icon.svg'
 import Konva from "konva";
 import { useEffect, useRef } from "react";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 type TargetProps = {
     movement: Movement,
@@ -20,6 +21,8 @@ export const Target = (
         onPress
     }: TargetProps
 ) => {
+    const theme = useTheme();
+
     const [targetReplaceIconImage] = useImage(targetReplaceIconSvg);
     const targetReplaceIconImageRef = useRef<Konva.Image>(null);
 
@@ -54,7 +57,7 @@ export const Target = (
                 width={cellLength}
                 height={cellLength}
                 draggable={false}
-                fill="white"
+                fill={theme.colors.cell.selection.target.background}
                 opacity={0.5}
                 lineCap="round"
                 lineJoin="round"
@@ -63,7 +66,7 @@ export const Target = (
             <Circle
                 x={position.x + cellLength / 2}
                 y={position.y + cellLength / 2}
-                fill="black"
+                fill={theme.colors.cell.selection.target.accent}
                 opacity={0.75}
                 strokeWidth={0}
                 strokeEnabled={false}

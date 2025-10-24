@@ -55,7 +55,7 @@ export const PossibleTargets = observer(({
         <Group id="pt-group">
             {possibleMovements.map((movement) => (
                 <Target
-                    key={`mt-${MovementHelper.toAN(movement)}`}
+                    key={`t-${MovementHelper.toAN(movement)}`}
                     cellLength={cellLength}
                     movement={movement}
                     onPress={() => handlePress(movement)}

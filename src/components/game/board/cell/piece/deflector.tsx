@@ -2,6 +2,7 @@ import { Group, Shape } from "react-konva";
 import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 type DeflectorProps = PieceProps;
 
@@ -15,6 +16,8 @@ export const Deflector = ({
   onDragStart,
   onDragEnd,
 }: DeflectorProps) => {
+  const theme = useTheme();
+
   const offset = length / 2;
   const pixelLength = length / 8;
 
@@ -51,8 +54,8 @@ export const Deflector = ({
       onDragEnd={onDragEnd}
     >
       <Shape
-        fill="white"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         lineJoin="round"
         lineCap="round"
@@ -70,8 +73,8 @@ export const Deflector = ({
       />
 
       <Shape
-        fill="lightgrey"
-        stroke="black"
+        fill={theme.colors.piece.mirror[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         lineJoin="round"
         lineCap="round"

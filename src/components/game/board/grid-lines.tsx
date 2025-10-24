@@ -1,6 +1,7 @@
 import { Shape } from "react-konva";
 import { CELL_STROKE_WIDTH, COLUMN_COUNT, ROW_COUNT } from "@/constants";
 import type { Size } from "@/models/size";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 
 type GridLinesProps = {
@@ -12,12 +13,14 @@ export const GridLines = ({
     canvasSize,
     cellLength,
 }: GridLinesProps) => {
+    const theme = useTheme();
+
     return (
         <Shape
             width={canvasSize.width}
             height={canvasSize.height}
             strokeWidth={CELL_STROKE_WIDTH}
-            stroke="black"
+            stroke={theme.colors.board.divider}
             sceneFunc={(context, shape) => {
                 context.beginPath();
 

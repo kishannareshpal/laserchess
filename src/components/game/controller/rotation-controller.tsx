@@ -3,14 +3,20 @@ import { RotateCcwIcon, RotateCwIcon } from 'lucide-react';
 import { RotateButton } from './rotate-button';
 import { observer, use$ } from '@legendapp/state/react';
 import { rotationEvent } from '@/lib/store/events/rotation-event';
+import { useTheme } from '@/lib/hooks/use-theme';
 
 export const RotationController = observer(() => {
     const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
+    const theme = useTheme();
 
     const disabled = !selectedPieceLocation;
 
     return (
-        <div className="flex border-0 bg-black/25 border-black/75 p-1 gap-4 duration-300 rounded-full aria-disabled:opacity-25" aria-disabled={disabled}>
+        <div
+            className="flex border-0 p-1 gap-4 duration-300 rounded-full aria-disabled:opacity-25"
+            style={{ background: theme.colors.controls.surface, color: theme.colors.controls.text }}
+            aria-disabled={disabled}
+        >
             <RotateButton
                 disabled={disabled}
                 onClick={rotationEvent.left.fire}

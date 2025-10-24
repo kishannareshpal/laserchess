@@ -1,5 +1,5 @@
 import { observable } from "@legendapp/state";
-import type { ThemeName } from "../theme";
+import type { ThemeName } from "../themes/theme";
 
 type SettingsState = {
     theme: ThemeName

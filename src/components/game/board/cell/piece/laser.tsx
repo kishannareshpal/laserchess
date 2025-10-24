@@ -1,6 +1,7 @@
 import { Circle, Group, Rect } from "react-konva";
 import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
+import { useTheme } from "@/lib/hooks/use-theme";
 
 type LaserProps = PieceProps;
 
@@ -12,6 +13,8 @@ export const Laser = ({
   enabled,
   onSelect,
 }: LaserProps) => {
+  const theme = useTheme();
+
   const offset = length / 2;
   const pixelLength = length / 8;
 
@@ -45,8 +48,8 @@ export const Laser = ({
       <Circle
         x={length / 2}
         y={length / 2}
-        fill="white"
-        stroke="black"
+        fill={theme.colors.piece.primary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         radius={length / 2 - pixelLength}
       />
@@ -56,8 +59,8 @@ export const Laser = ({
         y={pixelLength / 2}
         width={pixelLength * 2}
         height={length / 2}
-        fill="lightgrey"
-        stroke="black"
+        fill={theme.colors.piece.secondary[piece.playerType]}
+        stroke={theme.colors.piece.stroke[piece.playerType]}
         strokeWidth={4}
         cornerRadius={length}
       />
@@ -66,7 +69,7 @@ export const Laser = ({
         x={length / 2}
         y={pixelLength}
         width={pixelLength / 2}
-        fill="black"
+        fill={theme.colors.piece.mirror[piece.playerType]}
       />
     </Group>
   );

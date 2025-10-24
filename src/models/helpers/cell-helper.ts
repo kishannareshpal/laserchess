@@ -26,7 +26,7 @@ export class CellHelper {
     static getPlayerLaserCell(playerType: PlayerType, cellGrid: CellGrid): Cell | null {
         let playerLaserCellLocation: Location;
 
-        if (playerType === 'player-two') {
+        if (playerType === 'player-one') {
             playerLaserCellLocation = { colIndex: 9, rowIndex: 7 }
         } else {
             playerLaserCellLocation = { colIndex: 0, rowIndex: 0 }

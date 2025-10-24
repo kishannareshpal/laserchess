@@ -1,6 +1,5 @@
 import type { Location } from "./location";
 import type { Point } from "./point";
-import type { Position } from "./position";
 
 /**
  * @deprecated - no need, cuz can be inferred from the path this segment belongs to

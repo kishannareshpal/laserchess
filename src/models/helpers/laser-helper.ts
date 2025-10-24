@@ -55,7 +55,6 @@ export class LaserHelper {
                 if (!CellHelper.hasPiece(cellUnderCurrentSegment)) {
                     // No piece at this cell, beam continues through the same direction
                     currentSegmentEffect = 'none';
-                    // currentSegmentLaserDirection = null;
 
                 } else {
                     // Piece was found, figure out it's effect on the beam
@@ -79,55 +78,46 @@ export class LaserHelper {
     }
 
     static convertLaserPathToPoints(laserPath: LaserPath, cellLength: number): LaserPathPoints {
-        const halfOfCellLength = cellLength / 2;
-        const points = laserPath.map((segment, index) => {
-            const isEdge = index === 0 || index === (laserPath.length - 1);
-            const segmentPosition = PositionHelper.fromLocation(segment.location, cellLength, { centered: isEdge });
+        const halfCell = cellLength / 2;
+
+        return laserPath.map((segment, index) => {
+            const isFirst = index === 0;
+            const isLast = index === laserPath.length - 1;
+            const isEdge = isFirst || isLast;
+
+            // Use PositionHelper for endpoints
             if (isEdge) {
-                return segmentPosition
+                return PositionHelper.fromLocation(segment.location, cellLength, { centered: true });
             }
 
             const { rowIndex, colIndex } = segment.location;
+            const baseX = colIndex * cellLength;
+            const baseY = rowIndex * cellLength;
 
-            let posX = 0;
-            let posY = 0;
+            let x = baseX + halfCell;
+            let y = baseY + halfCell;
+
+            // Adjust position depending on direction and effect
             switch (segment.direction) {
                 case 'top':
-                    posX = colIndex * cellLength + halfOfCellLength;
-                    posY = segment.effect === 'deflect'
-                        ? rowIndex * cellLength + halfOfCellLength
-                        : rowIndex * cellLength;
+                    y = segment.effect === 'deflect' ? baseY + halfCell : baseY;
                     break;
 
                 case 'bottom':
-                    posX = colIndex * cellLength + halfOfCellLength;
-                    posY = segment.effect === 'deflect'
-                        ? rowIndex * cellLength + halfOfCellLength
-                        : rowIndex * cellLength + cellLength;
+                    y = segment.effect === 'deflect' ? baseY + halfCell : baseY + cellLength;
                     break;
 
                 case 'left':
-                    posX = segment.effect === 'deflect'
-                        ? colIndex * cellLength + halfOfCellLength
-                        : colIndex * cellLength;
-                    posY = rowIndex * cellLength + halfOfCellLength;
+                    x = segment.effect === 'deflect' ? baseX + halfCell : baseX;
                     break;
 
                 case 'right':
-                    posX = segment.effect === 'deflect'
-                        ? colIndex * cellLength + halfOfCellLength
-                        : colIndex * cellLength + cellLength;
-                    posY = rowIndex * cellLength + halfOfCellLength;
+                    x = segment.effect === 'deflect' ? baseX + halfCell : baseX + cellLength;
                     break;
             }
 
-            return {
-                x: posX,
-                y: posY
-            };
+            return { x, y };
         });
-
-        return points;
     }
 
     static computeFlattenedLaserPathPoints(

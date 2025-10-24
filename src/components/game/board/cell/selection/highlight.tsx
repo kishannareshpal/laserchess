@@ -4,6 +4,7 @@ import { game$ } from "@/lib/store/game$"
 import { observer } from "@legendapp/state/react"
 import { use$ } from "@legendapp/state/react"
 import { Rect } from "react-konva"
+import { useTheme } from "@/lib/hooks/use-theme"
 
 type HighlightProps = {
     cellLength: number
@@ -13,6 +14,7 @@ export const Highlight = observer(({
     cellLength
 }: HighlightProps) => {
     const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
+    const theme = useTheme();
 
     if (!selectedPieceLocation) {
         return null;
@@ -27,7 +29,7 @@ export const Highlight = observer(({
             y={position.y}
             width={cellLength}
             height={cellLength}
-            stroke="white"
+            stroke={theme.colors.cell.selection.highlight}
             listening={false}
             strokeWidth={CELL_HIGHLIGHT_STROKE_WIDTH}
             lineCap="round"

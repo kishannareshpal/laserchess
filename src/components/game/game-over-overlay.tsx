@@ -13,7 +13,7 @@ export const GameOverOverlay = observer(() => {
     const winnerPlayerName: string = PlayerHelper.humanize(winner);
 
     const handleRestart = (): void => {
-        game$.startGame(true);
+        //!
     }
 
     return (

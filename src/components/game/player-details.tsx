@@ -5,12 +5,15 @@ import { observer, use$ } from "@legendapp/state/react"
 import { UserIcon } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { animate, JSAnimation, splitText, stagger } from "animejs";
+import { useTheme } from "@/lib/hooks/use-theme"
 
 export type PlayerDetailsProps = {
     playerType: PlayerType
 }
 
 export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
+    const theme = useTheme();
+
     const turnPlayer = use$(game$.turn.player);
 
     const playerName = PlayerHelper.humanize(playerType);
@@ -49,7 +52,7 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
     }, [turnPlayer]);
 
     return (
-        <div className="flex justify-center items-center gap-2 rounded-lg">
+        <div className="flex justify-center items-center gap-2 rounded-lg" style={{ color: theme.colors.page.text }}>
             <UserIcon />
             <div className="flex flex-col relative justify-center">
                 {/*
@@ -64,8 +67,8 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
                 </div>
 
                 <div ref={containerRef} style={{ opacity: isPlayerTurn ? 1 : 0 }}>
-                    <p className="flex">{playerName}</p>
-                    <p ref={turnIndicatorTextRef} className="text-sm text-white/75">
+                    <p className="flex font-bold">{playerName}</p>
+                    <p ref={turnIndicatorTextRef} className="text-sm" style={{ opacity: .75 }}>
                         Your turn
                     </p>
                 </div>
