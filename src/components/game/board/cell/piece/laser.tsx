@@ -2,6 +2,7 @@ import { Circle, Group, Rect } from "react-konva";
 import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { useTheme } from "@/lib/hooks/use-theme";
+import { PIECE_STROKE_WIDTH } from "@/constants";
 
 type LaserProps = PieceProps;
 
@@ -50,7 +51,7 @@ export const Laser = ({
         y={length / 2}
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
         radius={length / 2 - pixelLength}
       />
 
@@ -61,7 +62,7 @@ export const Laser = ({
         height={length / 2}
         fill={theme.colors.piece.secondary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
         cornerRadius={length}
       />
 

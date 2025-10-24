@@ -3,6 +3,7 @@ import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
 import { useTheme } from "@/lib/hooks/use-theme";
+import { PIECE_STROKE_WIDTH } from "@/constants";
 
 type KingProps = PieceProps;
 
@@ -61,7 +62,8 @@ export const King = ({
           length - pixelLength,
         ]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
+        strokeScaleEnabled
         lineCap="round"
         lineJoin="round"
       />
@@ -69,7 +71,8 @@ export const King = ({
       <Shape
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
+        strokeScaleEnabled
         lineJoin="round"
         lineCap="round"
         sceneFunc={(context, shape) => {
@@ -105,8 +108,9 @@ export const King = ({
         y={pixelLength * 3}
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
         strokeEnabled
+        strokeScaleEnabled
         radius={pixelLength / 2}
       />
 
@@ -115,7 +119,8 @@ export const King = ({
         y={pixelLength}
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
+        strokeScaleEnabled
         radius={pixelLength / 2}
       />
 
@@ -124,7 +129,8 @@ export const King = ({
         y={pixelLength * 3}
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
+        strokeScaleEnabled
         radius={pixelLength / 2}
       />
     </Group>

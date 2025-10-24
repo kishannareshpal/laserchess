@@ -3,6 +3,7 @@ import type { PieceProps } from "./types";
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
 import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
 import { useTheme } from "@/lib/hooks/use-theme";
+import { PIECE_STROKE_WIDTH } from "@/constants";
 
 type DefenderProps = PieceProps;
 
@@ -58,7 +59,7 @@ export const Defender = ({
         y={pixelLength * 2}
         fill={theme.colors.piece.primary[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
         lineCap="round"
         lineJoin="round"
         width={length - pixelLength * 2}
@@ -68,7 +69,7 @@ export const Defender = ({
       <Shape
         fill={theme.colors.piece.shield[piece.playerType]}
         stroke={theme.colors.piece.stroke[piece.playerType]}
-        strokeWidth={4}
+        strokeWidth={PIECE_STROKE_WIDTH}
         lineJoin="round"
         lineCap="round"
         sceneFunc={(context, shape) => {
