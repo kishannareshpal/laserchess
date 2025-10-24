@@ -18,7 +18,9 @@ export const Game = () => {
             <div ref={boardContainerRef} className="flex flex-1 flex-col">
                 <div className="inline-flex flex-col gap-2 self-center p-2">
                     <div className="flex justify-between items-center">
-                        <PlayerDetails playerType="player-two" />
+                        <div className="flex">
+                            <PlayerDetails playerType="player-two" />
+                        </div>
                     </div>
 
                     <div className="flex rounded-3xl relative">
@@ -39,7 +41,6 @@ export const Game = () => {
 
                         <div className="flex flex-col items-end">
                             <RotationController />
-
                         </div>
                     </div>
                 </div>
