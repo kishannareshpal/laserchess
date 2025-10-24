@@ -5,28 +5,7 @@ export type PlayerType = 'player-one' | 'player-two';
 
 export type CellType = 'normal' | 'reserved-player-one' | 'reserved-player-two' | 'laser-player-two' | 'laser-player-one';
 
-/**
- * @deprecated
- */
-export type SquareType = CellType;
-
 export type GameStatus = 'idle' | 'playing' | 'paused' | 'over';
-
-/**
- * @deprecated
- */
-export type LaserActionType = 'kill' | 'deflect' | 'nothing';
-
-/**
- * @deprecated
- */
-export type LaserDirection = 'top' | 'right' | 'bottom' | 'left';
-
-/**
- * @deprecated
- */
-export type LaserEvent = 'start' | 'central' | 'end';
-
 
 export type KingPieceType = 'k';
 export type DefenderPieceType = 'd';

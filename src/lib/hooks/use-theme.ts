@@ -3,7 +3,7 @@ import { settings$ } from "../store/settings$"
 import { themes } from "../themes/theme";
 
 export const useTheme = () => {
-    const selectedTheme = use$(settings$.theme);
+    const selectedTheme = use$(() => settings$.theme.get());
 
     return themes[selectedTheme];
 }

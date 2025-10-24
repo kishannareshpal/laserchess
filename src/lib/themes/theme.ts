@@ -10,5 +10,5 @@ export const themeNames = [
 export type ThemeName = typeof themeNames[number]
 
 export const themes: Themes = {
-  'classic': classicTheme,
+  'classic': classicTheme
 };
