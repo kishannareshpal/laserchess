@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope&display=swap");
+@import "tailwindcss";
+
 * {
-    font-family: "IBM Plex Sans", sans-serif !important;
+    font-family: 'Manrope', Times, serif, sans-serif !important;
 }
 
 h1,
@@ -12,7 +15,5 @@ h6 {
 }
 
 body {
-    /* background-color: #1c1d21; #ffe8d6 */
-    background-color: #ffefe2;
     margin: 0;
 }

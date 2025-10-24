@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="clip-blue-switch">
+      <rect width="128" height="128"/>
+    </clipPath>
+  </defs>
+  <g id="blue-switch" clip-path="url(#clip-blue-switch)">
+    <g id="Piece_Background" data-name="Piece Background" transform="translate(4 4)">
+      <path id="Piece_Background-2" data-name="Piece Background" d="M18.151,0h83.7A18.39,18.39,0,0,1,120,18.621v82.759A18.39,18.39,0,0,1,101.849,120h-83.7A18.39,18.39,0,0,1,0,101.379V18.621A18.39,18.39,0,0,1,18.151,0Z" fill="rgba(70,70,73,0.94)"/>
+    </g>
+    <g id="P" transform="translate(7.479 7.479)" style="isolation: isolate">
+      <path id="Normal" d="M0,0,78.524,78.524Z" transform="translate(17.259 17.259)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="18"/>
+      <path id="Normal-2" data-name="Normal" d="M0,0,78.524,78.524Z" transform="translate(17.259 17.259)" fill="none" stroke="#1376f8" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+    </g>
+  </g>
+</svg>
