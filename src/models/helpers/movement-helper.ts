@@ -161,12 +161,12 @@ export class MovementHelper {
         }
 
         // Ensure other player's piece isn't being moved to a reserved cell
-        if (sourceCell.piece.playerType !== 'player-two' && targetCell.type === 'reserved-player-one') {
+        if (targetCell.type === 'reserved-player-one' && sourceCell.piece.playerType !== 'player-one') {
             // Cannot move a piece that's not blue player's (e.g. red player's piece) to a cell reserved for blue player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }
 
-        if (sourceCell.piece.playerType !== 'player-one' && targetCell.type === 'reserved-player-two') {
+        if (targetCell.type === 'reserved-player-two' && sourceCell.piece.playerType !== 'player-two') {
             // Cannot move a piece that's not red player's (e.g. blue player's piece) to a cell reserved for red player's pieces
             return { type: 'invalid', sourceCellLocation: sourceCell.location, targetCellLocation: targetCell.location }
         }
