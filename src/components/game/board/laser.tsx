@@ -48,6 +48,7 @@ export const Laser = (
     const trailLaserLineRef = useRef<Konva.Line>(null!);
 
     useEffect(() => {
+
         game$.turn.phase.onChange(({ value: phase }) => {
             if (phase === 'firing') {
                 const laserPath = game$.turn.laserPath.peek();

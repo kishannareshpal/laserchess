@@ -80,39 +80,38 @@ export class LaserHelper {
     static convertLaserPathToPoints(laserPath: LaserPath, cellLength: number): LaserPathPoints {
         const halfCell = cellLength / 2;
 
+        console.log(laserPath);
+
         return laserPath.map((segment, index) => {
-            const isFirst = index === 0;
+            // const isFirst = index === 0;
             const isLast = index === laserPath.length - 1;
-            const isEdge = isFirst || isLast;
 
-            // Use PositionHelper for endpoints
-            if (isEdge) {
-                return PositionHelper.fromLocation(segment.location, cellLength, { centered: true });
+            const cellMiddle = PositionHelper.fromLocation(segment.location, cellLength, { centered: true });
+
+            let x = cellMiddle.x;
+            let y = cellMiddle.y;
+
+            if (isLast && segment.effect === 'kill') {
+                // If killing, stay centered
+                return { x, y };
             }
-
-            const { rowIndex, colIndex } = segment.location;
-            const baseX = colIndex * cellLength;
-            const baseY = rowIndex * cellLength;
-
-            let x = baseX + halfCell;
-            let y = baseY + halfCell;
 
             // Adjust position depending on direction and effect
             switch (segment.direction) {
                 case 'top':
-                    y = segment.effect === 'deflect' ? baseY + halfCell : baseY;
+                    y = segment.effect === 'deflect' ? cellMiddle.y : cellMiddle.y - halfCell / 2;
                     break;
 
                 case 'bottom':
-                    y = segment.effect === 'deflect' ? baseY + halfCell : baseY + cellLength;
+                    y = segment.effect === 'deflect' ? cellMiddle.y : cellMiddle.y + halfCell / 2;
                     break;
 
                 case 'left':
-                    x = segment.effect === 'deflect' ? baseX + halfCell : baseX;
+                    x = segment.effect === 'deflect' ? cellMiddle.x : cellMiddle.x - halfCell / 2;
                     break;
 
                 case 'right':
-                    x = segment.effect === 'deflect' ? baseX + halfCell : baseX + cellLength;
+                    x = segment.effect === 'deflect' ? cellMiddle.x : cellMiddle.x + halfCell / 2;
                     break;
             }
 
