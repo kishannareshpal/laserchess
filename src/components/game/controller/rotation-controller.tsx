@@ -1,12 +1,12 @@
 import { game$ } from '@/lib/store/game$';
 import { RotateCcwIcon, RotateCwIcon } from 'lucide-react';
 import { RotateButton } from './rotate-button';
-import { observer, use$ } from '@legendapp/state/react';
 import { rotationEvent } from '@/lib/store/events/rotation-event';
 import { useTheme } from '@/lib/hooks/use-theme';
+import { useValue } from '@legendapp/state/react';
 
-export const RotationController = observer(() => {
-    const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
+export const RotationController = () => {
+    const selectedPieceLocation = useValue(game$.turn.selectedPieceLocation);
     const theme = useTheme();
 
     const disabled = !selectedPieceLocation;
@@ -30,4 +30,4 @@ export const RotationController = observer(() => {
             />
         </div>
     )
-});
+};

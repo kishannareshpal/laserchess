@@ -1,6 +1,7 @@
 import logo from "@/assets/logo.svg"
 import { useTheme } from "@/lib/hooks/use-theme"
-import { themeNames } from "@/lib/themes/theme"
+import { settings$ } from "@/lib/store/settings$";
+import { themeNames, type ThemeName } from "@/lib/themes/theme"
 
 export const Header = () => {
     const theme = useTheme();
@@ -18,7 +19,7 @@ export const Header = () => {
                 </div>
 
                 <div className="flex">
-                    <select>
+                    <select onChange={(event) => settings$.setTheme(event.target.value as ThemeName)}>
                         {themeNames.map((themeName) => (
                             <option key={themeName} value={themeName}>{themeName}</option>
                         ))}

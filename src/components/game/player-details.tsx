@@ -1,20 +1,20 @@
 import { game$ } from "@/lib/store/game$"
 import { PlayerHelper } from "@/models/helpers/player-helper"
 import type { PlayerType } from "@/types"
-import { observer, use$ } from "@legendapp/state/react"
 import { UserIcon } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { animate, JSAnimation, splitText, stagger } from "animejs";
 import { useTheme } from "@/lib/hooks/use-theme"
+import { useValue } from "@legendapp/state/react"
 
 export type PlayerDetailsProps = {
     playerType: PlayerType
 }
 
-export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
+export const PlayerDetails = ({ playerType }: PlayerDetailsProps) => {
     const theme = useTheme();
 
-    const turnPlayer = use$(game$.turn.player);
+    const turnPlayer = useValue(game$.turn.player);
 
     const playerName = PlayerHelper.humanize(playerType);
     const isPlayerTurn = turnPlayer === playerType;
@@ -75,4 +75,4 @@ export const PlayerDetails = observer(({ playerType }: PlayerDetailsProps) => {
             </div>
         </div>
     )
-});
+};

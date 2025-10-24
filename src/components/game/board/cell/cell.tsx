@@ -2,7 +2,6 @@ import type { Cell as TCell } from "@/models/cell";
 import { PositionHelper } from "@/models/helpers/position-helper";
 import { game$ } from "@/lib/store/game$";
 import { LocationHelper } from "@/models/helpers/location-helper";
-import { use$ } from "@legendapp/state/react";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import type { Position } from "@/models/position";
 import type { GridLayerRef } from "@/types";
@@ -12,6 +11,7 @@ import { GridLayerHelper } from "@/models/helpers/grid-layer-helper";
 import { Group } from "react-konva";
 import { Portal } from "react-konva-utils";
 import { useState } from "react";
+import { useValue } from "@legendapp/state/react";
 
 type BoardPieceProps = {
     cell: TCell;
@@ -21,9 +21,9 @@ type BoardPieceProps = {
 
 export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
     const [isPieceBeingDragged, setIsPieceBeingDragged] = useState<boolean>(false);
+    const turn = useValue(game$.turn);
 
     const cellPosition = PositionHelper.fromLocation(cell.location, cellLength);
-    const turn = use$(game$.turn);
     const enabled = turn.phase === "moving" && cell.piece?.playerType === turn.player;
 
     const handleSelection = (): void => {

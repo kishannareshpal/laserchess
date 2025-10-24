@@ -3,11 +3,12 @@ import { Game } from "./components/game";
 import { Header } from "./components/layout/header";
 import { game$ } from "@/lib/store/game$";
 import { useTheme } from "./lib/hooks/use-theme";
+import { Footer } from "./components/layout/footer";
 
 export const App = () => {
+	const [ready, setReady] = useState(false);
 	const theme = useTheme();
 
-	const [ready, setReady] = useState(false);
 	useEffect(() => {
 		game$.startGame();
 		setReady(true);
@@ -28,7 +29,7 @@ export const App = () => {
 				</div>
 			) : null}
 
-			{/* <Footer /> */}
+			<Footer />
 		</div>
 	);
-}
+};

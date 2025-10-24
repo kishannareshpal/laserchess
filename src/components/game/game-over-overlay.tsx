@@ -1,10 +1,10 @@
 import { game$ } from "@/lib/store/game$"
 import { PlayerHelper } from "@/models/helpers/player-helper";
-import { observer, use$ } from "@legendapp/state/react"
+import { useValue } from "@legendapp/state/react"
 import { PartyPopperIcon } from "lucide-react"
 
-export const GameOverOverlay = observer(() => {
-    const winner = use$(game$.winner);
+export const GameOverOverlay = () => {
+    const winner = useValue(game$.winner);
 
     if (!winner) {
         return null;
@@ -30,4 +30,4 @@ export const GameOverOverlay = observer(() => {
             </button>
         </div>
     )
-})
+}

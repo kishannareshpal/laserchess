@@ -1,9 +1,9 @@
-import { use$ } from "@legendapp/state/react"
+import { useValue } from "@legendapp/state/react"
 import { settings$ } from "../store/settings$"
 import { themes } from "../themes/theme";
 
 export const useTheme = () => {
-    const selectedTheme = use$(() => settings$.theme.get());
+    const selectedTheme = useValue(settings$.theme);
 
     return themes[selectedTheme];
 }

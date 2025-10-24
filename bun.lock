@@ -4,7 +4,7 @@
     "": {
       "name": "laserchess-vite",
       "dependencies": {
-        "@legendapp/state": "^3.0.0-beta.34",
+        "@legendapp/state": "^3.0.0-beta.39",
         "@material-ui/core": "^4.12.4",
         "@material-ui/icons": "^4.11.3",
         "@reduxjs/toolkit": "^2.9.0",
@@ -177,7 +177,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@legendapp/state": ["@legendapp/state@3.0.0-beta.34", "", { "dependencies": { "use-sync-external-store": "^1.2.2" }, "peerDependencies": { "expo-sqlite": "^15.0.0" }, "optionalPeers": ["expo-sqlite"] }, "sha512-XWVKTeTMfQElgc8VewlSA87jxtdq89ewgAv9xF8QNzRjR8eEV+c0mQRq6vt5F7RtMkBwwr0b0Is/njUHUIZgOg=="],
+    "@legendapp/state": ["@legendapp/state@3.0.0-beta.39", "", { "dependencies": { "use-sync-external-store": "^1.2.2" }, "peerDependencies": { "expo-sqlite": "^15.0.0" }, "optionalPeers": ["expo-sqlite"] }, "sha512-VGpbXVTqMhykgpBm03ZGLEZZkLh5kwRpRM7V7nAZavDBBCp5dqL3uphFNUGLXF84fpfX3O8wxkzXuc80Z2jWKA=="],
 
     "@material-ui/core": ["@material-ui/core@4.12.4", "", { "dependencies": { "@babel/runtime": "^7.4.4", "@material-ui/styles": "^4.11.5", "@material-ui/system": "^4.12.2", "@material-ui/types": "5.1.0", "@material-ui/utils": "^4.11.3", "@types/react-transition-group": "^4.2.0", "clsx": "^1.0.4", "hoist-non-react-statics": "^3.3.2", "popper.js": "1.16.1-lts", "prop-types": "^15.7.2", "react-is": "^16.8.0 || ^17.0.0", "react-transition-group": "^4.4.0" }, "peerDependencies": { "@types/react": "^16.8.6 || ^17.0.0", "react": "^16.8.0 || ^17.0.0", "react-dom": "^16.8.0 || ^17.0.0" }, "optionalPeers": ["@types/react"] }, "sha512-tr7xekNlM9LjA6pagJmL8QCgZXaubWUwkJnoYcMKd4gw/t4XiyvnTkjdGrUVicyB2BsdaAv1tvow45bPM4sSwQ=="],
 

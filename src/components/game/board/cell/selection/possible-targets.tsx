@@ -1,7 +1,6 @@
 import { MovementHelper } from "@/models/helpers/movement-helper"
 import { game$ } from "@/lib/store/game$"
-import { observer } from "@legendapp/state/react"
-import { use$ } from "@legendapp/state/react"
+import { useValue } from "@legendapp/state/react"
 import { Group } from "react-konva"
 import type { Movement } from "@/models/movement"
 import type { GridLayerRef } from "@/types"
@@ -13,12 +12,12 @@ type PossibleTargetsProps = {
     gridLayerRef: GridLayerRef
 }
 
-export const PossibleTargets = observer(({
+export const PossibleTargets = ({
     cellLength,
     gridLayerRef
 }: PossibleTargetsProps) => {
-    const cellGrid = use$(game$.cellGrid);
-    const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
+    const cellGrid = useValue(game$.cellGrid);
+    const selectedPieceLocation = useValue(game$.turn.selectedPieceLocation);
 
     if (!selectedPieceLocation) {
         return null;
@@ -45,4 +44,4 @@ export const PossibleTargets = observer(({
             ))}
         </Group>
     )
-})
+}

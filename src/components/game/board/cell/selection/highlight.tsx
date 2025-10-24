@@ -1,8 +1,7 @@
 import { CELL_HIGHLIGHT_STROKE_WIDTH } from "@/constants"
 import { PositionHelper } from "@/models/helpers/position-helper"
 import { game$ } from "@/lib/store/game$"
-import { observer } from "@legendapp/state/react"
-import { use$ } from "@legendapp/state/react"
+import { useValue } from "@legendapp/state/react"
 import { Rect } from "react-konva"
 import { useTheme } from "@/lib/hooks/use-theme"
 
@@ -10,10 +9,10 @@ type HighlightProps = {
     cellLength: number
 }
 
-export const Highlight = observer(({
+export const Highlight = ({
     cellLength
 }: HighlightProps) => {
-    const selectedPieceLocation = use$(game$.turn.selectedPieceLocation);
+    const selectedPieceLocation = useValue(game$.turn.selectedPieceLocation);
     const theme = useTheme();
 
     if (!selectedPieceLocation) {
@@ -36,4 +35,4 @@ export const Highlight = observer(({
             lineJoin="round"
         />
     )
-})
+}

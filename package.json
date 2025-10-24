@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@legendapp/state": "^3.0.0-beta.34",
+    "@legendapp/state": "^3.0.0-beta.39",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@reduxjs/toolkit": "^2.9.0",
