@@ -1,10 +1,10 @@
-# Laser Chess
+# Laser chess
 
 [![Laser Chess Badge](https://img.shields.io/github/v/release/kishannareshpal/laserchess?color=ffefe2&include_prereleases&label=laser-chess.com&style=for-the-badge)](https://laser-chess.com)
 
-## About
+![Screenshot](./docs/images/screenshot.png)
 
-##### Status: `Work in progress`
+## About
 
 A board game made with JavaScript (with the help of ReactJS).
 
