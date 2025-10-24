@@ -10,6 +10,7 @@ import type { LaserPath } from "@/models/laser";
 import { LaserHelper } from "@/models/helpers/laser-helper";
 import { CellHelper } from "@/models/helpers/cell-helper";
 import type { Position } from "@/models/position";
+import { PlayerHelper } from "@/models/helpers/player-helper";
 
 /** 
  * The default board setup (ACE).
@@ -166,7 +167,7 @@ export const game$ = observable<GameStore>({
 
             if (killedCell.piece.type === 'k') {
                 // Game over: Killed a king piece - the player whose king got killed loses
-                const winner: PlayerType = killedCell.piece.playerType === 'player-two' ? 'player-one' : 'player-two';
+                const winner: PlayerType = PlayerHelper.opponentOf(killedCell.piece.playerType);
                 game$.assign({
                     status: 'over',
                     winner: winner

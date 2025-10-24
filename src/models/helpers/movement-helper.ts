@@ -6,6 +6,7 @@ import type { Movement } from "@/models/movement";
 import { CellHelper } from "./cell-helper";
 import { LocationHelper } from "./location-helper";
 import type { OrientationDegrees } from "@/types";
+import { produce } from 'immer';
 
 export class MovementHelper {
     static toAN(movement: Movement): string {
@@ -13,6 +14,53 @@ export class MovementHelper {
         const targetCellLocationAN = LocationHelper.toAN(movement.targetCellLocation);
 
         return `${sourceCellLocationAN}${targetCellLocationAN}`;
+    }
+
+    static perform(movement: Movement, cellGrid: CellGrid): CellGrid {
+        if (movement.type === 'invalid') {
+            return;
+        }
+
+        const sourceCell = structuredClone(cellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex]);
+        const targetCell = structuredClone(cellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex]);
+
+        return produce(cellGrid, (draftCellGrid) => {
+            if (movement.type === 'normal' || movement.type === 'special') {
+                // Swap source and target pieces (on a normal move, the target piece is empty/null, so the source will become empty/null)
+                Object.assign(
+                    draftCellGrid[movement.sourceCellLocation.rowIndex][movement.sourceCellLocation.colIndex],
+                    {
+                        id: targetCell.id,
+                        piece: targetCell.piece,
+                        location: movement.sourceCellLocation
+                    }
+                );
+
+                Object.assign(
+                    draftCellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex],
+                    {
+                        id: sourceCell.id,
+                        piece: sourceCell.piece,
+                        location: movement.targetCellLocation
+                    }
+                )
+
+            } else if (movement.type === 'clockwise_rotation' || movement.type === 'anticlockwise_rotation') {
+                // Rotate the target piece clockwise or anti-clockwise (which should always be assumed to be the same as source piece in this case, but we use the target piece for correctness)
+                const targetPiece = draftCellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].piece;
+                if (!targetPiece) {
+                    return;
+                }
+
+                const nextOrientation = MovementHelper.getNextOrientation(
+                    targetPiece.orientation,
+                    movement.type === 'clockwise_rotation' ? 'clockwise' : 'anticlockwise'
+                )
+                draftCellGrid[movement.targetCellLocation.rowIndex][movement.targetCellLocation.colIndex].piece.orientation = nextOrientation;
+            }
+        })
+
+        // CellHelper.prettyPrintCellGrid(cellGrid)
     }
 
     /**

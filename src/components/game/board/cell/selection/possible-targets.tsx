@@ -6,8 +6,6 @@ import { Group } from "react-konva"
 import type { Movement } from "@/models/movement"
 import type { GridLayerRef } from "@/types"
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper"
-import { CellHelper } from "@/models/helpers/cell-helper"
-import { PositionHelper } from "@/models/helpers/position-helper"
 import { Target } from "./target"
 
 type PossibleTargetsProps = {
@@ -32,23 +30,7 @@ export const PossibleTargets = observer(({
     )
 
     const handlePress = (movement: Movement) => {
-        const sourceCell = CellHelper.getCellAt(cellGrid, game$.turn.selectedPieceLocation.peek());
-        const sourceCellPosition = PositionHelper.fromLocation(movement.sourceCellLocation, cellLength, { centered: true });
-
-        const targetCell = CellHelper.getCellAt(cellGrid, movement.targetCellLocation);
-        const targetCellPosition = PositionHelper.fromLocation(movement.targetCellLocation, cellLength, { centered: true });
-
-        CellUIHelper.performMovement({
-            source: {
-                cell: sourceCell,
-                position: sourceCellPosition
-            },
-            target: {
-                cell: targetCell,
-                position: targetCellPosition
-            },
-            gridLayerRef
-        })
+        CellUIHelper.performMovement(movement, game$.turn.selectedPieceLocation.peek(), gridLayerRef, cellGrid, cellLength);
     }
 
     return (

@@ -100,7 +100,7 @@ export const Cell = ({ cell, cellLength, gridLayerRef }: BoardPieceProps) => {
                                 cellLength,
                                 { offset: PositionHelper.fromScalar(cellLength / 2) },
                             );
-                            CellUIHelper.performMovement({
+                            CellUIHelper.animateMovement({
                                 source: {
                                     cell: sourceCell,
                                     position: sourceCellPosition,

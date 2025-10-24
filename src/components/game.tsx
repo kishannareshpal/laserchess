@@ -9,8 +9,8 @@ import { BoardUIHelper } from "@/models/helpers/board-ui-helper";
 
 export const Game = () => {
     const [initialCellGrid] = useState(() => structuredClone(game$.cellGrid.peek()));
-
     const [boardContainerSize, boardContainerRef] = useElementSize<HTMLDivElement>();
+
     const { cellLength, boardWidth, boardHeight } = BoardUIHelper.calculateOptimalLayout(boardContainerSize);
 
     return (
@@ -39,6 +39,7 @@ export const Game = () => {
 
                         <div className="flex flex-col items-end">
                             <RotationController />
+
                         </div>
                     </div>
                 </div>

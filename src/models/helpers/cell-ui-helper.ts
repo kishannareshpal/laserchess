@@ -2,11 +2,14 @@ import type { GridLayerRef } from "@/types";
 import type { Movement } from "@/models/movement";
 import type { Position } from "@/models/position";
 import { MovementHelper } from "./movement-helper";
-import type { Cell } from "@/models/cell";
+import type { Cell, CellGrid } from "@/models/cell";
 import { PIECE_MOVEMENT_ANIMATION_DURATION, PIECE_MOVEMENT_ANIMATION_EASING_FN } from "@/constants";
 import { GridLayerHelper } from "./grid-layer-helper";
 import { game$ } from "@/lib/store/game$";
 import type Konva from "konva";
+import { CellHelper } from "./cell-helper";
+import { PositionHelper } from "./position-helper";
+import type { Location } from "../location";
 
 type PresentMovementOptions = {
     source: {
@@ -26,7 +29,27 @@ export class CellUIHelper {
         stageContainer.style.cursor = cursorStyle;
     }
 
-    static performMovement(options: PresentMovementOptions): Movement {
+    static performMovement(movement: Movement, sourceCellLocation: Location, gridLayerRef: GridLayerRef, cellGrid: CellGrid, cellLength: number): void {
+        const sourceCell = CellHelper.getCellAt(cellGrid, sourceCellLocation);
+        const sourceCellPosition = PositionHelper.fromLocation(movement.sourceCellLocation, cellLength, { centered: true });
+
+        const targetCell = CellHelper.getCellAt(cellGrid, movement.targetCellLocation);
+        const targetCellPosition = PositionHelper.fromLocation(movement.targetCellLocation, cellLength, { centered: true });
+
+        this.animateMovement({
+            source: {
+                cell: sourceCell,
+                position: sourceCellPosition
+            },
+            target: {
+                cell: targetCell,
+                position: targetCellPosition
+            },
+            gridLayerRef
+        })
+    }
+
+    static animateMovement(options: PresentMovementOptions): Movement {
         const sourceCellNode = GridLayerHelper.findCellNodeById(options.source.cell.id, options.gridLayerRef);
         const checkedMovement = MovementHelper.checkMove(options.source.cell, options.target.cell);
 

@@ -20,7 +20,7 @@ export const Header = () => {
                 <div className="flex">
                     <select>
                         {themeNames.map((themeName) => (
-                            <option value={themeName}>{themeName}</option>
+                            <option key={themeName} value={themeName}>{themeName}</option>
                         ))}
                     </select>
                 </div>
