@@ -1,10 +1,11 @@
 {
   "name": "laserchess-vite",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "./scripts/write-version",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.9.1",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
