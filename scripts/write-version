@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+
+# ==============================================================
+# This script runs as part of the build lifecycle.
+#
+# It sets environment variables that persist for the duration of
+# the build job and can be accessed by the app at runtime via ./src/lib/version.ts.
+# ==============================================================
+
+# Get the directory containing this script
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+# Resolve the .env file path (one level up from ./scripts/)
+ENV_FILE="$SCRIPT_DIR/../.env"
+
+# Retrieve build values
+APP_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# Ensure .env exists
+touch "$ENV_FILE"
+
+# Detect OS and choose proper sed syntax
+# macOS uses BSD sed which requires a backup suffix argument for -i
+case "$(uname)" in
+  Darwin*)
+    sed -i '' '/^VITE_BUILD_APP_VERSION=/d' "$ENV_FILE"
+    sed -i '' '/^VITE_BUILD_COMMIT_HASH=/d' "$ENV_FILE"
+    sed -i '' '/^VITE_BUILD_DATE_TIME_ISO8601_UTC=/d' "$ENV_FILE"
+    ;;
+  *)
+    sed -i '/^VITE_BUILD_APP_VERSION=/d' "$ENV_FILE"
+    sed -i '/^VITE_BUILD_COMMIT_HASH=/d' "$ENV_FILE"
+    sed -i '/^VITE_BUILD_DATE_TIME_ISO8601_UTC=/d' "$ENV_FILE"
+    ;;
+esac
+
+# Append updated values
+{
+  echo "VITE_BUILD_APP_VERSION=$APP_VERSION"
+  echo "VITE_BUILD_COMMIT_HASH=$COMMIT_HASH"
+  echo "VITE_BUILD_DATE_TIME_ISO8601_UTC=$BUILD_DATE"
+} >> "$ENV_FILE"
+
+echo ".env updated at $ENV_FILE with build metadata:"
+cat "$ENV_FILE"
