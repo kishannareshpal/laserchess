@@ -24,6 +24,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
     steps:
       - name: 🏗 Checkout repository
         uses: actions/checkout@v5
