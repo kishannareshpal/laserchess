@@ -8,6 +8,7 @@ export const Footer = () => {
             <a className="opacity-25 hover:opacity-100" href="https://kishanjadav.com">
                 Kishan Jadav
             </a>
+            <span className="opacity-25">{' • '} {globalThis.__APP_VERSION__} at {globalThis.__COMMIT_HASH__}</span>
         </div>
     )
 }
