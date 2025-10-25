@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+
+import { Footer } from "./components/layout/footer";
 import { Game } from "./components/game";
 import { Header } from "./components/layout/header";
 import { game$ } from "@/lib/store/game$";
 import { useTheme } from "./lib/hooks/use-theme";
-import { Footer } from "./components/layout/footer";
 
 export const App = () => {
 	const [ready, setReady] = useState(false);
@@ -20,7 +21,7 @@ export const App = () => {
 	}, [theme])
 
 	return (
-		<div className="flex flex-1 p-4 mb-4 flex-col h-screen gap-6">
+		<div className="flex flex-1 p-4 flex-col h-screen gap-6">
 			<Header />
 
 			{ready ? (

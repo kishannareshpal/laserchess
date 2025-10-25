@@ -1,3 +1,4 @@
+import { Settings } from "../settings";
 import logo from "@/assets/logo.svg"
 import { useTheme } from "@/lib/hooks/use-theme"
 
@@ -16,13 +17,15 @@ export const Header = () => {
                     </p>
                 </div>
 
-                {/* <div className="flex">
-                    <select onChange={(event) => settings$.setTheme(event.target.value as ThemeName)}>
+                <div className="flex">
+                    <Settings.Dialog />
+
+                    {/* <select onChange={(event) => settings$.setTheme(event.target.value as ThemeName)}>
                         {themeNames.map((themeName) => (
                             <option key={themeName} value={themeName}>{themeName}</option>
                         ))}
-                    </select>
-                </div> */}
+                    </select> */}
+                </div>
             </nav>
         </header>
     )

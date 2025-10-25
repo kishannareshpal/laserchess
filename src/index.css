@@ -1,19 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope&display=swap");
 @import "tailwindcss";
 
-* {
-    font-family: 'Manrope', Times, serif, sans-serif !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 600;
-}
-
-body {
-    margin: 0;
-}
+@layer theme, base, components, utilities;
+@import "./theme.css" layer(theme);
