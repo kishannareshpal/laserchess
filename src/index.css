@@ -1,5 +1,6 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Manrope&display=swap");
+
+@import "tailwindcss";
 
 @layer theme, base, components, utilities;
 @import "./theme.css" layer(theme);
