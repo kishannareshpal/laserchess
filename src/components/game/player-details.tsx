@@ -1,9 +1,10 @@
-import { game$ } from "@/lib/store/game$"
+import { JSAnimation, animate, splitText, stagger } from "animejs";
+import { useEffect, useRef } from "react"
+
 import { PlayerHelper } from "@/models/helpers/player-helper"
 import type { PlayerType } from "@/types"
 import { UserIcon } from "lucide-react"
-import { useEffect, useRef } from "react"
-import { animate, JSAnimation, splitText, stagger } from "animejs";
+import { game$ } from "@/lib/store/game$"
 import { useTheme } from "@/lib/hooks/use-theme"
 import { useValue } from "@legendapp/state/react"
 
@@ -54,6 +55,7 @@ export const PlayerDetails = ({ playerType }: PlayerDetailsProps) => {
     return (
         <div className="flex justify-center items-center gap-2 rounded-lg" style={{ color: theme.colors.page.text }}>
             <UserIcon />
+
             <div className="flex flex-col relative justify-center">
                 {/*
                       Remarks:

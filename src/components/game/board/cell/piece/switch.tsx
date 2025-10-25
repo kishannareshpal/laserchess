@@ -1,9 +1,10 @@
 import { Group, Shape } from "react-konva";
-import type { PieceProps } from "./types";
+
 import { CellUIHelper } from "@/models/helpers/cell-ui-helper";
+import { PIECE_STROKE_WIDTH } from "@/constants";
+import type { PieceProps } from "./types";
 import { PieceUIHelper } from "@/models/helpers/piece-ui-helper";
 import { useTheme } from "@/lib/hooks/use-theme";
-import { PIECE_STROKE_WIDTH } from "@/constants";
 
 type SwitchProps = PieceProps;
 

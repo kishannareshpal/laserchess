@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope&display=swap");
+
+@theme {
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";  
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;  
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --color-primary: var(--color-black);
+    --color-primary-foreground: var(--color-white);
+
+    --color-background: var(--color-white);
+    --color-foreground: var(--color-black);
+}
