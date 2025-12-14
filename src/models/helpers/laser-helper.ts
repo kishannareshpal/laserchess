@@ -1,6 +1,6 @@
 import type { PlayerType } from "@/types";
 import LHAN_RELATIONS_JSON from "@/assets/laser-v-piece.json";
-import type { LaserDirection, LaserEffect, LaserEffectDeflect, LaserEffectKill, LaserEffectNone, LaserPath, LaserPathFlattenedPoints, LaserPathPoints } from "@/models/laser";
+import type { LaserDirection, LaserEffect, LaserEffectBlock, LaserEffectDeflect, LaserEffectKill, LaserEffectNone, LaserPath, LaserPathFlattenedPoints, LaserPathPoints } from "@/models/laser";
 import { CellHelper } from "./cell-helper";
 import type { Cell, CellGrid } from "@/models/cell";
 import type { Piece } from "@/models/piece";
@@ -11,7 +11,7 @@ import { PointHelper } from "./point-helper";
 
 type SegmentEffectResult =
     { effect: LaserEffectDeflect, nextDirection: LaserDirection }
-    | { effect: LaserEffectKill | LaserEffectNone }
+    | { effect: LaserEffectKill | LaserEffectBlock | LaserEffectNone }
 
 export class LaserHelper {
     static computeLaserPath(playerType: PlayerType, cellGrid: CellGrid): LaserPath {
@@ -55,15 +55,18 @@ export class LaserHelper {
                 if (!CellHelper.hasPiece(cellUnderCurrentSegment)) {
                     // No piece at this cell, beam continues through the same direction
                     currentSegmentEffect = 'none';
+                    isPathOpen = true;
 
                 } else {
                     // Piece was found, figure out it's effect on the beam
                     const effectResult = this.determineSegmentEffectAt(cellUnderCurrentSegment, currentSegmentLaserDirection);
                     currentSegmentEffect = effectResult.effect;
                     currentSegmentLaserDirection = effectResult.effect === 'deflect' ? effectResult.nextDirection : currentSegmentLaserDirection;
+
+                    // close the path if the the current pieece effect is terminal - keep open on deflect
+                    isPathOpen = currentSegmentEffect !== 'block' && currentSegmentEffect !== 'kill';
                 }
 
-                isPathOpen = currentSegmentEffect !== 'kill';
             }
 
             // Register this segment
@@ -91,8 +94,8 @@ export class LaserHelper {
             let x = cellMiddle.x;
             let y = cellMiddle.y;
 
-            if (isLast && segment.effect === 'kill') {
-                // If killing, stay centered
+            if (isLast && (segment.effect === 'kill' || segment.effect === 'block')) {
+                // If killing or blocking, keep the laser at the center of the piece
                 return { x, y };
             }
 
@@ -170,7 +173,7 @@ export class LaserHelper {
         if (hitAction === "kill") {
             return { effect: 'kill' };
         } else if (hitAction === "nothing") {
-            return { effect: 'none' };
+            return { effect: 'block' };
         } else {
             return {
                 effect: 'deflect',
