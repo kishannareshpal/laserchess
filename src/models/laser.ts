@@ -9,7 +9,8 @@ export type LaserPathSegmentType = 'start' | 'central' | 'end';
 export type LaserEffectKill = 'kill';
 export type LaserEffectDeflect = 'deflect';
 export type LaserEffectNone = 'none';
-export type LaserEffect = LaserEffectKill | LaserEffectDeflect | LaserEffectNone
+export type LaserEffectBlock = 'block'; // remark: behaves the same as none, but this explicitly indicates that it was blocked by a defender piece
+export type LaserEffect = LaserEffectKill | LaserEffectDeflect | LaserEffectBlock | LaserEffectNone
 
 export type LaserDirection = 'top' | 'right' | 'bottom' | 'left';
 
