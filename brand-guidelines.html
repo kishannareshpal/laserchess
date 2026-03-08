@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laser Chess — Brand Guidelines</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --accent-yellow: #FFD600;
+      --player-cyan: #11E4E4;
+      --player-cyan-dim: #0A8A8A;
+      --player-red: #EF3C2D;
+      --player-red-dim: #8A2218;
+      --laser-color: #FF0000;
+      --bg-page: #0D0D0D;
+      --bg-surface: #1A1A1A;
+      --bg-cell: #1E1E1E;
+      --bg-board: #161616;
+      --bg-elevated: #232323;
+      --border-primary: #2D2D2D;
+      --border-subtle: #1F1F1F;
+      --text-primary: #F5F5F0;
+      --text-secondary: #6B6B6B;
+      --text-muted: #4D4D4D;
+    }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    /* ─── Header ─── */
+    .brand-header {
+      text-align: center;
+      padding-bottom: 80px;
+      border-bottom: 1px solid var(--border-primary);
+      margin-bottom: 80px;
+    }
+    .brand-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .brand-header .tagline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--text-secondary);
+    }
+    .brand-header .version {
+      margin-top: 24px;
+      display: inline-block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-primary);
+      padding: 6px 16px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    /* ─── Sections ─── */
+    .section {
+      margin-bottom: 80px;
+    }
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-yellow);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 13px;
+      max-width: 560px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    /* ─── Color Palette ─── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .color-card {
+      border: 1px solid var(--border-primary);
+      overflow: hidden;
+    }
+    .color-swatch {
+      height: 100px;
+      position: relative;
+    }
+    .color-info {
+      padding: 14px 16px;
+      background: var(--bg-surface);
+    }
+    .color-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .color-hex {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+    .color-var {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .color-group-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+
+    /* ─── Typography ─── */
+    .type-specimen {
+      border: 1px solid var(--border-primary);
+      padding: 40px;
+      margin-bottom: 16px;
+      background: var(--bg-surface);
+    }
+    .type-specimen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .type-family-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-primary);
+    }
+    .type-family-role {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .type-sample-large {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .type-sample-medium {
+      font-size: 24px;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .type-sample-small {
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── Type Scale ─── */
+    .type-scale {
+      border: 1px solid var(--border-primary);
+      overflow: hidden;
+    }
+    .type-scale-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 24px;
+    }
+    .type-scale-row:last-child {
+      border-bottom: none;
+    }
+    .type-scale-meta {
+      min-width: 200px;
+    }
+    .type-scale-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+    .type-scale-spec {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .type-scale-preview {
+      flex: 1;
+    }
+
+    /* ─── Buttons ─── */
+    .button-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 52px;
+      padding: 0 32px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary {
+      background: var(--accent-yellow);
+      color: #0D0D0D;
+    }
+    .btn-danger {
+      background: var(--player-red);
+      color: #0D0D0D;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-primary);
+    }
+    .btn-sm {
+      height: 36px;
+      padding: 0 20px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* ─── Chips / Tags ─── */
+    .chip-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      padding: 0 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .chip-active {
+      background: var(--accent-yellow);
+      color: #0D0D0D;
+    }
+    .chip-default {
+      background: transparent;
+      border: 1px solid var(--border-primary);
+      color: var(--text-secondary);
+    }
+
+    /* ─── Player Identity ─── */
+    .player-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .player-card {
+      border: 1px solid var(--border-primary);
+      padding: 32px;
+      background: var(--bg-surface);
+    }
+    .player-dot {
+      width: 12px;
+      height: 12px;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .player-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .player-bar {
+      height: 4px;
+      width: 100%;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    .player-colors {
+      display: flex;
+      gap: 12px;
+    }
+    .player-color-chip {
+      flex: 1;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #0D0D0D;
+    }
+
+    /* ─── Board Preview ─── */
+    .board-preview {
+      border: 1px solid var(--border-primary);
+      background: var(--bg-board);
+      padding: 12px;
+      display: inline-grid;
+      grid-template-columns: repeat(10, 44px);
+      grid-template-rows: repeat(8, 44px);
+      gap: 2px;
+    }
+    .board-cell {
+      background: var(--bg-cell);
+    }
+    .board-cell.zone-red {
+      background: #EF3C2D15;
+      border: 1px solid #EF3C2D30;
+    }
+    .board-cell.zone-cyan {
+      background: #11E4E415;
+      border: 1px solid #11E4E430;
+    }
+
+    /* ─── Spacing / Layout ─── */
+    .spacing-demo {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .spacing-item {
+      text-align: center;
+    }
+    .spacing-block {
+      background: var(--accent-yellow);
+      opacity: 0.3;
+      margin-bottom: 8px;
+    }
+    .spacing-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Surfaces ─── */
+    .surface-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .surface-card {
+      height: 120px;
+      border: 1px solid var(--border-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+    }
+    .surface-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+    }
+    .surface-token {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ─── Theme Toggle ─── */
+    .theme-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .theme-panel {
+      border: 1px solid var(--border-primary);
+      padding: 32px;
+      text-align: center;
+    }
+    .theme-panel.dark {
+      background: #0D0D0D;
+      color: #F5F5F0;
+    }
+    .theme-panel.light {
+      background: #F5F0EB;
+      color: #1A1A1A;
+    }
+    .theme-panel h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .theme-swatches {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .theme-swatch {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(128,128,128,0.2);
+    }
+    .theme-swatch-label {
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ─── Divider ─── */
+    .divider {
+      height: 1px;
+      background: var(--border-primary);
+      margin: 80px 0;
+    }
+
+    /* ─── Footer ─── */
+    .guide-footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-primary);
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .guide-footer .heart {
+      color: var(--player-red);
+    }
+
+    /* ─── Do / Don't ─── */
+    .do-dont-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .do-dont-card {
+      border: 1px solid var(--border-primary);
+      padding: 24px;
+      background: var(--bg-surface);
+    }
+    .do-dont-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    .do-dont-card h4.do { color: #43FF56; }
+    .do-dont-card h4.dont { color: var(--player-red); }
+    .do-dont-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .do-dont-card li {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      padding-left: 16px;
+      position: relative;
+    }
+    .do-dont-card li::before {
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+    .do-dont-card.do-card li::before { content: '+'; color: #43FF56; }
+    .do-dont-card.dont-card li::before { content: '−'; color: var(--player-red); }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="brand-header">
+      <h1>LASER CHESS</h1>
+      <p class="tagline">DEFLECT. DESTROY. DOMINATE.</p>
+      <span class="version">BRAND GUIDELINES v2.0</span>
+    </header>
+
+    <!-- ═══ 01 — COLOR PALETTE ═══ -->
+    <section class="section">
+      <p class="section-label">01</p>
+      <h2 class="section-title">COLOR PALETTE</h2>
+      <p class="section-desc">
+        A dark, tactical palette built for high contrast and clarity during gameplay.
+        Accent yellow commands attention. Cyan and red establish player identity.
+      </p>
+
+      <p class="color-group-title">ACCENT</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#FFD600"></div>
+          <div class="color-info">
+            <div class="color-name">ACCENT YELLOW</div>
+            <div class="color-hex">#FFD600</div>
+            <div class="color-var">$accent-yellow</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#FF0000"></div>
+          <div class="color-info">
+            <div class="color-name">LASER</div>
+            <div class="color-hex">#FF0000</div>
+            <div class="color-var">$laser-color</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="color-group-title">PLAYER IDENTITY</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#11E4E4"></div>
+          <div class="color-info">
+            <div class="color-name">PLAYER CYAN</div>
+            <div class="color-hex">#11E4E4</div>
+            <div class="color-var">$player-cyan</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#0A8A8A"></div>
+          <div class="color-info">
+            <div class="color-name">PLAYER CYAN DIM</div>
+            <div class="color-hex">#0A8A8A</div>
+            <div class="color-var">$player-cyan-dim</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#EF3C2D"></div>
+          <div class="color-info">
+            <div class="color-name">PLAYER RED</div>
+            <div class="color-hex">#EF3C2D</div>
+            <div class="color-var">$player-red</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#8A2218"></div>
+          <div class="color-info">
+            <div class="color-name">PLAYER RED DIM</div>
+            <div class="color-hex">#8A2218</div>
+            <div class="color-var">$player-red-dim</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="color-group-title">BACKGROUNDS — DARK MODE</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#0D0D0D"></div>
+          <div class="color-info">
+            <div class="color-name">PAGE</div>
+            <div class="color-hex">#0D0D0D</div>
+            <div class="color-var">$bg-page</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#1A1A1A"></div>
+          <div class="color-info">
+            <div class="color-name">SURFACE</div>
+            <div class="color-hex">#1A1A1A</div>
+            <div class="color-var">$bg-surface</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#1E1E1E"></div>
+          <div class="color-info">
+            <div class="color-name">CELL</div>
+            <div class="color-hex">#1E1E1E</div>
+            <div class="color-var">$bg-cell</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#161616"></div>
+          <div class="color-info">
+            <div class="color-name">BOARD</div>
+            <div class="color-hex">#161616</div>
+            <div class="color-var">$bg-board</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#232323"></div>
+          <div class="color-info">
+            <div class="color-name">ELEVATED</div>
+            <div class="color-hex">#232323</div>
+            <div class="color-var">$bg-elevated</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="color-group-title">BORDERS — DARK MODE</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#2D2D2D"></div>
+          <div class="color-info">
+            <div class="color-name">PRIMARY</div>
+            <div class="color-hex">#2D2D2D</div>
+            <div class="color-var">$border-primary</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#1F1F1F"></div>
+          <div class="color-info">
+            <div class="color-name">SUBTLE</div>
+            <div class="color-hex">#1F1F1F</div>
+            <div class="color-var">$border-subtle</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="color-group-title">TEXT — DARK MODE</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#F5F5F0"></div>
+          <div class="color-info">
+            <div class="color-name">PRIMARY</div>
+            <div class="color-hex">#F5F5F0</div>
+            <div class="color-var">$text-primary</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#6B6B6B"></div>
+          <div class="color-info">
+            <div class="color-name">SECONDARY</div>
+            <div class="color-hex">#6B6B6B</div>
+            <div class="color-var">$text-secondary</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#4D4D4D"></div>
+          <div class="color-info">
+            <div class="color-name">MUTED</div>
+            <div class="color-hex">#4D4D4D</div>
+            <div class="color-var">$text-muted</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 02 — THEME MODES ═══ -->
+    <section class="section">
+      <p class="section-label">02</p>
+      <h2 class="section-title">THEME MODES</h2>
+      <p class="section-desc">
+        The design system supports dark and light modes via CSS variable theming.
+        Dark mode is the primary experience. Light mode adapts warm neutrals.
+      </p>
+
+      <div class="theme-comparison">
+        <div class="theme-panel dark">
+          <h4>DARK MODE</h4>
+          <div class="theme-swatches">
+            <div>
+              <div class="theme-swatch" style="background:#0D0D0D"></div>
+              <div class="theme-swatch-label">Page</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#1A1A1A"></div>
+              <div class="theme-swatch-label">Surface</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#1E1E1E"></div>
+              <div class="theme-swatch-label">Cell</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#F5F5F0"></div>
+              <div class="theme-swatch-label">Text</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#2D2D2D"></div>
+              <div class="theme-swatch-label">Border</div>
+            </div>
+          </div>
+        </div>
+        <div class="theme-panel light">
+          <h4 style="color:#1A1A1A">LIGHT MODE</h4>
+          <div class="theme-swatches">
+            <div>
+              <div class="theme-swatch" style="background:#F5F0EB"></div>
+              <div class="theme-swatch-label" style="color:#B0B0B0">Page</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#FFFFFF"></div>
+              <div class="theme-swatch-label" style="color:#B0B0B0">Surface</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#FAF7F4"></div>
+              <div class="theme-swatch-label" style="color:#B0B0B0">Cell</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#1A1A1A"></div>
+              <div class="theme-swatch-label" style="color:#B0B0B0">Text</div>
+            </div>
+            <div>
+              <div class="theme-swatch" style="background:#E0DBD5"></div>
+              <div class="theme-swatch-label" style="color:#B0B0B0">Border</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 03 — TYPOGRAPHY ═══ -->
+    <section class="section">
+      <p class="section-label">03</p>
+      <h2 class="section-title">TYPOGRAPHY</h2>
+      <p class="section-desc">
+        Two typefaces create a clear hierarchy. Space Grotesk carries authority in
+        headlines and actions. IBM Plex Mono provides a technical, data-driven voice
+        for body text and metadata.
+      </p>
+
+      <div class="type-specimen">
+        <div class="type-specimen-header">
+          <span class="type-family-name">SPACE GROTESK</span>
+          <span class="type-family-role">HEADINGS · BUTTONS · LABELS</span>
+        </div>
+        <div class="type-sample-large" style="font-family:'Space Grotesk',sans-serif">
+          LASER CHESS
+        </div>
+        <div class="type-sample-medium" style="font-family:'Space Grotesk',sans-serif; font-weight:700">
+          Deflect. Destroy. Dominate.
+        </div>
+        <div class="type-sample-small" style="font-family:'Space Grotesk',sans-serif">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789
+        </div>
+      </div>
+
+      <div class="type-specimen">
+        <div class="type-specimen-header">
+          <span class="type-family-name">IBM PLEX MONO</span>
+          <span class="type-family-role">BODY · CAPTIONS · METADATA</span>
+        </div>
+        <div class="type-sample-large" style="font-family:'IBM Plex Mono',monospace; font-size:36px">
+          13 PIECES
+        </div>
+        <div class="type-sample-medium" style="font-family:'IBM Plex Mono',monospace">
+          King eliminated by laser strike
+        </div>
+        <div class="type-sample-small" style="font-family:'IBM Plex Mono',monospace">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <p class="color-group-title">TYPE SCALE</p>
+        <div class="type-scale">
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">DISPLAY</div>
+              <div class="type-scale-spec">Space Grotesk · 72px · 700 · ls: 4px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:48px; font-weight:700; letter-spacing:4px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis">
+              LASER CHESS
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">HEADING</div>
+              <div class="type-scale-spec">Space Grotesk · 36px · 700 · ls: 2px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; letter-spacing:2px">
+              PLAYER ONE WINS
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">STAT VALUE</div>
+              <div class="type-scale-spec">Space Grotesk · 32px · 700</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700">
+              <span style="color:var(--player-cyan)">12</span>
+              <span style="color:var(--text-muted); font-size:14px; margin-left:12px">TURNS</span>
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">NAV / LOGO</div>
+              <div class="type-scale-spec">Space Grotesk · 14px · 700 · ls: 2px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; letter-spacing:2px">
+              LASER CHESS
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">BUTTON</div>
+              <div class="type-scale-spec">Space Grotesk · 13–14px · 700 · ls: 1.5px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; letter-spacing:1.5px">
+              PLAY GAME &nbsp;&nbsp; FIRE LASER &nbsp;&nbsp; MAIN MENU
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">PLAYER NAME</div>
+              <div class="type-scale-spec">Space Grotesk · 12px · 700 · ls: 1.5px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px">
+              <span style="color:var(--player-cyan)">PLAYER ONE</span>
+              <span style="color:var(--text-muted); margin:0 12px">vs</span>
+              <span style="color:var(--player-red)">PLAYER TWO</span>
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">SUBTITLE / TAGLINE</div>
+              <div class="type-scale-spec">IBM Plex Mono · 14px · 400 · ls: 3px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:3px; color:var(--text-secondary)">
+              DEFLECT. DESTROY. DOMINATE.
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">BODY</div>
+              <div class="type-scale-spec">IBM Plex Mono · 11–13px · 400</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-secondary)">
+              King eliminated by laser strike
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">CAPTION / LABEL</div>
+              <div class="type-scale-spec">IBM Plex Mono · 10px · 700 · ls: 1px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:700; letter-spacing:1px; color:var(--text-muted)">
+              13 PIECES &nbsp;&nbsp; TURNS &nbsp;&nbsp; ELIMINATED
+            </div>
+          </div>
+          <div class="type-scale-row">
+            <div class="type-scale-meta">
+              <div class="type-scale-label">CHIP / TAG</div>
+              <div class="type-scale-spec">Space Grotesk · 11px · 700 · ls: 1px</div>
+            </div>
+            <div class="type-scale-preview" style="font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px">
+              ACE &nbsp;&nbsp; CURIOSITY &nbsp;&nbsp; GRAIL &nbsp;&nbsp; MERCURY &nbsp;&nbsp; SOPHIE
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 04 — PLAYER IDENTITY ═══ -->
+    <section class="section">
+      <p class="section-label">04</p>
+      <h2 class="section-title">PLAYER IDENTITY</h2>
+      <p class="section-desc">
+        Each player is represented by a distinct color: cyan for Player One and red
+        for Player Two. These colors define board zones, UI indicators, and piece ownership.
+      </p>
+
+      <div class="player-cards">
+        <div class="player-card">
+          <div class="player-bar" style="background:var(--player-cyan)"></div>
+          <div class="player-label" style="color:var(--player-cyan)">
+            <span class="player-dot" style="background:var(--player-cyan)"></span>
+            PLAYER ONE
+          </div>
+          <div class="player-colors">
+            <div class="player-color-chip" style="background:var(--player-cyan)">PRIMARY</div>
+            <div class="player-color-chip" style="background:var(--player-cyan-dim); color:var(--text-primary)">DIM</div>
+            <div class="player-color-chip" style="background:#11E4E415; color:var(--player-cyan); border:1px solid #11E4E430">ZONE</div>
+          </div>
+        </div>
+        <div class="player-card">
+          <div class="player-bar" style="background:var(--player-red)"></div>
+          <div class="player-label" style="color:var(--player-red)">
+            <span class="player-dot" style="background:var(--player-red)"></span>
+            PLAYER TWO
+          </div>
+          <div class="player-colors">
+            <div class="player-color-chip" style="background:var(--player-red)">PRIMARY</div>
+            <div class="player-color-chip" style="background:var(--player-red-dim); color:var(--text-primary)">DIM</div>
+            <div class="player-color-chip" style="background:#EF3C2D15; color:var(--player-red); border:1px solid #EF3C2D30">ZONE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 05 — UI COMPONENTS ═══ -->
+    <section class="section">
+      <p class="section-label">05</p>
+      <h2 class="section-title">UI COMPONENTS</h2>
+      <p class="section-desc">
+        Core interactive elements follow a minimal, utilitarian aesthetic.
+        Primary actions use accent yellow. Secondary actions use bordered outlines.
+      </p>
+
+      <p class="color-group-title">BUTTONS</p>
+      <div class="button-row">
+        <button class="btn btn-primary">PLAY GAME</button>
+        <button class="btn btn-danger">FIRE LASER</button>
+        <button class="btn btn-outline">HOW TO PLAY</button>
+        <button class="btn btn-outline">MAIN MENU</button>
+      </div>
+      <div class="button-row">
+        <button class="btn btn-primary btn-sm">PLAY AGAIN</button>
+        <button class="btn btn-outline btn-sm">SETTINGS</button>
+      </div>
+
+      <p class="color-group-title" style="margin-top:40px">CHIPS / SETUP SELECTOR</p>
+      <div class="chip-row">
+        <span class="chip chip-active">ACE</span>
+        <span class="chip chip-default">CURIOSITY</span>
+        <span class="chip chip-default">GRAIL</span>
+        <span class="chip chip-default">MERCURY</span>
+        <span class="chip chip-default">SOPHIE</span>
+      </div>
+    </section>
+
+    <!-- ═══ 06 — SURFACES ═══ -->
+    <section class="section">
+      <p class="section-label">06</p>
+      <h2 class="section-title">SURFACES</h2>
+      <p class="section-desc">
+        Layered dark surfaces create depth through subtle value shifts.
+        Borders separate elements without competing for visual attention.
+      </p>
+
+      <div class="surface-grid">
+        <div class="surface-card" style="background:var(--bg-page)">
+          <div class="surface-name">PAGE</div>
+          <div class="surface-token">$bg-page · #0D0D0D</div>
+        </div>
+        <div class="surface-card" style="background:var(--bg-surface)">
+          <div class="surface-name">SURFACE</div>
+          <div class="surface-token">$bg-surface · #1A1A1A</div>
+        </div>
+        <div class="surface-card" style="background:var(--bg-elevated)">
+          <div class="surface-name">ELEVATED</div>
+          <div class="surface-token">$bg-elevated · #232323</div>
+        </div>
+        <div class="surface-card" style="background:var(--bg-board)">
+          <div class="surface-name">BOARD</div>
+          <div class="surface-token">$bg-board · #161616</div>
+        </div>
+        <div class="surface-card" style="background:var(--bg-cell)">
+          <div class="surface-name">CELL</div>
+          <div class="surface-token">$bg-cell · #1E1E1E</div>
+        </div>
+        <div class="surface-card" style="background:var(--bg-cell); border-color:#43FF56">
+          <div class="surface-name" style="color:#43FF56">CELL — SELECTED</div>
+          <div class="surface-token">$bg-cell + #43FF56 border</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 07 — BOARD ANATOMY ═══ -->
+    <section class="section">
+      <p class="section-label">07</p>
+      <h2 class="section-title">BOARD ANATOMY</h2>
+      <p class="section-desc">
+        The 10×8 game board uses a 2px gap grid on a dark substrate. Player zones
+        are tinted with their respective colors at low opacity. Selected cells
+        receive a green highlight.
+      </p>
+
+      <div style="display:flex; gap:32px; align-items:start; flex-wrap:wrap">
+        <div class="board-preview">
+          <!-- Row 1 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell zone-cyan"></div>
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 2 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 3 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 4 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 5 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 6 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 7 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+          <!-- Row 8 -->
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell zone-cyan"></div>
+          <div class="board-cell zone-red"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell"></div>
+          <div class="board-cell zone-cyan"></div>
+        </div>
+
+        <div style="flex:1; min-width:200px">
+          <p class="color-group-title" style="margin-top:0">BOARD SPECS</p>
+          <table style="font-size:12px; color:var(--text-secondary); border-collapse:collapse; width:100%">
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Grid</td><td>10 columns × 8 rows</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Cell gap</td><td>2px</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Board size</td><td>680 × 544px</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Padding</td><td>2px</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Border</td><td>1px $border-primary</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Background</td><td>$bg-board (#161616)</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Red zones</td><td>#EF3C2D at 8% opacity</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Cyan zones</td><td>#11E4E4 at 8% opacity</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Selection</td><td>#43FF56 2px inside border</td></tr>
+            <tr><td style="padding:6px 16px 6px 0; color:var(--text-muted)">Move hints</td><td>#43FF56 at 12% fill</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 08 — SPACING ═══ -->
+    <section class="section">
+      <p class="section-label">08</p>
+      <h2 class="section-title">SPACING SCALE</h2>
+      <p class="section-desc">
+        Consistent spacing uses a base-2 scale. Tighter gaps inside game elements,
+        wider breathing room in menus and overlays.
+      </p>
+      <div class="spacing-demo">
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:16px; height:16px"></div>
+          <div class="spacing-label">2px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:20px; height:20px"></div>
+          <div class="spacing-label">6px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:24px; height:24px"></div>
+          <div class="spacing-label">8px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:28px; height:28px"></div>
+          <div class="spacing-label">10px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:32px; height:32px"></div>
+          <div class="spacing-label">12px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:40px; height:40px"></div>
+          <div class="spacing-label">16px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:48px; height:48px"></div>
+          <div class="spacing-label">24px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:56px; height:56px"></div>
+          <div class="spacing-label">32px</div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-block" style="width:64px; height:64px"></div>
+          <div class="spacing-label">40px</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 09 — DESIGN PRINCIPLES ═══ -->
+    <section class="section">
+      <p class="section-label">09</p>
+      <h2 class="section-title">DESIGN PRINCIPLES</h2>
+      <p class="section-desc">
+        Visual rules to maintain consistency across all screens and future features.
+      </p>
+
+      <div class="do-dont-grid">
+        <div class="do-dont-card do-card">
+          <h4 class="do">DO</h4>
+          <ul>
+            <li>Use uppercase text for all UI labels and buttons</li>
+            <li>Apply generous letter-spacing (1–4px) on display text</li>
+            <li>Keep surfaces dark and layered — never flat white</li>
+            <li>Use player colors only for player-owned elements</li>
+            <li>Use accent yellow sparingly for primary CTAs</li>
+            <li>Maintain 2px gap grid system on the board</li>
+            <li>Use 1px borders with $border-primary for separation</li>
+            <li>Let IBM Plex Mono handle data and descriptions</li>
+          </ul>
+        </div>
+        <div class="do-dont-card dont-card">
+          <h4 class="dont">DON'T</h4>
+          <ul>
+            <li>Mix player colors — cyan is P1, red is P2, always</li>
+            <li>Use accent yellow for non-interactive decoration</li>
+            <li>Add rounded corners — all elements use sharp edges</li>
+            <li>Use more than three text hierarchy levels per screen</li>
+            <li>Introduce new colors outside the design token system</li>
+            <li>Use sentence case in navigation or game UI</li>
+            <li>Apply heavy drop shadows — depth comes from value shifts</li>
+            <li>Combine Space Grotesk body text with IBM Plex Mono headers</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 10 — ICON SYSTEM ═══ -->
+    <section class="section">
+      <p class="section-label">10</p>
+      <h2 class="section-title">ICON SYSTEM</h2>
+      <p class="section-desc">
+        Icons use the Lucide icon family at 18–20px. Colored with $text-secondary
+        by default, $text-primary on hover, or semantic player colors when contextual.
+      </p>
+
+      <table style="font-size:12px; color:var(--text-secondary); border-collapse:collapse">
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">settings</td>
+          <td style="padding:10px 24px 10px 0">Navigation bar, settings panel</td>
+          <td>20 × 20px</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">menu</td>
+          <td style="padding:10px 24px 10px 0">Hamburger menu</td>
+          <td>20 × 20px</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">play</td>
+          <td style="padding:10px 24px 10px 0">Play button CTA</td>
+          <td>18 × 18px</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">book-open</td>
+          <td style="padding:10px 24px 10px 0">How to play</td>
+          <td>18 × 18px</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">heart</td>
+          <td style="padding:10px 24px 10px 0">Footer branding</td>
+          <td>12 × 12px</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 24px 10px 0; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:1px; color:var(--text-primary)">x</td>
+          <td style="padding:10px 24px 10px 0">Close / dismiss</td>
+          <td>20 × 20px</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- ═══ CSS TOKENS ═══ -->
+    <section class="section">
+      <p class="section-label">11</p>
+      <h2 class="section-title">CSS TOKENS</h2>
+      <p class="section-desc">
+        All design tokens as CSS custom properties. Use these variables in code
+        rather than raw hex values for theme-safe styling.
+      </p>
+      <div style="background:var(--bg-surface); border:1px solid var(--border-primary); padding:24px 32px; font-family:'IBM Plex Mono',monospace; font-size:12px; line-height:2; color:var(--text-secondary); overflow-x:auto">
+        <span style="color:var(--text-muted)">/* Accent */</span><br>
+        <span style="color:var(--text-primary)">--accent-yellow</span>: <span style="color:var(--accent-yellow)">#FFD600</span>;<br>
+        <span style="color:var(--text-primary)">--laser-color</span>: <span style="color:var(--laser-color)">#FF0000</span>;<br>
+        <br>
+        <span style="color:var(--text-muted)">/* Players */</span><br>
+        <span style="color:var(--text-primary)">--player-cyan</span>: <span style="color:var(--player-cyan)">#11E4E4</span>;<br>
+        <span style="color:var(--text-primary)">--player-cyan-dim</span>: <span style="color:var(--player-cyan-dim)">#0A8A8A</span>;<br>
+        <span style="color:var(--text-primary)">--player-red</span>: <span style="color:var(--player-red)">#EF3C2D</span>;<br>
+        <span style="color:var(--text-primary)">--player-red-dim</span>: <span style="color:var(--player-red-dim)">#8A2218</span>;<br>
+        <br>
+        <span style="color:var(--text-muted)">/* Backgrounds (dark) */</span><br>
+        <span style="color:var(--text-primary)">--bg-page</span>: #0D0D0D;<br>
+        <span style="color:var(--text-primary)">--bg-surface</span>: #1A1A1A;<br>
+        <span style="color:var(--text-primary)">--bg-cell</span>: #1E1E1E;<br>
+        <span style="color:var(--text-primary)">--bg-board</span>: #161616;<br>
+        <span style="color:var(--text-primary)">--bg-elevated</span>: #232323;<br>
+        <br>
+        <span style="color:var(--text-muted)">/* Backgrounds (light) */</span><br>
+        <span style="color:var(--text-primary)">--bg-page</span>: #F5F0EB;<br>
+        <span style="color:var(--text-primary)">--bg-surface</span>: #FFFFFF;<br>
+        <span style="color:var(--text-primary)">--bg-cell</span>: #FAF7F4;<br>
+        <span style="color:var(--text-primary)">--bg-board</span>: #E8E2DB;<br>
+        <span style="color:var(--text-primary)">--bg-elevated</span>: #F0EBE5;<br>
+        <br>
+        <span style="color:var(--text-muted)">/* Borders */</span><br>
+        <span style="color:var(--text-primary)">--border-primary</span>: #2D2D2D <span style="color:var(--text-muted)">/ #E0DBD5</span>;<br>
+        <span style="color:var(--text-primary)">--border-subtle</span>: #1F1F1F <span style="color:var(--text-muted)">/ #EDE8E2</span>;<br>
+        <br>
+        <span style="color:var(--text-muted)">/* Text */</span><br>
+        <span style="color:var(--text-primary)">--text-primary</span>: #F5F5F0 <span style="color:var(--text-muted)">/ #1A1A1A</span>;<br>
+        <span style="color:var(--text-primary)">--text-secondary</span>: #6B6B6B <span style="color:var(--text-muted)">/ #8A8A8A</span>;<br>
+        <span style="color:var(--text-primary)">--text-muted</span>: #4D4D4D <span style="color:var(--text-muted)">/ #B0B0B0</span>;<br>
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="guide-footer">
+      BUILT WITH <span class="heart">&hearts;</span> AND LASERS &nbsp;&middot;&nbsp; LASER CHESS v2.0
+    </footer>
+  </div>
+</body>
+</html>
